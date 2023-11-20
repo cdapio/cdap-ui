@@ -80,7 +80,7 @@ export const PullPipelineWizard = ({ isOpen, error, dispatch }: IPullPipelineWiz
         toggle={() => dispatch({ type: 'TOGGLE_MODAL' })}
       >
         <Provider store={SourceControlManagementSyncStore}>
-          <RemotePipelineListView redirectOnSubmit={true} />
+          <RemotePipelineListView redirectOnSubmit={true} singlePipelineMode={true} />
         </Provider>
       </StandardModal>
     </>

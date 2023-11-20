@@ -21,19 +21,30 @@ import { LocalPipelineListView } from './LocalPipelineListView';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import { RemotePipelineListView } from './RemotePipelineListView';
-import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
-import { getNamespacePipelineList, getRemotePipelineList } from './store/ActionCreator';
+import {
+  getNamespacePipelineList,
+  getRemotePipelineList,
+  setSyncStatusOfAllPipelines,
+} from './store/ActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+import { OperationsHistoryView } from './OperationsHistoryView';
 
 const PREFIX = 'features.SourceControlManagement';
 
 const StyledDiv = styled.div`
-  padding: 10px;
-  margin-top: 10px;
+  padding: 4px 10px;
+`;
+
+const StyledTabs = styled(Tabs)`
+  border-bottom: 1px solid #e8e8e8;
 `;
 
 const ScmSyncTabs = () => {
   const [tabIndex, setTabIndex] = useState(0);
+  const multiPushEnabled = useFeatureFlagDefaultFalse(
+    'source.control.management.multi.app.enabled'
+  );
 
   const { ready: pushStateReady, nameFilter } = useSelector(({ push }) => push);
   useEffect(() => {
@@ -49,6 +60,12 @@ const ScmSyncTabs = () => {
     }
   }, [pullStateReady]);
 
+  useEffect(() => {
+    if (pushStateReady && pullStateReady) {
+      setSyncStatusOfAllPipelines();
+    }
+  }, [pushStateReady, pullStateReady]);
+
   const handleTabChange = (e, newValue) => {
     setTabIndex(newValue);
     // refetch latest pipeline data, while displaying possibly stale data
@@ -59,10 +76,26 @@ const ScmSyncTabs = () => {
     }
   };
 
+  const renderTabContent = () => {
+    if (tabIndex === 0) {
+      return <LocalPipelineListView />;
+    }
+
+    if (tabIndex === 1) {
+      return <RemotePipelineListView />;
+    }
+
+    if (tabIndex === 2) {
+      return <OperationsHistoryView />;
+    }
+
+    return null;
+  };
+
   return (
     <>
       <StyledDiv>
-        <Tabs
+        <StyledTabs
           value={tabIndex}
           onChange={handleTabChange}
           textColor="primary"
@@ -70,13 +103,15 @@ const ScmSyncTabs = () => {
         >
           <Tab data-testid="local-pipeline-tab" label={T.translate(`${PREFIX}.push.tab`)} />
           <Tab data-testid="remote-pipeline-tab" label={T.translate(`${PREFIX}.pull.tab`)} />
-        </Tabs>
+          {multiPushEnabled && (
+            <Tab
+              data-testid="operation-history-tab"
+              label={T.translate(`${PREFIX}.operationHistory.tab`)}
+            />
+          )}
+        </StyledTabs>
       </StyledDiv>
-      <FeatureProvider>
-        <StyledDiv>
-          {tabIndex === 0 ? <LocalPipelineListView /> : <RemotePipelineListView />}
-        </StyledDiv>
-      </FeatureProvider>
+      <StyledDiv>{renderTabContent()}</StyledDiv>
     </>
   );
 };

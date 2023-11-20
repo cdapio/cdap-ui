@@ -15,20 +15,24 @@
  */
 
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import {
   countPushFailedPipelines,
+  dismissOperationAlert,
   fetchLatestOperation,
   getNamespacePipelineList,
   pushMultipleSelectedPipelines,
   pushSelectedPipelines,
-  reset,
+  refetchAllPipelines,
   resetPushStatus,
   setLoadingMessage,
   setLocalPipelines,
   setNameFilter,
+  setSyncStatusFilter,
+  setSyncStatusOfAllPipelines,
+  setSyncStatusOfRemotePipelines,
   toggleCommitModal,
   toggleShowFailedOnly,
 } from '../store/ActionCreator';
@@ -40,11 +44,17 @@ import cloneDeep from 'lodash/cloneDeep';
 import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
 import { LocalPipelineTable } from './PipelineTable';
 import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
-import { FailStatusDiv, PipelineListContainer, StyledSelectionStatusDiv } from '../styles';
+import {
+  FailStatusDiv,
+  FiltersAndStatusWrapper,
+  PipelineListContainer,
+  StyledSelectionStatusDiv,
+} from '../styles';
 import { IListResponse, IOperationMetaResponse, IOperationRun } from '../types';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 import { parseOperationResource } from '../helpers';
 import { OperationAlert } from '../OperationAlert';
+import { SyncStatusFilters } from '../SyncStatusFilters';
 
 const PREFIX = 'features.SourceControlManagement.push';
 
@@ -57,9 +67,10 @@ export const LocalPipelineListView = () => {
     commitModalOpen,
     loadingMessage,
     showFailedOnly,
+    syncStatusFilter,
   } = useSelector(({ push }) => push);
 
-  const { running: isAnOperationRunning, operation } = useSelector(
+  const { running: isAnOperationRunning, operation, showLastOperationInfo } = useSelector(
     ({ operationRun }) => operationRun
   );
 
@@ -79,8 +90,6 @@ export const LocalPipelineListView = () => {
       fetchLatestOperation(getCurrentNamespace());
     }
   }, []);
-
-  useOnUnmount(() => reset());
 
   const onPushSubmit = (commitMessage: string) => {
     resetPushStatus();
@@ -108,6 +117,8 @@ export const LocalPipelineListView = () => {
         },
         complete() {
           setLoadingMessage(null);
+          refetchAllPipelines();
+          setSyncStatusOfAllPipelines();
         },
       });
 
@@ -131,6 +142,8 @@ export const LocalPipelineListView = () => {
       },
       complete() {
         setLoadingMessage(null);
+        refetchAllPipelines();
+        setSyncStatusOfAllPipelines();
       },
     });
   };
@@ -143,8 +156,10 @@ export const LocalPipelineListView = () => {
             localPipelines={localPipelines}
             selectedPipelines={selectedPipelines}
             showFailedOnly={showFailedOnly}
-            enableMultipleSelection={multiPushEnabled}
+            multiPushEnabled={multiPushEnabled}
             disabled={isAnOperationRunning}
+            syncStatusFilter={syncStatusFilter}
+            lastOperationInfoShown={showLastOperationInfo}
           />
           <PrimaryContainedButton
             onClick={toggleCommitModal}
@@ -162,37 +177,47 @@ export const LocalPipelineListView = () => {
 
   return (
     <PipelineListContainer>
-      <SearchBox nameFilter={nameFilter} setNameFilter={setNameFilter} />
-      {operation && multiPushEnabled && <OperationAlert operation={operation} />}
-      {selectedPipelines.length > 0 && (
-        <StyledSelectionStatusDiv>
-          <div>
-            {T.translate(`${PREFIX}.pipelinesSelected`, {
-              selected: selectedPipelines.length,
-              total: localPipelines.length,
-            })}
-          </div>
-          {!multiPushEnabled && pushFailedCount > 0 && (
-            <>
-              <FailStatusDiv>
-                {pushFailedCount === 1
-                  ? T.translate(`${PREFIX}.pipelinePushedFail`)
-                  : T.translate(`${PREFIX}.pipelinesPushedFail`, {
-                      count: pushFailedCount.toString(),
-                    })}
-              </FailStatusDiv>
-              <PrimaryTextButton onClick={toggleShowFailedOnly}>
-                {showFailedOnly
-                  ? T.translate('commons.showAll')
-                  : T.translate('commons.showFailed')}
-              </PrimaryTextButton>
-            </>
-          )}
-          {multiPushEnabled && pushFailedCount > 0 && (
-            <FailStatusDiv>{T.translate(`${PREFIX}.pipelinesPushedFailMulti`)}</FailStatusDiv>
-          )}
-        </StyledSelectionStatusDiv>
+      {operation && multiPushEnabled && showLastOperationInfo && (
+        <OperationAlert operation={operation} onClose={dismissOperationAlert} />
       )}
+      <SearchBox nameFilter={nameFilter} setNameFilter={setNameFilter} />
+      <FiltersAndStatusWrapper>
+        {selectedPipelines.length > 0 && (
+          <StyledSelectionStatusDiv>
+            <div>
+              {T.translate(`${PREFIX}.pipelinesSelected`, {
+                selected: selectedPipelines.length,
+                total: localPipelines.length,
+              })}
+            </div>
+            {!multiPushEnabled && pushFailedCount > 0 && (
+              <>
+                <FailStatusDiv>
+                  {pushFailedCount === 1
+                    ? T.translate(`${PREFIX}.pipelinePushedFail`)
+                    : T.translate(`${PREFIX}.pipelinesPushedFail`, {
+                        count: pushFailedCount.toString(),
+                      })}
+                </FailStatusDiv>
+                <PrimaryTextButton onClick={toggleShowFailedOnly}>
+                  {showFailedOnly
+                    ? T.translate('commons.showAll')
+                    : T.translate('commons.showFailed')}
+                </PrimaryTextButton>
+              </>
+            )}
+            {multiPushEnabled && pushFailedCount > 0 && (
+              <FailStatusDiv>{T.translate(`${PREFIX}.pipelinesPushedFailMulti`)}</FailStatusDiv>
+            )}
+          </StyledSelectionStatusDiv>
+        )}
+        {multiPushEnabled && (
+          <SyncStatusFilters
+            syncStatusFilter={syncStatusFilter}
+            setSyncStatusFilter={setSyncStatusFilter}
+          />
+        )}
+      </FiltersAndStatusWrapper>
       {ready ? LocalPipelineTableComp() : <LoadingSVGCentered />}
       <CommitModal
         isOpen={commitModalOpen}

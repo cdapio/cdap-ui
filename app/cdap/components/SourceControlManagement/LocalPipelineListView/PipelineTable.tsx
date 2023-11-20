@@ -14,11 +14,22 @@
  * the License.
  */
 
-import React from 'react';
-import { Checkbox, Table, TableBody, TableCell, TableRow, TableHead } from '@material-ui/core';
+import React, { useState } from 'react';
+import {
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  TableSortLabel,
+  TablePagination,
+} from '@material-ui/core';
 import InfoIcon from '@material-ui/icons/Info';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import ErrorIcon from '@material-ui/icons/Error';
 import { setSelectedPipelines } from '../store/ActionCreator';
-import { IRepositoryPipeline } from '../types';
+import { IRepositoryPipeline, TSyncStatusFilter } from '../types';
 import T from 'i18n-react';
 import StatusButton from 'components/StatusButton';
 import { SUPPORT } from 'components/StatusButton/constants';
@@ -29,8 +40,12 @@ import {
   StatusCell,
   StyledFixedWidthCell,
   StyledPopover,
+  SyncStatusWrapper,
 } from '../styles';
 import { timeInstantToString } from 'services/DataFormatter';
+import { compareSyncStatus, filterOnSyncStatus, stableSort } from '../helpers';
+import LoadingSVG from 'components/shared/LoadingSVG';
+import { green, red } from '@material-ui/core/colors';
 
 const PREFIX = 'features.SourceControlManagement.table';
 
@@ -38,18 +53,42 @@ interface IRepositoryPipelineTableProps {
   localPipelines: IRepositoryPipeline[];
   selectedPipelines: string[];
   showFailedOnly: boolean;
-  enableMultipleSelection?: boolean;
+  multiPushEnabled?: boolean;
   disabled?: boolean;
+  syncStatusFilter?: TSyncStatusFilter;
+  lastOperationInfoShown?: boolean;
 }
 
 export const LocalPipelineTable = ({
   localPipelines,
   selectedPipelines,
   showFailedOnly,
-  enableMultipleSelection = false,
+  multiPushEnabled = false,
   disabled = false,
+  syncStatusFilter = 'all',
+  lastOperationInfoShown = true,
 }: IRepositoryPipelineTableProps) => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
+
   const isSelected = (name: string) => selectedPipelines.indexOf(name) !== -1;
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+
+  const syncStatusComparator = (a: IRepositoryPipeline, b: IRepositoryPipeline) => {
+    return sortOrder === 'desc' ? compareSyncStatus(a, b) : -compareSyncStatus(a, b);
+  };
+
+  const filteredPipelines = filterOnSyncStatus(localPipelines, syncStatusFilter);
+  const displayedPipelines = stableSort(filteredPipelines, syncStatusComparator).slice(
+    page * rowsPerPage,
+    (page + 1) * rowsPerPage
+  );
+  const displayedPipelineNames = displayedPipelines.map((pipeline) => pipeline.name);
+
+  const selectedPipelinesSet = new Set(selectedPipelines);
+  const isAllDisplayedPipelinesSelected = displayedPipelineNames.reduce((acc, pipelineName) => {
+    return acc && selectedPipelinesSet.has(pipelineName);
+  }, true);
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) {
@@ -57,8 +96,7 @@ export const LocalPipelineTable = ({
     }
 
     if (event.target.checked) {
-      const allSelected = localPipelines.map((pipeline) => pipeline.name);
-      setSelectedPipelines(allSelected);
+      setSelectedPipelines(displayedPipelineNames);
       return;
     }
     setSelectedPipelines([]);
@@ -69,7 +107,7 @@ export const LocalPipelineTable = ({
       return;
     }
 
-    if (enableMultipleSelection) {
+    if (multiPushEnabled) {
       handleMultipleSelection(name);
       return;
     }
@@ -98,19 +136,31 @@ export const LocalPipelineTable = ({
     setSelectedPipelines(newSelected);
   };
 
+  const handleSort = () => {
+    const isAsc = sortOrder === 'asc';
+    setSortOrder(isAsc ? 'desc' : 'asc');
+  };
+
+  const handleChangePage = (event, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
-    <TableBox>
+    <TableBox lastOperationInfoShown={lastOperationInfoShown}>
       <Table stickyHeader data-testid="local-pipelines-table">
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
-              {enableMultipleSelection && (
+              {multiPushEnabled && (
                 <Checkbox
                   color="primary"
-                  indeterminate={
-                    selectedPipelines.length > 0 && selectedPipelines.length < localPipelines.length
-                  }
-                  checked={selectedPipelines.length === localPipelines.length}
+                  indeterminate={selectedPipelines.length > 0 && !isAllDisplayedPipelinesSelected}
+                  checked={isAllDisplayedPipelinesSelected}
                   onChange={handleSelectAllClick}
                   disabled={disabled}
                 />
@@ -119,18 +169,27 @@ export const LocalPipelineTable = ({
             <TableCell></TableCell>
             <StyledTableCell>{T.translate(`${PREFIX}.pipelineName`)}</StyledTableCell>
             <StyledTableCell>{T.translate(`${PREFIX}.lastSyncDate`)}</StyledTableCell>
-            <StyledFixedWidthCell>
-              <div>
-                {T.translate(`${PREFIX}.gitStatus`)}
-                <StyledPopover target={() => <InfoIcon />} showOn="Hover">
-                  {T.translate(`${PREFIX}.gitStatusHelperText`)}
-                </StyledPopover>
-              </div>
-            </StyledFixedWidthCell>
+            {multiPushEnabled && (
+              <StyledFixedWidthCell>
+                <TableSortLabel active={true} direction={sortOrder} onClick={handleSort}>
+                  {T.translate(`${PREFIX}.gitSyncStatus`)}
+                </TableSortLabel>
+              </StyledFixedWidthCell>
+            )}
+            {!multiPushEnabled && (
+              <StyledFixedWidthCell>
+                <div>
+                  {T.translate(`${PREFIX}.gitStatus`)}
+                  <StyledPopover target={() => <InfoIcon />} showOn="Hover">
+                    {T.translate(`${PREFIX}.gitStatusHelperText`)}
+                  </StyledPopover>
+                </div>
+              </StyledFixedWidthCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
-          {localPipelines.map((pipeline: IRepositoryPipeline) => {
+          {displayedPipelines.map((pipeline: IRepositoryPipeline) => {
             if (showFailedOnly && !pipeline.error) {
               // only render pipelines that failed to push
               return;
@@ -170,14 +229,47 @@ export const LocalPipelineTable = ({
                 </StatusCell>
                 <StyledTableCell>{pipeline.name}</StyledTableCell>
                 <StyledTableCell>{timeInstantToString(pipeline.lastSyncDate)}</StyledTableCell>
-                <StyledFixedWidthCell>
-                  {pipeline.fileHash ? T.translate(`${PREFIX}.connected`) : '--'}
-                </StyledFixedWidthCell>
+                {multiPushEnabled && (
+                  <StyledFixedWidthCell>
+                    {pipeline.syncStatus === undefined ||
+                    pipeline.syncStatus === 'not_available' ? (
+                      <SyncStatusWrapper>
+                        <LoadingSVG height="18px" />
+                        {T.translate(`${PREFIX}.gitSyncStatusFetching`)}
+                      </SyncStatusWrapper>
+                    ) : pipeline.syncStatus === 'not_connected' ||
+                      pipeline.syncStatus === 'out_of_sync' ? (
+                      <SyncStatusWrapper>
+                        <ErrorIcon style={{ color: red[500] }} />{' '}
+                        {T.translate(`${PREFIX}.gitSyncStatusUnsynced`)}
+                      </SyncStatusWrapper>
+                    ) : (
+                      <SyncStatusWrapper>
+                        <CheckCircleIcon style={{ color: green[500] }} />
+                        {T.translate(`${PREFIX}.gitSyncStatusSynced`)}
+                      </SyncStatusWrapper>
+                    )}
+                  </StyledFixedWidthCell>
+                )}
+                {!multiPushEnabled && (
+                  <StyledFixedWidthCell>
+                    {pipeline.fileHash ? T.translate(`${PREFIX}.connected`) : '--'}
+                  </StyledFixedWidthCell>
+                )}
               </StyledTableRow>
             );
           })}
         </TableBody>
       </Table>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50]}
+        component="span"
+        count={filteredPipelines.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </TableBox>
   );
 };

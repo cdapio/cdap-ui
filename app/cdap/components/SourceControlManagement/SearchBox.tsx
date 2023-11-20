@@ -32,7 +32,7 @@ const StyledTextField = styled(TextField)`
 `;
 
 const StyledDiv = styled.div`
-  margin: 12px 0px;
+  margin: 8px 0 4px 0px;
 `;
 
 interface ISearchBoxProps {

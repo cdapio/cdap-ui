@@ -27,7 +27,14 @@ import SourceControlManagementSyncStore, {
 } from '.';
 import { SourceControlApi } from 'api/sourcecontrol';
 import { LongRunningOperationApi } from 'api/longRunningOperation';
-import { IPipeline, IPushResponse, IRepositoryPipeline, IOperationRun } from '../types';
+import {
+  IPipeline,
+  IPushResponse,
+  IRepositoryPipeline,
+  IOperationRun,
+  TSyncStatusFilter,
+  TSyncStatus,
+} from '../types';
 import { SUPPORT } from 'components/StatusButton/constants';
 import { compareTimeInstant } from '../helpers';
 import { getCurrentNamespace } from 'services/NamespaceStore';
@@ -36,6 +43,7 @@ const PREFIX = 'features.SourceControlManagement';
 
 // push actions
 export const getNamespacePipelineList = (namespace, nameFilter = null) => {
+  const shouldCalculateSyncStatus = SourceControlManagementSyncStore.getState().pull.ready;
   MyPipelineApi.list({
     namespace,
     artifactName: BATCH_PIPELINE_TYPE,
@@ -44,13 +52,18 @@ export const getNamespacePipelineList = (namespace, nameFilter = null) => {
     (res: IPipeline[] | { applications: IPipeline[] }) => {
       const pipelines = Array.isArray(res) ? res : res?.applications;
       const nsPipelines = pipelines.map((pipeline) => {
-        return {
+        const localPipeline: IRepositoryPipeline = {
           name: pipeline.name,
           fileHash: pipeline.sourceControlMeta?.fileHash,
           lastSyncDate: pipeline.sourceControlMeta?.lastSyncedAt,
           error: null,
           status: null,
+          syncStatus: 'not_available',
         };
+        if (shouldCalculateSyncStatus) {
+          localPipeline.syncStatus = getSyncStatus(localPipeline);
+        }
+        return localPipeline;
       });
       setLocalPipelines(nsPipelines);
     },
@@ -58,6 +71,55 @@ export const getNamespacePipelineList = (namespace, nameFilter = null) => {
       setLocalPipelines([]);
     }
   );
+};
+
+const getSyncStatus = (pipeline: IRepositoryPipeline, withLocal?: boolean): TSyncStatus => {
+  const listOfPipelines = withLocal
+    ? SourceControlManagementSyncStore.getState().push.localPipelines
+    : SourceControlManagementSyncStore.getState().pull.remotePipelines;
+
+  const pipelineInList = listOfPipelines.find((p) => p.name === pipeline.name);
+  if (!pipeline.fileHash || !pipelineInList) {
+    return 'not_connected';
+  }
+  return pipeline.fileHash === pipelineInList.fileHash ? 'in_sync' : 'out_of_sync';
+};
+
+export const setSyncStatusOfLocalPipelines = () => {
+  const localPipelines = SourceControlManagementSyncStore.getState().push.localPipelines;
+  const remotePipelines = SourceControlManagementSyncStore.getState().pull.remotePipelines;
+  if (!remotePipelines.length) {
+    return;
+  }
+
+  setLocalPipelines(
+    localPipelines.map((pipeline) => {
+      const p = { ...pipeline };
+      p.syncStatus = getSyncStatus(pipeline);
+      return p;
+    })
+  );
+};
+
+export const setSyncStatusOfRemotePipelines = () => {
+  const localPipelines = SourceControlManagementSyncStore.getState().push.localPipelines;
+  const remotePipelines = SourceControlManagementSyncStore.getState().pull.remotePipelines;
+  if (!localPipelines.length) {
+    return;
+  }
+
+  setRemotePipelines(
+    remotePipelines.map((pipeline) => {
+      const p = { ...pipeline };
+      p.syncStatus = getSyncStatus(pipeline, true);
+      return p;
+    })
+  );
+};
+
+export const setSyncStatusOfAllPipelines = () => {
+  setSyncStatusOfLocalPipelines();
+  setSyncStatusOfRemotePipelines();
 };
 
 export const setLocalPipelines = (pipelines: IRepositoryPipeline[]) => {
@@ -84,6 +146,15 @@ export const setNameFilter = (nameFilter: string) => {
     },
   });
   debouncedApplySearch();
+};
+
+export const setSyncStatusFilter = (syncStatusFilter: TSyncStatusFilter) => {
+  SourceControlManagementSyncStore.dispatch({
+    type: PushToGitActions.setSyncStatusFilter,
+    payload: {
+      syncStatusFilter,
+    },
+  });
 };
 
 export const setSelectedPipelines = (selectedPipelines: any[]) => {
@@ -199,18 +270,24 @@ export const reset = () => {
 
 // pull actions
 export const getRemotePipelineList = (namespace) => {
+  const shouldCalculateSyncStatus = SourceControlManagementSyncStore.getState().push.ready;
   SourceControlApi.list({
     namespace,
   }).subscribe(
     (res: IRepositoryPipeline[] | { apps: IRepositoryPipeline[] }) => {
       const pipelines = Array.isArray(res) ? res : res?.apps;
       const remotePipelines = pipelines.map((pipeline) => {
-        return {
+        const remotePipeline: IRepositoryPipeline = {
           name: pipeline.name,
           fileHash: pipeline.fileHash,
           error: null,
           status: null,
+          syncStatus: 'not_available',
         };
+        if (shouldCalculateSyncStatus) {
+          remotePipeline.syncStatus = getSyncStatus(remotePipeline, true);
+        }
+        return remotePipeline;
       });
       setRemotePipelines(remotePipelines);
     },
@@ -244,6 +321,15 @@ export const setRemoteNameFilter = (nameFilter: string) => {
     type: PullFromGitActions.setNameFilter,
     payload: {
       nameFilter,
+    },
+  });
+};
+
+export const setRemoteSyncStatusFilter = (syncStatusFilter: TSyncStatusFilter) => {
+  SourceControlManagementSyncStore.dispatch({
+    type: PullFromGitActions.setSyncStatusFilter,
+    payload: {
+      syncStatusFilter,
     },
   });
 };
@@ -348,11 +434,30 @@ export const resetRemote = () => {
   });
 };
 
+const updateOperationsHistory = (operations: IOperationRun[]) => {
+  const currentHistory = [
+    ...SourceControlManagementSyncStore.getState().operationRun.allOperations,
+  ];
+  const operationIds = new Set(currentHistory.map((op) => op.id));
+  for (const operation of operations) {
+    if (!operationIds.has(operation.id)) {
+      currentHistory.push(operation);
+    }
+  }
+
+  currentHistory.sort((a, b) => compareTimeInstant(b.metadata.createTime, a.metadata.createTime));
+  SourceControlManagementSyncStore.dispatch({
+    type: OperationRunActions.setAllOperations,
+    payload: currentHistory,
+  });
+};
+
 export const setLatestOperation = (namespace: string, operation: IOperationRun) => {
   SourceControlManagementSyncStore.dispatch({
     type: OperationRunActions.setLatestOperation,
     payload: operation,
   });
+  updateOperationsHistory([operation]);
 
   if (operation.done) {
     return;
@@ -364,7 +469,7 @@ export const setLatestOperation = (namespace: string, operation: IOperationRun) 
   }).subscribe((res: IOperationRun) => {
     if (res.done) {
       pollOperationStatus.unsubscribe();
-
+      updateOperationsHistory([res]);
       SourceControlManagementSyncStore.dispatch({
         type: OperationRunActions.setLatestOperation,
         payload: res,
@@ -388,6 +493,8 @@ export const fetchLatestPullOperation = (namespace: string) => {
       if (res.operations.length < 1) {
         return;
       }
+      updateOperationsHistory(res.operations);
+
       const operation = res.operations[0];
       if (
         !currentLatest ||
@@ -408,6 +515,8 @@ export const fetchLatestPushOperation = (namespace: string) => {
       if (res.operations.length < 1) {
         return;
       }
+      updateOperationsHistory(res.operations);
+
       const operation = res.operations[0];
       if (
         !currentLatest ||
@@ -438,4 +547,11 @@ export const stopOperation = (namespace: string, operation: IOperationRun) => ()
 export const refetchAllPipelines = () => {
   getNamespacePipelineList(getCurrentNamespace());
   getRemotePipelineList(getCurrentNamespace());
+};
+
+export const dismissOperationAlert = () => {
+  SourceControlManagementSyncStore.dispatch({
+    type: OperationRunActions.setShowLastOperationInfo,
+    payload: false,
+  });
 };

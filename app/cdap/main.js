@@ -19,7 +19,7 @@ import 'react-hot-loader/patch';
 import './globals';
 
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { Route, Router, Switch } from 'react-router-dom';
 import SessionTokenStore, { fetchSessionToken } from 'services/SessionTokenStore';
 import { Theme, applyTheme } from 'services/ThemeHelper';
@@ -65,6 +65,7 @@ import history from 'services/history';
 import { CookieBanner } from 'components/CookieBanner';
 // See ./graphql/fragements/README.md
 import introspectionQueryResultData from '../../graphql/fragments/fragmentTypes.json';
+import { FooterContext } from 'components/FooterContext';
 
 require('../ui-utils/url-generator');
 require('font-awesome-sass-loader!./styles/font-awesome.config.js');
@@ -409,7 +410,7 @@ class CDAP extends Component {
                   ))}
               </React.Fragment>
             )}
-            <Footer />
+            {this.props.showFooter && <Footer />}
             <AuthRefresher />
           </div>
         </ApolloProvider>
@@ -420,10 +421,34 @@ class CDAP extends Component {
 
 CDAP.propTypes = {
   children: PropTypes.node,
+  showFooter: PropTypes.bool,
 };
 
+CDAP.defaultProps = {
+  showFooter: true,
+};
+
+function CdapWithFooterContext() {
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    const appContainer = document.getElementById('app-container');
+    if (!show) {
+      appContainer.classList.add('no-footer');
+    } else {
+      appContainer.classList.remove('no-footer');
+    }
+  }, [show]);
+
+  return (
+    <FooterContext.Provider value={{ show, setShow }}>
+      <CDAP showFooter={show} />
+    </FooterContext.Provider>
+  );
+}
+
 const RootComp = hot(() => {
-  return <ThemeWrapper render={() => <CDAP />} />;
+  return <ThemeWrapper render={() => <CdapWithFooterContext />} />;
 });
 
 ReactDOM.render(<RootComp />, document.getElementById('app-container'));

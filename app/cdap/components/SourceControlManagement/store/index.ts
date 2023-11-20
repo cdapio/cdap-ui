@@ -17,13 +17,13 @@
 import { combineReducers, createStore, Store as StoreInterface } from 'redux';
 import { composeEnhancers } from 'services/helpers';
 import { IAction } from 'services/redux-helpers';
-import { IOperationRun, IRepositoryPipeline } from '../types';
-import { act } from 'react-dom/test-utils';
+import { IOperationRun, IRepositoryPipeline, TSyncStatusFilter } from '../types';
 
 interface IPushViewState {
   ready: boolean;
   localPipelines: IRepositoryPipeline[];
   nameFilter: string;
+  syncStatusFilter: TSyncStatusFilter;
   selectedPipelines: string[];
   commitModalOpen: boolean;
   loadingMessage: string;
@@ -34,6 +34,7 @@ interface IPullViewState {
   ready: boolean;
   remotePipelines: IRepositoryPipeline[];
   nameFilter: string;
+  syncStatusFilter: TSyncStatusFilter;
   selectedPipelines: string[];
   loadingMessage: string;
   showFailedOnly: boolean;
@@ -43,6 +44,8 @@ interface IPullViewState {
 interface IOperationRunState {
   running: boolean;
   operation?: IOperationRun;
+  showLastOperationInfo: boolean;
+  allOperations: IOperationRun[];
 }
 
 interface IStore {
@@ -55,6 +58,7 @@ export const PushToGitActions = {
   setLocalPipelines: 'LOCAL_PIPELINES_SET',
   reset: 'LOCAL_PIPELINES_RESET',
   setNameFilter: 'LOCAL_PIPELINES_SET_NAME_FILTER',
+  setSyncStatusFilter: 'LOCAL_PIPELINES_SET_SYNC_STATUS_FILTER',
   applySearch: 'LOCAL_PIPELINES_APPLY_SERACH',
   setSelectedPipelines: 'LOCAL_PIPELINES_SET_SELECTED_PIPELINES',
   toggleCommitModal: 'LOCAL_PIPELINES_TOGGLE_COMMIT_MODAL',
@@ -66,6 +70,7 @@ export const PullFromGitActions = {
   setRemotePipelines: 'REMOTE_PIPELINES_SET',
   reset: 'REMOTE_PIPELINES_RESET',
   setNameFilter: 'REMOTE_PIPELINES_SET_NAME_FILTER',
+  setSyncStatusFilter: 'REMOTE_PIPELINES_SET_SYNC_STATUS_FILTER',
   applySearch: 'REMOTE_PIPELINES_APPLY_SERACH',
   setSelectedPipelines: 'REMOTE_PIPELINES_SET_SELECTED_PIPELINES',
   setLoadingMessage: 'REMOTE_PIPELINES_SET_LOADING_MESSAGE',
@@ -76,12 +81,15 @@ export const PullFromGitActions = {
 export const OperationRunActions = {
   setLatestOperation: 'SET_RUNNING_OPERATION',
   unsetLatestOperation: 'UNSET_RUNNING_OPERATION',
+  setShowLastOperationInfo: 'SET_SHOW_LAST_OPERATION_INFO',
+  setAllOperations: 'SET_ALL_OPERATIONS',
 };
 
 const defaultPushViewState: IPushViewState = {
   ready: false,
   localPipelines: [],
   nameFilter: '',
+  syncStatusFilter: 'all',
   selectedPipelines: [],
   commitModalOpen: false,
   loadingMessage: null,
@@ -92,6 +100,7 @@ const defaultPullViewState: IPullViewState = {
   ready: false,
   remotePipelines: [],
   nameFilter: '',
+  syncStatusFilter: 'all',
   selectedPipelines: [],
   loadingMessage: null,
   showFailedOnly: false,
@@ -100,6 +109,8 @@ const defaultPullViewState: IPullViewState = {
 
 const defaultOperationRunState: IOperationRunState = {
   running: false,
+  showLastOperationInfo: true,
+  allOperations: [],
 };
 
 const push = (state = defaultPushViewState, action: IAction) => {
@@ -114,6 +125,11 @@ const push = (state = defaultPushViewState, action: IAction) => {
       return {
         ...state,
         nameFilter: action.payload.nameFilter,
+      };
+    case PushToGitActions.setSyncStatusFilter:
+      return {
+        ...state,
+        syncStatusFilter: action.payload.syncStatusFilter,
       };
     case PushToGitActions.applySearch:
       return {
@@ -161,6 +177,11 @@ const pull = (state = defaultPullViewState, action: IAction) => {
         ...state,
         nameFilter: action.payload.nameFilter,
       };
+    case PullFromGitActions.setSyncStatusFilter:
+      return {
+        ...state,
+        syncStatusFilter: action.payload.syncStatusFilter,
+      };
     case PullFromGitActions.setPullViewErrorMsg:
       return {
         ...state,
@@ -201,12 +222,26 @@ const operationRun = (
   switch (action.type) {
     case OperationRunActions.setLatestOperation:
       return {
+        ...state,
         running: !action.payload?.done,
         operation: action.payload,
+        showLastOperationInfo: true,
       };
     case OperationRunActions.unsetLatestOperation:
       return {
+        ...state,
         running: false,
+        showLastOperationInfo: false,
+      };
+    case OperationRunActions.setShowLastOperationInfo:
+      return {
+        ...state,
+        showLastOperationInfo: action.payload,
+      };
+    case OperationRunActions.setAllOperations:
+      return {
+        ...state,
+        allOperations: action.payload,
       };
     default:
       return state;

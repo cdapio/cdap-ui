@@ -21,7 +21,11 @@ import {
   IResource,
   IOperationResource,
   IOperationRun,
+  IOperationError,
   IOperationResourceScopedErrorMessage,
+  IRepositoryPipeline,
+  TSyncStatusFilter,
+  TSyncStatus,
 } from './types';
 import T from 'i18n-react';
 import { ITimeInstant, timeInstantToString } from 'services/DataFormatter';
@@ -71,7 +75,7 @@ export const getOperationRunMessage = (operation: IOperationRun) => {
     return T.translate(`${PREFIX}.syncSuccessMulti`);
   }
 
-  if (operation.status === OperationStatus.FAILED || operation.status === OperationStatus.KILLED) {
+  if (operation.status === OperationStatus.FAILED) {
     if (operation.type === OperationType.PUSH_APPS) {
       return T.translate(`${PREFIX}.push.pushFailureMulti`, { n });
     }
@@ -79,6 +83,16 @@ export const getOperationRunMessage = (operation: IOperationRun) => {
       return T.translate(`${PREFIX}.pull.pullFailureMulti`, { n });
     }
     return T.translate(`${PREFIX}.syncFailreMulti`);
+  }
+
+  if (operation.status === OperationStatus.KILLED) {
+    if (operation.type === OperationType.PUSH_APPS) {
+      return T.translate(`${PREFIX}.push.pushKilledMulti`, { n });
+    }
+    if (operation.type === OperationType.PULL_APPS) {
+      return T.translate(`${PREFIX}.pull.pullKilledMulti`, { n });
+    }
+    return T.translate(`${PREFIX}.syncKilledMulti`);
   }
 
   if (operation.type === OperationType.PUSH_APPS) {
@@ -99,8 +113,12 @@ export const getOperationStatusType = (operation: IOperationRun) => {
     return 'success';
   }
 
-  if (operation.status === OperationStatus.FAILED || operation.status === OperationStatus.KILLED) {
+  if (operation.status === OperationStatus.FAILED) {
     return 'error';
+  }
+
+  if (operation.status === OperationStatus.KILLED) {
+    return 'warning';
   }
 
   return 'info';
@@ -153,4 +171,52 @@ export const getOperationRunTime = (operation: IOperationRun): string => {
       .humanize();
   }
   return null;
+};
+
+const getSyncStatusWeight = (syncStatus?: TSyncStatus): number => {
+  if (syncStatus === undefined) {
+    return 0;
+  }
+  if (syncStatus === 'not_available') {
+    return 0;
+  }
+  if (syncStatus === 'not_connected') {
+    return 0;
+  }
+  if (syncStatus === 'out_of_sync') {
+    return 1;
+  }
+  return 2;
+};
+
+export const compareSyncStatus = (a: IRepositoryPipeline, b: IRepositoryPipeline): number => {
+  return getSyncStatusWeight(a.syncStatus) - getSyncStatusWeight(b.syncStatus);
+};
+
+export const stableSort = (array, comparator) => {
+  const stabilizedArray = array.map((el, index) => [el, index]);
+  stabilizedArray.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) {
+      return order;
+    }
+    return a[1] - b[1];
+  });
+  return stabilizedArray.map((el) => el[0]);
+};
+
+export const filterOnSyncStatus = (
+  array: IRepositoryPipeline[],
+  syncStatusFilter: TSyncStatusFilter
+): IRepositoryPipeline[] => {
+  if (syncStatusFilter === 'all') {
+    return array;
+  }
+
+  return array.filter((pipeline) => {
+    if (syncStatusFilter === 'out_of_sync') {
+      return ['not_connected', 'out_of_sync', 'not_available'].includes(pipeline.syncStatus);
+    }
+    return pipeline.syncStatus === syncStatusFilter;
+  });
 };

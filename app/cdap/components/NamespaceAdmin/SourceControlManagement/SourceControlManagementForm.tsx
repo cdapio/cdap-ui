@@ -340,17 +340,19 @@ const SourceControlManagementForm = ({
                     : []
                 }
               />
-              <PropertyRow
-                value={formState.config?.auth?.patConfig?.username}
-                property={{
-                  name: 'username',
-                  description: T.translate(`${PREFIX}.auth.pat.usernameHelperText`).toString(),
-                  label: T.translate(`${PREFIX}.auth.pat.username`).toString(),
-                }}
-                onChange={(val) => {
-                  handleValueChange(val, 'username');
-                }}
-              />
+              {formState.config?.provider !== providers.github && (
+                <PropertyRow
+                  value={formState.config?.auth?.patConfig?.username}
+                  property={{
+                    name: 'username',
+                    description: T.translate(`${PREFIX}.auth.pat.usernameHelperText`).toString(),
+                    label: T.translate(`${PREFIX}.auth.pat.username`).toString(),
+                  }}
+                  onChange={(val) => {
+                    handleValueChange(val, 'username');
+                  }}
+                />
+              )}
             </>
           )}
         </StyledGroup>
