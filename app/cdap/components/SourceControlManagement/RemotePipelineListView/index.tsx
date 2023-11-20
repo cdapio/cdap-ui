@@ -233,6 +233,7 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
             variant="filled"
             severity={getOperationStatusType(operation)}
             action={getOperationAction()}
+            data-testid="latest_operation_banner"
           >
             <AlertTitle>{getOperationRunMessage(operation)}</AlertTitle>
             {getOperationStartTime(operation)}

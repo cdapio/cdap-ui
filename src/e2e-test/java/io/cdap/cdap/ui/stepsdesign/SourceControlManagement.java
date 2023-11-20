@@ -21,6 +21,7 @@ import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
 import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.PluginPropertyUtils;
+import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -28,6 +29,7 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  *
@@ -207,9 +209,86 @@ public class SourceControlManagement {
     );
   }
 
+  @Then("Verify {string} pipeline exist in local list")
+  public void verifyLocalPipelineList(String pipeline) {
+    Assert.assertTrue(
+        Helper.isElementExists(Helper.getCssSelectorByDataTestId("local-" + pipeline))
+    );
+  }
+
+  @When("Select local pipeline {string}")
+  public void selectPipelineFromList(String pipeline) {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("local-" + pipeline));
+  }
+
+  @When("Select remote pipeline {string}")
+  public void selectRemotePipelineFromList(String pipeline) {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("remote-" + pipeline));
+  }
+
+  @When("Push selected pipelines to remote with commit message {string}")
+  public void pushPipelinesToRemote(String message) {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("remote-push-button"));
+    commitPipeline(message);
+  }
+
+  @When("Pull selected pipelines")
+  public void pullSelectedPipelines() {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("remote-pull-button"));
+  }
+
+  @Then("Verify {string} operation is running")
+  public void verifyOperationIsRunning(String operationType) {
+    String operationBannerPath = "//*[@data-testid=\"latest_operation_banner\"]";
+    WebElement operationBanner = Helper.locateElementByXPath(operationBannerPath);
+    ElementHelper.isElementDisplayed(operationBanner);
+
+    SeleniumDriver.getWaitDriver(180L).until(ExpectedConditions.or(
+        ExpectedConditions.textToBePresentInElement(operationBanner, "Pushing"),
+        ExpectedConditions.textToBePresentInElement(operationBanner, "Pulling")
+    ));
+
+    String bannerMessage = ElementHelper.getElementText(operationBanner);
+    String expectedText = operationType.equals("push") ? "Pushing" : "Pulling";
+    Assert.assertTrue(bannerMessage.contains(expectedText));
+  }
+
+  @Then("Verify the remote {string} button is disabled")
+  public void verifyRemotePushOrPullButtonIsDisabled(String operationType) {
+    String buttonXpath = "//*[@data-testid=\"remote-" + operationType + "-button\"]";
+    // if the button is not displayed at all, then we do not need to check if it's disabled
+    if (!ElementHelper.isElementDisplayed(By.xpath(buttonXpath), 1)) {
+      return;
+    }
+    WebElement button = Helper.locateElementByXPath(buttonXpath);
+    ElementHelper.isElementDisplayed(button);
+    Assert.assertFalse(button.isEnabled());
+  }
+
+  @Then("Wait for {string} operation to complete successfully")
+  public void waitForOperationToCompleteSuccessfully(String operationType) {
+    String operationBannerPath = "//*[@data-testid=\"latest_operation_banner\"]";
+    WebElement operationBanner = Helper.locateElementByXPath(operationBannerPath);
+    SeleniumDriver.getWaitDriver(180L).until(ExpectedConditions.or(
+        ExpectedConditions.textToBePresentInElement(operationBanner, "Successfully"),
+        ExpectedConditions.textToBePresentInElement(operationBanner, "Failed")
+    ));
+
+    String bannerMessage = ElementHelper.getElementText(operationBanner);
+    String expectedText = operationType.equals("push") ? "Successfully pushed" : "Successfully pulled";
+    Assert.assertTrue(bannerMessage.contains(expectedText));
+  }
+
+  @Then("Verify pipeline {string} is deployed")
+  public void verifyPipelineIsDeployed(String pipelineName) {
+    Assert.assertTrue(
+        Helper.isElementExists(Helper.getCssSelectorByDataTestId("deployed-" + pipelineName))
+    );
+  }
+
   @When("Select {string} pipeline and push")
   public void pushPipelineInRemotePage(String pipeline) {
-    ElementHelper.clickOnElement(Helper.locateElementByTestId("local-" + pipeline));
+    selectPipelineFromList(pipeline);
     ElementHelper.clickOnElement(Helper.locateElementByTestId("remote-push-button"));
   }
 
