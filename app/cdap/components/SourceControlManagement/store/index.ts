@@ -17,7 +17,8 @@
 import { combineReducers, createStore, Store as StoreInterface } from 'redux';
 import { composeEnhancers } from 'services/helpers';
 import { IAction } from 'services/redux-helpers';
-import { IRepositoryPipeline } from '../types';
+import { IOperationRun, IRepositoryPipeline } from '../types';
+import { act } from 'react-dom/test-utils';
 
 interface IPushViewState {
   ready: boolean;
@@ -39,9 +40,15 @@ interface IPullViewState {
   pullViewErrorMsg: string;
 }
 
+interface IOperationRunState {
+  running: boolean;
+  operation?: IOperationRun;
+}
+
 interface IStore {
   push: IPushViewState;
   pull: IPullViewState;
+  operationRun: IOperationRunState;
 }
 
 export const PushToGitActions = {
@@ -66,6 +73,11 @@ export const PullFromGitActions = {
   setPullViewErrorMsg: 'REMOTE_PIPELINES_SET_ERROR_MSG',
 };
 
+export const OperationRunActions = {
+  setLatestOperation: 'SET_RUNNING_OPERATION',
+  unsetLatestOperation: 'UNSET_RUNNING_OPERATION',
+};
+
 const defaultPushViewState: IPushViewState = {
   ready: false,
   localPipelines: [],
@@ -84,6 +96,10 @@ const defaultPullViewState: IPullViewState = {
   loadingMessage: null,
   showFailedOnly: false,
   pullViewErrorMsg: '',
+};
+
+const defaultOperationRunState: IOperationRunState = {
+  running: false,
 };
 
 const push = (state = defaultPushViewState, action: IAction) => {
@@ -178,14 +194,35 @@ const pull = (state = defaultPullViewState, action: IAction) => {
   }
 };
 
+const operationRun = (
+  state: IOperationRunState = defaultOperationRunState,
+  action: IAction
+): IOperationRunState => {
+  switch (action.type) {
+    case OperationRunActions.setLatestOperation:
+      return {
+        running: !action.payload?.done,
+        operation: action.payload,
+      };
+    case OperationRunActions.unsetLatestOperation:
+      return {
+        running: false,
+      };
+    default:
+      return state;
+  }
+};
+
 const SourceControlManagementSyncStore: StoreInterface<IStore> = createStore(
   combineReducers({
     push,
     pull,
+    operationRun,
   }),
   {
     push: defaultPushViewState,
     pull: defaultPullViewState,
+    operationRun: defaultOperationRunState,
   },
   composeEnhancers('SourceControlManagementSyncStore')()
 );

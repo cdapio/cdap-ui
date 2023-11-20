@@ -34,6 +34,7 @@ interface ICommitModalProps {
   loadingMessage?: string;
   pipelineName?: string;
   updateFileHash?: (fileHash: string) => void;
+  enableMultiplePush?: boolean;
 }
 
 export const CommitModal = ({
@@ -43,6 +44,7 @@ export const CommitModal = ({
   loadingMessage = null,
   pipelineName,
   updateFileHash,
+  enableMultiplePush = false,
 }: ICommitModalProps) => {
   const [commitMessage, setCommitMessage] = useState(null);
   const [pushError, setPushError] = useState(null);
@@ -108,11 +110,18 @@ export const CommitModal = ({
     handlePipelinePush();
   };
 
+  const getPushSuccessMessage = () => {
+    if (enableMultiplePush) {
+      return T.translate(`${PREFIX}.pushSuccessMulti`);
+    }
+    return T.translate(`${PREFIX}.pushSuccess`, { pipelineName });
+  };
+
   return (
     <>
       <Alert
         showAlert={pushStatus !== null}
-        message={pushError || T.translate(`${PREFIX}.pushSuccess`, { pipelineName })}
+        message={pushError || getPushSuccessMessage()}
         type={getAlertTypeFromStatus(pushStatus)}
         onClose={resetPushErrorAndSuccess}
       />
