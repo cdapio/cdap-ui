@@ -48,6 +48,7 @@ interface IConfirmDialogProps {
   extendedMessage?: IExtendedMessage | string;
   disableAction?: boolean;
   copyableExtendedMessage?: string | ReactNode;
+  isExpandedDefault?: boolean;
 }
 
 export const ConfirmDialog = ({
@@ -64,6 +65,7 @@ export const ConfirmDialog = ({
   extendedMessage,
   disableAction,
   copyableExtendedMessage,
+  isExpandedDefault,
 }: IConfirmDialogProps) => {
   return (
     <StyledDialog open={isOpen} fullWidth>
@@ -75,6 +77,7 @@ export const ConfirmDialog = ({
           extendedMessage={extendedMessage}
           copyableExtendedMessage={copyableExtendedMessage}
           key={statusMessage.toString()}
+          isExpandedDefault={isExpandedDefault}
         ></Status>
       )}
       <DialogContent>

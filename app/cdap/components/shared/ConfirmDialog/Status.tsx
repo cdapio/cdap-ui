@@ -30,6 +30,7 @@ interface IStatusProps {
   statusMessage?: string | ReactNode;
   extendedMessage?: IExtendedMessage | string;
   copyableExtendedMessage?: string | ReactNode;
+  isExpandedDefault?: boolean;
 }
 
 export const Status = ({
@@ -37,8 +38,9 @@ export const Status = ({
   statusMessage,
   extendedMessage,
   copyableExtendedMessage,
+  isExpandedDefault,
 }: IStatusProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(isExpandedDefault);
 
   const handleToggleExtendedMessage = () => {
     setIsExpanded(!isExpanded);
@@ -64,7 +66,7 @@ export const Status = ({
           {isExpanded && (
             <StyledBox>
               {typeof extendedMessage === 'string' ? (
-                <div>{extendedMessage}</div>
+                <div dangerouslySetInnerHTML={{ __html: extendedMessage.toString() }}></div>
               ) : (
                 <pre>{extendedMessage.response}</pre>
               )}
