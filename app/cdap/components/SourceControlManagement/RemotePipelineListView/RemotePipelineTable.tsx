@@ -29,16 +29,32 @@ interface IRepositoryPipelineTableProps {
   remotePipelines: IRepositoryPipeline[];
   selectedPipelines: string[];
   showFailedOnly: boolean;
+  enableMultipleSelection?: boolean;
+  disabled?: boolean;
 }
 
 export const RemotePipelineTable = ({
   remotePipelines,
   selectedPipelines,
   showFailedOnly,
+  enableMultipleSelection = false,
+  disabled = false,
 }: IRepositoryPipelineTableProps) => {
   const isSelected = (name: string) => selectedPipelines.indexOf(name) !== -1;
 
   const handleClick = (event: React.MouseEvent, name: string) => {
+    if (disabled) {
+      return;
+    }
+
+    if (enableMultipleSelection) {
+      handleMultipleSelection(name);
+      return;
+    }
+    handleSingleSelection(name);
+  };
+
+  const handleSingleSelection = (name: string) => {
     // currently only 1 application pull at a time is allowed, so single selection
     const selectedIndex = selectedPipelines.indexOf(name);
     let newSelected = [];
@@ -48,12 +64,51 @@ export const RemotePipelineTable = ({
     setSelectedRemotePipelines(newSelected);
   };
 
+  const handleMultipleSelection = (name: string) => {
+    const selectedIndex = selectedPipelines.indexOf(name);
+    const newSelected = [...selectedPipelines];
+
+    if (selectedIndex === -1) {
+      // not currently selected
+      newSelected.push(name);
+    } else {
+      newSelected.splice(selectedIndex, 1);
+    }
+    setSelectedRemotePipelines(newSelected);
+  };
+
+  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled) {
+      return;
+    }
+
+    if (event.target.checked) {
+      const allSelected = remotePipelines.map((pipeline) => pipeline.name);
+      setSelectedRemotePipelines(allSelected);
+      return;
+    }
+    setSelectedRemotePipelines([]);
+  };
+
   return (
     <TableBox>
       <Table data-testid="remote-pipelines-table" stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell padding="checkbox"></TableCell>
+            <TableCell padding="checkbox">
+              {enableMultipleSelection && (
+                <Checkbox
+                  color="primary"
+                  indeterminate={
+                    selectedPipelines.length > 0 &&
+                    selectedPipelines.length < remotePipelines.length
+                  }
+                  checked={selectedPipelines.length === remotePipelines.length}
+                  onChange={handleSelectAllClick}
+                  disabled={disabled}
+                />
+              )}
+            </TableCell>
             <TableCell></TableCell>
             <StyledTableCell>{T.translate(`${PREFIX}.pipelineName`)}</StyledTableCell>
           </TableRow>
@@ -73,9 +128,10 @@ export const RemotePipelineTable = ({
                 selected={isPipelineSelected}
                 onClick={(e) => handleClick(e, pipeline.name)}
                 data-testid={`remote-${pipeline.name}`}
+                disabled={disabled}
               >
                 <TableCell padding="checkbox">
-                  <Checkbox color="primary" checked={isPipelineSelected} />
+                  <Checkbox color="primary" checked={isPipelineSelected} disabled={disabled} />
                 </TableCell>
                 <TableCell
                   style={{ width: '40px' }}

@@ -18,15 +18,23 @@ import DataSourceConfigurer from 'services/datasource/DataSourceConfigurer';
 import { apiCreator } from 'services/resource-helper';
 
 const dataSrc = DataSourceConfigurer.getInstance();
-const basePath = '/namespaces/:namespace/repository';
+const basePath = '/namespaces/:namespace/operations';
+const PUSH_FILTER = encodeURIComponent('TYPE=PUSH_APPS');
+const PULL_FILTER = encodeURIComponent('TYPE=PULL_APPS');
 
-export const SourceControlApi = {
-  push: apiCreator(dataSrc, 'POST', 'REQUEST', `${basePath}/apps/:appId/push`),
-  pull: apiCreator(dataSrc, 'POST', 'REQUEST', `${basePath}/apps/:appId/pull`),
-  pushMultiple: apiCreator(dataSrc, 'POST', 'REQUEST', `${basePath}/apps/push`),
-  pullMultiple: apiCreator(dataSrc, 'POST', 'REQUEST', `${basePath}/apps/pull`),
-  list: apiCreator(dataSrc, 'GET', 'REQUEST', `${basePath}/apps`),
-  setConfig: apiCreator(dataSrc, 'PUT', 'REQUEST', basePath),
-  getConfig: apiCreator(dataSrc, 'GET', 'REQUEST', basePath),
-  deleteConfig: apiCreator(dataSrc, 'DELETE', 'REQUEST', basePath),
+export const LongRunningOperationApi = {
+  getLatestPush: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basePath}/?pageSize=1&filter=${PUSH_FILTER}`
+  ),
+  getLatestPull: apiCreator(
+    dataSrc,
+    'GET',
+    'REQUEST',
+    `${basePath}/?pageSize=1&filter=${PULL_FILTER}`
+  ),
+  pollOperation: apiCreator(dataSrc, 'GET', 'POLL', `${basePath}/:operationId`),
+  stopOperation: apiCreator(dataSrc, 'POST', 'REQUEST', `${basePath}/:operationId/stop`),
 };

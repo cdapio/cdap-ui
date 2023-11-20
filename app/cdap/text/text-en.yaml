@@ -3226,32 +3226,51 @@ features:
           _: "{context} required fields are missing"
     info: Source control management allows you to connect namespace with the repository of your source control system repository to efficiently manage development process of the deployed pipelines.
     linkButton: Link Repository
+    syncAppMessageMulti: Syncing pipelines with the remote repository now...
+    syncSuccessMulti: Successfully synced {n} pipelines with the remote repository.
+    syncFailureMulti: Failed to sync {n} pipelines with the remote repository.
+    pipelineSyncMessage: Syncing 1 pipeline with the remote repository
+    pipelineSyncedSuccess: Successfully synced 1 pipeline with the remote repository
+    pipelineSyncedFail: Failed to sync 1 pipeline with the remote repository
     pull:
       emptyPipelineListMessage: There are no pipelines in the remote repository or no pipelines matching the search query "{query}"
       modalTitle: Pull pipeline from remote repository
-      pipelinePulledFail: "Failed to pull 1 pipeline"
+      pipelinePulledFail: "Failed to pull 1 pipeline from the remote repository"
+      pipelinePulledSuccess: Successfully pulled 1 pipeline from the remote repository
+      pipelinePullMessage: Pulling 1 pipeline from the remote repository
       pipelinesListedFail: "Failed to list remote pipelines"
       pipelinesPulledFail: "Failed to pull {count} pipelines"
       pipelinesSelected: "{selected} of {total} pipelines selected"
       pullAppMessage: Pulling {appId} from remote repository now...
+      pullAppMessageMulti: Pulling {n} pipelines from the remote repository now...
       pullButton: Pull to namespace
       pullChipTooltip: Click to pull the latest from Git
       pullSuccess: Pipeline {pipelineName} updated
+      pullSuccessMulti: Successfully pulled {n} pipelines from the remote repository.
+      pullFailureMulti: Failed to pull {n} pipelines from the remote repository.
       tab: Remote pipelines
       upToDate: Pipeline is already up to date.
+      stopOperation: STOP
     push:
       commitPlaceHolder: Write commit message here
       commitTitle: Enter Commit Message
       emptyCommitMessage: Commit Message cannot be empty.
       emptyPipelineListMessage: There are no pipelines in current namespace or no pipelines matching the search query "{query}"
-      pipelinePushedFail: "Failed to push 1 pipeline"
+      pipelinePushedFail: "Failed to push 1 pipeline to the remote repository"
+      pipelinePushedSuccess: Successfully pushed 1 pipeline to the remote repository
+      pipelinePushMessage: Pushing 1 pipeline to the remote repository
       pipelinesPushedFail: "Failed to push {count} pipelines"
+      pipelinesPushedFailMulti: Failed to push the pipelines
       pipelinesSelected: "{selected} of {total} pipelines selected"
       pushAppMessage: Pushing {appId} to remote repository now...
+      pushAppMessageMulti: Pushing {n} pipelines to the remote repository now...
       pushButton: Push to remote
       pushSuccess: Successfully pushed pipeline {pipelineName}
+      pushSuccessMulti: Successfully pushed {n} pipelines to the remote repository.
+      pushFailureMulti: Failed to push {n} pipelines to the remote repository.
       searchLabel: Search by batch pipeline name
       tab: Local pipelines
+      stopOperation: STOP
     table:
       connected: Connected
       pipelineName: Pipeline name

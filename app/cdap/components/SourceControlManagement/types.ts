@@ -16,12 +16,48 @@
 
 import { IArtifactObj } from 'components/PipelineContextMenu/PipelineTypes';
 import { SUPPORT } from 'components/StatusButton/constants';
+import { OperationType } from './OperationType';
+import { OperationStatus } from './OperationStatus';
 
 export interface IRepositoryPipeline {
   name: string;
   fileHash: string;
   error: string;
   status: SUPPORT;
+}
+
+export interface IOperationResource {
+  resourceUri: string;
+}
+
+export interface ITimeInstant {
+  seconds: number;
+  nanos: number;
+}
+
+export interface IOperationMeta {
+  resources: IOperationResource[];
+  createTime?: ITimeInstant;
+  endTime?: ITimeInstant;
+}
+
+export interface IOperationError {
+  message?: string;
+  details?: IOperationResourceScopedError[];
+}
+
+export interface IOperationResourceScopedError {
+  resourceUri: string;
+  message?: string;
+}
+
+export interface IOperationRun {
+  id: string;
+  type: OperationType;
+  done: boolean;
+  status: OperationStatus;
+  metadata?: IOperationMeta;
+  error?: IOperationError;
 }
 
 export interface IPushResponse {
@@ -51,4 +87,17 @@ export interface IListResponse {
   name: string;
   message: string;
   fileHash?: string;
+}
+
+export interface IOperationMetaResponse {
+  status: SUPPORT;
+  resources?: IOperationResource[];
+  message: string;
+}
+
+export interface IResource {
+  resourceType: string;
+  namespace: string;
+  name: string;
+  version: string;
 }
