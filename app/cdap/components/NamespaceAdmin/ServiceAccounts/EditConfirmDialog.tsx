@@ -168,6 +168,7 @@ export const EditConfirmDialog = ({
       statusMessage={saveStatusMsg}
       extendedMessage={saveStatusDetails}
       copyableExtendedMessage={copyableExtendedMessage}
+      isExpandedDefault={true}
     ></ConfirmDialog>
   );
 };
