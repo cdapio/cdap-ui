@@ -769,6 +769,10 @@ features:
         decimalConfig:
           applyButton: APPLY
           cancelButton: CANCEL
+          precisionLabel: Precision
+          precisionHelpButton: Tooltip for precision input
+          precisionHelperText: Define precision here
+          precisionTooltip: Specifies the precision of the decimal.
           scaleLabel: Scale
           scaleHelpButton: Tooltip for scale input
           scaleHelperText: Define scale here

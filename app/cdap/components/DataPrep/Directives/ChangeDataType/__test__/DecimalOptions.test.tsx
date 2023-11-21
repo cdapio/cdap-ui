@@ -33,6 +33,7 @@ const ROUNDING_OPTIONS = [
 
 describe('DecimalOptions component', () => {
   const SCALE_LABEL = T.translate(`${PREFIX}.scaleLabel`).toString();
+  const PRECISION_LABEL = T.translate(`${PREFIX}.precisionLabel`).toString();
   const ROUNDING_LABEL = T.translate(`${PREFIX}.roundingLabel`).toString();
   const FLOOR = T.translate(`${PREFIX}.roundingOptions.FLOOR.label`).toString();
   const APPLY = T.translate(`${PREFIX}.applyButton`).toString();
@@ -51,13 +52,18 @@ describe('DecimalOptions component', () => {
     submenu = render(<DecimalOptions onApply={onApply} onCancel={onCancel} />);
   });
 
-  it('should render a number input for scale and a select dropdown for rounding mode', () => {
+  it('should render a number input for scale, precision and a select dropdown for rounding mode', () => {
     const scaleInput = submenu.getByLabelText(SCALE_LABEL);
+    const precisionInput = submenu.getByLabelText(PRECISION_LABEL);
     const roundingInput = submenu.getByLabelText(ROUNDING_LABEL);
 
     expect(scaleInput).toBeVisible();
     expect(scaleInput).toBeEnabled();
     expect(scaleInput).toHaveAttribute('type', 'number');
+
+    expect(precisionInput).toBeVisible();
+    expect(precisionInput).toBeEnabled();
+    expect(precisionInput).toHaveAttribute('type', 'number');
 
     // Rounding mode select dropdown should be disabled initially as no scale
     // has been specified yet.
@@ -65,7 +71,7 @@ describe('DecimalOptions component', () => {
     expect(roundingInput).toHaveClass('Mui-disabled');
   });
 
-  it('should enable the rounding mode input only when scale is specified', () => {
+  it('should enable the rounding mode input when scale is specified', () => {
     const scaleInput = submenu.getByLabelText(SCALE_LABEL);
     const roundingInput = submenu.getByLabelText(ROUNDING_LABEL);
 
@@ -78,7 +84,7 @@ describe('DecimalOptions component', () => {
     const options = within(listbox).getAllByRole('option');
     const optionValues = options.map((li) => li.getAttribute('data-value'));
 
-    // The roundig modes select menu should have the 8 rounding modes
+    // The rounding modes select menu should have the 8 rounding modes
     // in any order
     expect(optionValues).toHaveLength(8);
     ROUNDING_OPTIONS.forEach((opt) => expect(optionValues).toContain(opt));
@@ -87,11 +93,35 @@ describe('DecimalOptions component', () => {
     expect(roundingInput).toHaveClass('Mui-disabled');
   });
 
+  it('should enable the rounding mode input when precision is specified', () => {
+    const precisionInput = submenu.getByLabelText(PRECISION_LABEL);
+    const roundingInput = submenu.getByLabelText(ROUNDING_LABEL);
+
+    expect(roundingInput).toHaveClass('Mui-disabled');
+    fireEvent.change(precisionInput, { target: { value: '8' } });
+    expect(roundingInput).not.toHaveClass('Mui-disabled');
+
+    fireEvent.mouseDown(roundingInput);
+    const listbox = within(screen.getByRole('presentation')).getByRole('listbox');
+    const options = within(listbox).getAllByRole('option');
+    const optionValues = options.map((li) => li.getAttribute('data-value'));
+
+    // The rounding modes select menu should have the 8 rounding modes
+    // in any order
+    expect(optionValues).toHaveLength(8);
+    ROUNDING_OPTIONS.forEach((opt) => expect(optionValues).toContain(opt));
+
+    fireEvent.change(precisionInput, { target: { value: '' } });
+    expect(roundingInput).toHaveClass('Mui-disabled');
+  });
+
   it('should pass correct args to the directive on apply', () => {
     const scaleInput = submenu.getByLabelText(SCALE_LABEL);
+    const precisionInput = submenu.getByLabelText(PRECISION_LABEL);
     const roundingInput = submenu.getByLabelText(ROUNDING_LABEL);
 
     fireEvent.change(scaleInput, { target: { value: '4' } });
+    fireEvent.change(precisionInput, { target: { value: '8' } });
     fireEvent.mouseDown(roundingInput);
     fireEvent.click(submenu.getByText(FLOOR));
     fireEvent.click(submenu.getByText(APPLY));
@@ -99,10 +129,10 @@ describe('DecimalOptions component', () => {
     expect(onApply.mock.calls).toHaveLength(1);
     expect(onApply.mock.calls[0]).toHaveLength(2);
     expect(onApply.mock.calls[0][0]).toBe('decimal');
-    expect(onApply.mock.calls[0][1]).toBe("4 'FLOOR'");
+    expect(onApply.mock.calls[0][1]).toBe("4 'FLOOR' prop:{precision=8}");
   });
 
-  it('should default rouding mode to HALF_EVEN if scale is specified and rounding mode is not specified', () => {
+  it('should default rounding mode to HALF_EVEN if scale is specified and rounding mode is not specified', () => {
     const scaleInput = submenu.getByLabelText(SCALE_LABEL);
     fireEvent.change(scaleInput, { target: { value: '2' } });
     fireEvent.click(submenu.getByText(APPLY));
@@ -113,7 +143,18 @@ describe('DecimalOptions component', () => {
     expect(onApply.mock.calls[0][1]).toBe("2 'HALF_EVEN'");
   });
 
-  it('should not add any extra args if scale is not specified', () => {
+  it('should default rounding mode to HALF_EVEN if precision is specified and rounding mode is not specified', () => {
+    const precisionInput = submenu.getByLabelText(PRECISION_LABEL);
+    fireEvent.change(precisionInput, { target: { value: '8' } });
+    fireEvent.click(submenu.getByText(APPLY));
+
+    expect(onApply.mock.calls).toHaveLength(1);
+    expect(onApply.mock.calls[0]).toHaveLength(2);
+    expect(onApply.mock.calls[0][0]).toBe('decimal');
+    expect(onApply.mock.calls[0][1]).toBe(" 'HALF_EVEN' prop:{precision=8}");
+  });
+
+  it('should not add any extra args if scale and precision are not specified', () => {
     fireEvent.click(submenu.getByText(APPLY));
     expect(onApply.mock.calls).toHaveLength(1);
     expect(onApply.mock.calls[0]).toHaveLength(2);

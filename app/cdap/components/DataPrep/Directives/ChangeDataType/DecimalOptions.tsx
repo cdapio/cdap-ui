@@ -47,8 +47,9 @@ const ROUNDING_PREFIX = `${PREFIX}.roundingOptions`;
 const ID_PREFIX = 'DataPrep-Directives-ChangeDataType-decimal';
 
 const SCALE_INPUT_ID = `${ID_PREFIX}-scaleInputId`;
+const PRECISION_INPUT_ID = `${ID_PREFIX}-precisionInputId`;
 const ROUNDING_INPUT_ID = `${ID_PREFIX}-roundingInputId`;
-const ROUNDING_LABEL_ID = `${ID_PREFIX}-roundingLableId`;
+const ROUNDING_LABEL_ID = `${ID_PREFIX}-roundingLabelId`;
 
 interface IRoundingMode {
   value: string;
@@ -114,14 +115,20 @@ const useStyles = makeStyles((theme) => ({
 
 export const DecimalOptions = ({ onApply, onCancel }: ISubmenuProps): JSX.Element => {
   const [scale, setScale] = useState<string>('');
+  const [precision, setPrecision] = useState<string>('');
   const [rounding, setRounding] = useState<string>('');
 
   const classes = useStyles();
-  const isRoundingDisabled = scale === '';
+  const isRoundingDisabled = scale === '' && precision === '';
 
   function handleScaleChange(event) {
     const val = event.target.value;
     setScale(val);
+  }
+
+  function handlePrecisionChange(event) {
+    const val = event.target.value;
+    setPrecision(val);
   }
 
   function handleRoundingChange(event) {
@@ -131,7 +138,13 @@ export const DecimalOptions = ({ onApply, onCancel }: ISubmenuProps): JSX.Elemen
 
   function applyDirective() {
     const option = 'decimal';
-    const extraArgs = scale !== '' ? `${scale} '${rounding || 'HALF_EVEN'}'` : '';
+    let extraArgs = scale !== '' ? `${scale}` : '';
+    if (scale !== '' || precision !== '') {
+      extraArgs = `${extraArgs} '${rounding || 'HALF_EVEN'}'`;
+    }
+    if (precision !== '') {
+      extraArgs = `${extraArgs} prop:{precision=${precision}}`;
+    }
     return onApply(option, extraArgs);
   }
 
@@ -167,6 +180,37 @@ export const DecimalOptions = ({ onApply, onCancel }: ISubmenuProps): JSX.Elemen
               }
             />
             <FormHelperText>{T.translate(`${PREFIX}.scaleHelperText`)}</FormHelperText>
+          </FormControl>
+          <FormControl variant="outlined">
+            <InputLabel htmlFor={PRECISION_INPUT_ID}>
+              {T.translate(`${PREFIX}.precisionLabel`)}
+            </InputLabel>
+            <OutlinedInput
+              fullWidth
+              labelWidth={72}
+              id={PRECISION_INPUT_ID}
+              type="number"
+              value={precision}
+              onChange={handlePrecisionChange}
+              endAdornment={
+                <InputAdornment position="end">
+                  <Tooltip
+                    arrow
+                    enterDelay={500}
+                    title={T.translate(`${PREFIX}.precisionTooltip`).toString()}
+                    classes={{ tooltip: classes.customTooltip, arrow: classes.customTooltipArrow }}
+                  >
+                    <IconButton
+                      aria-label={T.translate(`${PREFIX}.precisionHelpButton`).toString()}
+                      edge="end"
+                    >
+                      <HelpIcon />
+                    </IconButton>
+                  </Tooltip>
+                </InputAdornment>
+              }
+            />
+            <FormHelperText>{T.translate(`${PREFIX}.precisionHelperText`)}</FormHelperText>
           </FormControl>
           <Tooltip
             arrow
