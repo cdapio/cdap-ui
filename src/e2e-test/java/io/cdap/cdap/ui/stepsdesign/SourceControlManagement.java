@@ -93,9 +93,6 @@ public class SourceControlManagement {
     Assert.assertTrue(Helper.locateElementByTestId("repository-provider").getText().contains("GITHUB"));
     Assert.assertTrue(Helper.locateElementByTestId("repository-link").getText().contains(Constants.FAKE_REPO_LINK));
     Assert.assertTrue(Helper.locateElementByTestId("repository-auth-type").getText().contains("PAT"));
-    Assert.assertTrue(Helper.locateElementByTestId("repository-auth-token")
-        .findElement(By.cssSelector("input")).getAttribute("value")
-        .contains(Constants.FAKE_TOKEN));
   }
 
   @Then("Delete the repo config")

@@ -48,6 +48,7 @@ const StyledInfo = styled.div`
 
 export const SourceControlManagement = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isEditingConfig, setIsEditingConfig] = useState(false);
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -57,6 +58,17 @@ export const SourceControlManagement = () => {
   const toggleForm = () => {
     setIsFormOpen(!isFormOpen);
   };
+
+  const openCreateForm = () => {
+    setIsEditingConfig(false);
+    setIsFormOpen(true);
+  };
+
+  const openEditForm = () => {
+    setIsEditingConfig(true);
+    setIsFormOpen(true);
+  };
+
   const toggleUnlinkModal = () => {
     setIsUnlinkModalOpen(!isUnlinkModalOpen);
   };
@@ -64,7 +76,7 @@ export const SourceControlManagement = () => {
   const actions = [
     {
       label: T.translate('commons.edit'),
-      actionFn: () => toggleForm(),
+      actionFn: () => openEditForm(),
     },
     {
       label: T.translate('commons.delete'),
@@ -100,7 +112,7 @@ export const SourceControlManagement = () => {
       <StyledInfo>{T.translate(`${PREFIX}.info`)}</StyledInfo>
       {!sourceControlManagementConfig && (
         <PrimaryContainedButton
-          onClick={toggleForm}
+          onClick={openCreateForm}
           style={{ marginBottom: '15px' }}
           data-testid="link-repository-button"
         >
@@ -108,13 +120,12 @@ export const SourceControlManagement = () => {
         </PrimaryContainedButton>
       )}
       {sourceControlManagementConfig && (
-        <Table columnTemplate="100px 2fr 1fr 2fr 1fr 2fr 120px 100px">
+        <Table columnTemplate="100px 2fr 1fr 1fr 2fr 120px 100px">
           <TableHeader>
             <TableRow>
               <TableCell>{T.translate(`${PREFIX}.configModal.provider.label`)}</TableCell>
               <TableCell>{T.translate(`${PREFIX}.configModal.repoUrl.label`)}</TableCell>
               <TableCell>{T.translate(`${PREFIX}.configModal.auth.label`)}</TableCell>
-              <TableCell>{T.translate(`${PREFIX}.configModal.auth.pat.token`)}</TableCell>
               <TableCell>{T.translate(`${PREFIX}.configModal.branch.label`)}</TableCell>
               <TableCell>{T.translate(`${PREFIX}.configModal.pathPrefix.label`)}</TableCell>
               <TableCell></TableCell>
@@ -136,9 +147,6 @@ export const SourceControlManagement = () => {
               </TableCell>
               <TableCell data-testid="repository-auth-type">
                 {sourceControlManagementConfig.auth.type}
-              </TableCell>
-              <TableCell data-testid="repository-auth-token">
-                <StyledPasswordWrapper value={sourceControlManagementConfig.auth.token} />
               </TableCell>
               <TableCell>
                 {sourceControlManagementConfig.defaultBranch
@@ -166,6 +174,7 @@ export const SourceControlManagement = () => {
         <SourceControlManagementForm
           onToggle={toggleForm}
           initialSourceControlManagementConfig={sourceControlManagementConfig}
+          isEdit={isEditingConfig}
         />
       )}
       <UnlinkSourceControlModal
