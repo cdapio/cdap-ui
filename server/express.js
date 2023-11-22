@@ -241,6 +241,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         maxRecordsPreview: cdapConfig['preview.max.num.records'],
         ui: uiSettings['ui'],
         k8sWorkloadIdentityEnabled: cdapConfig['master.environment.k8s.workload.identity.enabled'],
+        k8sWorkloadIdentityPool:cdapConfig['credential.provider.system.properties.gcp-wi-credential-provider.k8s.workload.identity.pool'],
         namespaceCreationHookEnabled: cdapConfig['namespaces.creation.hook.enabled'],
         hstsEnabled: cdapConfig['hsts.enabled'],
         hstsMaxAge: cdapConfig['hsts.max.age'],
