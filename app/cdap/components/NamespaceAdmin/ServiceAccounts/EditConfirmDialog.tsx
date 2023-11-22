@@ -63,13 +63,13 @@ const StyledTextField = styled(TextField)`
  * @return string, the gcloud cli command to run
  */
 const getGcloudCommand = ({
-  tenantProjectId = '${TENANT_PROJECT_ID}',
+  k8sWorkloadIdentityPool = '${TENANT_PROJECT_ID}.svc.id.goog',
   identity = '${IDENTITY}',
   gsaEmail = '${GSA_EMAIL}',
   gsaProjectId = '${GSA_PROJECT_ID}',
   k8snamespace = 'default',
 }): string =>
-  `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:${tenantProjectId}.svc.id.goog[${k8snamespace}/${identity}]" ${gsaEmail} --project ${gsaProjectId}`;
+  `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:${k8sWorkloadIdentityPool}[${k8snamespace}/${identity}]" ${gsaEmail} --project ${gsaProjectId}`;
 
 export const EditConfirmDialog = ({
   selectedServiceAcccount,
@@ -79,6 +79,7 @@ export const EditConfirmDialog = ({
   k8snamespace,
 }: IEditConfirmDialogProps) => {
   const namespacedCreationHookEnabled = window.CDAP_CONFIG.cdap.namespaceCreationHookEnabled;
+  const k8sWorkloadIdentityPool = window.CDAP_CONFIG.cdap.k8sWorkloadIdentityPool;
   const [serviceAccountInputValue, setServiceAccountInputValue] = useState<string>(
     selectedServiceAcccount
   );
@@ -94,6 +95,7 @@ export const EditConfirmDialog = ({
     identity: namespaceIdentity || undefined,
     gsaEmail: serviceAccountInputValue || undefined,
     k8snamespace: (namespacedCreationHookEnabled && k8snamespace) || undefined,
+    k8sWorkloadIdentityPool: k8sWorkloadIdentityPool || undefined,
   };
 
   const copyableExtendedMessage =
