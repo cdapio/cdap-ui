@@ -78,11 +78,13 @@ const StyledHr = styled.hr`
 interface ISourceControlManagementFormProps {
   initialSourceControlManagementConfig?: ISourceControlManagementConfig | null;
   onToggle: () => void;
+  isEdit: boolean;
 }
 
 const SourceControlManagementForm = ({
   initialSourceControlManagementConfig,
   onToggle,
+  isEdit,
 }: ISourceControlManagementFormProps) => {
   const [formState, formStateDispatch] = useReducer(
     sourceControlManagementFormReducer,
@@ -94,7 +96,7 @@ const SourceControlManagementForm = ({
     if (!formState.config?.link) {
       count++;
     }
-    if (!formState.config?.auth?.token) {
+    if (!isEdit && !formState.config?.auth?.token) {
       count++;
     }
     if (!formState.config?.auth?.patConfig?.passwordName) {
@@ -326,7 +328,7 @@ const SourceControlManagementForm = ({
                   name: 'token',
                   description: T.translate(`${PREFIX}.auth.pat.tokenHelperText`).toString(),
                   label: T.translate(`${PREFIX}.auth.pat.token`).toString(),
-                  required: true,
+                  required: !isEdit,
                   'widget-type': 'password',
                 }}
                 onChange={(val) => {
