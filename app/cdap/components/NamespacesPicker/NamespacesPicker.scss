@@ -39,7 +39,7 @@ $monitor-more-color: $blue-02;
 
     .popper {
       width: 300px;
-      z-index: 1; // need to be on top of the svg graph
+      z-index: 999; // need to be on top of the svg graph
       text-align: left;
 
       .popover-content {
