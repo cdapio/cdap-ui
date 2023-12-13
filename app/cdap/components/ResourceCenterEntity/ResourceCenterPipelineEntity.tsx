@@ -24,11 +24,8 @@ import { validateImportJSON, adjustConfigNode } from 'services/PipelineErrorFact
 import { objectQuery } from 'services/helpers';
 import IconSVG from 'components/shared/IconSVG';
 import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButton';
-import { defaultState, PullPipelineWizard, reducer } from './PullPipelineWizard';
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
-import { getSourceControlManagement } from 'components/NamespaceAdmin/store/ActionCreator';
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
-import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 
 require('./ResourceCenterPipelineEntity.scss');
@@ -48,9 +45,6 @@ interface IResourceCenterPipelineEntityProps {
 export default function ResourceCenterPipelineEntity({
   onError,
 }: IResourceCenterPipelineEntityProps) {
-  const sourceControlManagementEnabled = useFeatureFlagDefaultFalse(
-    'source.control.management.git.enabled'
-  );
   const namespace = getCurrentNamespace();
   const resourceCenterId = uuidV4();
   const hydratorLinkStateParams = {
@@ -109,88 +103,49 @@ export default function ResourceCenterPipelineEntity({
     };
   };
 
-  const [pullPipelineModalState, dispatch] = useReducer(reducer, defaultState);
-
-  const pullPipelineBtnHandler = () => {
-    dispatch({ type: 'SET_LOADING', payload: { loading: true } });
-    getSourceControlManagement(namespace).subscribe(
-      () => {
-        dispatch({ type: 'TOGGLE_MODAL' });
-      },
-      (err) => {
-        dispatch({
-          type: 'SET_ERROR',
-          payload: {
-            error: err.message,
-          },
-        });
-        dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-      },
-      () => {
-        dispatch({ type: 'SET_LOADING', payload: { loading: false } });
-      }
-    );
-  };
-
   return (
-    <>
-      <div className="resourcecenter-entity-card resourcecenter-entity-card-pipeline">
-        <div className="image-content-container">
-          <div className="image-container">
-            <div className="entity-image">
-              <IconSVG name="icon-pipelines" />
-            </div>
-          </div>
-          <div className="content-container">
-            <div className="content-text">
-              <h4>{T.translate(`${PREFIX}.label`)}</h4>
-              <p>{T.translate(`${PREFIX}.description`)}</p>
-            </div>
+    <div className="resourcecenter-entity-card resourcecenter-entity-card-pipeline">
+      <div className="image-content-container">
+        <div className="image-container">
+          <div className="entity-image">
+            <IconSVG name="icon-pipelines" />
           </div>
         </div>
-        <div className="buttons-container">
-          <PrimaryContainedButton
-            href={hydratorCreateLink}
-            id="create-pipeline-link"
-            className="btn btn-primary"
-            onClick={createBtnHandler}
-          >
-            {T.translate(`${PREFIX}.actionbtn0`)}
-          </PrimaryContainedButton>
-          <input
-            type="file"
-            accept=".json"
-            id="resource-center-import-pipeline"
-            onChange={importBtnHandler}
-          />
-          <label htmlFor="resource-center-import-pipeline">
-            <StyledButton
-              id={(
-                T.translate(`${PREFIX}.actionbtn1`) +
-                '-' +
-                T.translate(`${PREFIX}.label`)
-              ).toLowerCase()}
-              component="span"
-            >
-              {T.translate(`${PREFIX}.actionbtn1`)}
-            </StyledButton>
-          </label>
-          {sourceControlManagementEnabled && (
-            <StyledButton
-              onClick={pullPipelineBtnHandler}
-              loading={pullPipelineModalState.loading}
-              data-testid="pull-pipeline-button"
-            >
-              {T.translate(`${PREFIX}.actionbtn2`)}
-            </StyledButton>
-          )}
+        <div className="content-container">
+          <div className="content-text">
+            <h4>{T.translate(`${PREFIX}.label`)}</h4>
+            <p>{T.translate(`${PREFIX}.description`)}</p>
+          </div>
         </div>
       </div>
-      <PullPipelineWizard
-        isOpen={pullPipelineModalState.isOpen}
-        error={pullPipelineModalState.error}
-        dispatch={dispatch}
-      />
-    </>
+      <div className="buttons-container">
+        <PrimaryContainedButton
+          href={hydratorCreateLink}
+          id="create-pipeline-link"
+          className="btn btn-primary"
+          onClick={createBtnHandler}
+        >
+          {T.translate(`${PREFIX}.actionbtn0`)}
+        </PrimaryContainedButton>
+        <input
+          type="file"
+          accept=".json"
+          id="resource-center-import-pipeline"
+          onChange={importBtnHandler}
+        />
+        <label htmlFor="resource-center-import-pipeline">
+          <StyledButton
+            id={(
+              T.translate(`${PREFIX}.actionbtn1`) +
+              '-' +
+              T.translate(`${PREFIX}.label`)
+            ).toLowerCase()}
+            component="span"
+          >
+            {T.translate(`${PREFIX}.actionbtn1`)}
+          </StyledButton>
+        </label>
+      </div>
+    </div>
   );
 }

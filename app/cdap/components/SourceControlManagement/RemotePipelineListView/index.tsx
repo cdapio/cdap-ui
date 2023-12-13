@@ -18,15 +18,8 @@ import React, { useEffect, useState } from 'react';
 import T from 'i18n-react';
 import { useSelector } from 'react-redux';
 import cloneDeep from 'lodash/cloneDeep';
-import { default as MuiAlert } from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
 import { SearchBox } from '../SearchBox';
-import {
-  AlertErrorView,
-  FailStatusDiv,
-  PipelineListContainer,
-  StyledSelectionStatusDiv,
-} from '../styles';
+import { FailStatusDiv, PipelineListContainer, StyledSelectionStatusDiv } from '../styles';
 import { RemotePipelineTable } from './RemotePipelineTable';
 import {
   countPullFailedPipelines,
@@ -41,7 +34,6 @@ import {
   toggleRemoteShowFailedOnly,
   pullAndDeployMultipleSelectedRemotePipelines,
   fetchLatestOperation,
-  stopOperation,
 } from '../store/ActionCreator';
 import { LoadingAppLevel } from 'components/shared/LoadingAppLevel';
 import { getCurrentNamespace } from 'services/NamespaceStore';
@@ -54,16 +46,8 @@ import { SUPPORT } from 'components/StatusButton/constants';
 import { IListResponse, IOperationMetaResponse, IOperationRun } from '../types';
 import Alert from 'components/shared/Alert';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
-import {
-  getOperationRunMessage,
-  getOperationStartTime,
-  getOperationStatusType,
-  parseOperationResource,
-} from '../helpers';
-import Button from '@material-ui/core/Button';
-import { OperationStatus } from '../OperationStatus';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import { parseOperationResource } from '../helpers';
+import { OperationAlert } from '../OperationAlert';
 
 const PREFIX = 'features.SourceControlManagement.pull';
 
@@ -72,7 +56,6 @@ interface IRemotePipelineListViewProps {
 }
 
 export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineListViewProps) => {
-  const [viewErrorExpanded, setViewErrorExpanded] = useState(false);
   const {
     ready,
     remotePipelines,
@@ -190,34 +173,6 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
     return <div>{T.translate(`${PREFIX}.emptyPipelineListMessage`, { query: nameFilter })}</div>;
   };
 
-  const getOperationAction = () => {
-    if (!operation.done) {
-      return (
-        <Button
-          color="inherit"
-          size="small"
-          onClick={stopOperation(getCurrentNamespace(), operation)}
-        >
-          {T.translate(`${PREFIX}.stopOperation`)}
-        </Button>
-      );
-    }
-
-    if (operation.status === OperationStatus.FAILED) {
-      return (
-        <Button
-          color="inherit"
-          size="small"
-          onClick={() => setViewErrorExpanded((isExpanded) => !isExpanded)}
-        >
-          {viewErrorExpanded ? <ExpandLess /> : <ExpandMore />}
-        </Button>
-      );
-    }
-
-    return undefined;
-  };
-
   return (
     <>
       <Alert
@@ -228,23 +183,7 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
       />
       <PipelineListContainer>
         <SearchBox nameFilter={nameFilter} setNameFilter={setRemoteNameFilter} />
-        {operation && (
-          <MuiAlert
-            variant="filled"
-            severity={getOperationStatusType(operation)}
-            action={getOperationAction()}
-          >
-            <AlertTitle>{getOperationRunMessage(operation)}</AlertTitle>
-            {getOperationStartTime(operation)}
-            {operation.status === OperationStatus.FAILED && viewErrorExpanded && (
-              <AlertErrorView>
-                Operation ID: {operation.id}
-                <br />
-                Error: {operation.error.message}
-              </AlertErrorView>
-            )}
-          </MuiAlert>
-        )}
+        {operation && multiPullEnabled && <OperationAlert operation={operation} />}
         {selectedPipelines.length > 0 && (
           <StyledSelectionStatusDiv>
             <div>

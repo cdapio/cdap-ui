@@ -30,6 +30,7 @@ import {
   StyledFixedWidthCell,
   StyledPopover,
 } from '../styles';
+import { timeInstantToString } from 'services/DataFormatter';
 
 const PREFIX = 'features.SourceControlManagement.table';
 
@@ -117,6 +118,7 @@ export const LocalPipelineTable = ({
             </TableCell>
             <TableCell></TableCell>
             <StyledTableCell>{T.translate(`${PREFIX}.pipelineName`)}</StyledTableCell>
+            <StyledTableCell>{T.translate(`${PREFIX}.lastSyncDate`)}</StyledTableCell>
             <StyledFixedWidthCell>
               <div>
                 {T.translate(`${PREFIX}.gitStatus`)}
@@ -167,6 +169,7 @@ export const LocalPipelineTable = ({
                   )}
                 </StatusCell>
                 <StyledTableCell>{pipeline.name}</StyledTableCell>
+                <StyledTableCell>{timeInstantToString(pipeline.lastSyncDate)}</StyledTableCell>
                 <StyledFixedWidthCell>
                   {pipeline.fileHash ? T.translate(`${PREFIX}.connected`) : '--'}
                 </StyledFixedWidthCell>

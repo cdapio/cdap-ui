@@ -18,8 +18,6 @@ import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedBu
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import Alert from '@material-ui/lab/Alert';
-import AlertTitle from '@material-ui/lab/AlertTitle';
 import {
   countPushFailedPipelines,
   fetchLatestOperation,
@@ -31,7 +29,6 @@ import {
   setLoadingMessage,
   setLocalPipelines,
   setNameFilter,
-  stopOperation,
   toggleCommitModal,
   toggleShowFailedOnly,
 } from '../store/ActionCreator';
@@ -43,29 +40,15 @@ import cloneDeep from 'lodash/cloneDeep';
 import PrimaryTextButton from 'components/shared/Buttons/PrimaryTextButton';
 import { LocalPipelineTable } from './PipelineTable';
 import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
-import {
-  AlertErrorView,
-  FailStatusDiv,
-  PipelineListContainer,
-  StyledSelectionStatusDiv,
-} from '../styles';
+import { FailStatusDiv, PipelineListContainer, StyledSelectionStatusDiv } from '../styles';
 import { IListResponse, IOperationMetaResponse, IOperationRun } from '../types';
 import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
-import {
-  getOperationRunMessage,
-  getOperationStartTime,
-  getOperationStatusType,
-  parseOperationResource,
-} from '../helpers';
-import Button from '@material-ui/core/Button';
-import { OperationStatus } from '../OperationStatus';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import { parseOperationResource } from '../helpers';
+import { OperationAlert } from '../OperationAlert';
 
 const PREFIX = 'features.SourceControlManagement.push';
 
 export const LocalPipelineListView = () => {
-  const [viewErrorExpanded, setViewErrorExpanded] = useState(false);
   const {
     ready,
     localPipelines,
@@ -177,54 +160,10 @@ export const LocalPipelineListView = () => {
     return <div>{T.translate(`${PREFIX}.emptyPipelineListMessage`, { query: nameFilter })}</div>;
   };
 
-  const getOperationAction = () => {
-    if (!operation.done) {
-      return (
-        <Button
-          color="inherit"
-          size="small"
-          onClick={stopOperation(getCurrentNamespace(), operation)}
-        >
-          {T.translate(`${PREFIX}.stopOperation`)}
-        </Button>
-      );
-    }
-
-    if (operation.status === OperationStatus.FAILED) {
-      return (
-        <Button
-          color="inherit"
-          size="small"
-          onClick={() => setViewErrorExpanded((isExpanded) => !isExpanded)}
-        >
-          {viewErrorExpanded ? <ExpandLess /> : <ExpandMore />}
-        </Button>
-      );
-    }
-
-    return undefined;
-  };
-
   return (
     <PipelineListContainer>
       <SearchBox nameFilter={nameFilter} setNameFilter={setNameFilter} />
-      {operation && (
-        <Alert
-          variant="filled"
-          severity={getOperationStatusType(operation)}
-          action={getOperationAction()}
-        >
-          <AlertTitle>{getOperationRunMessage(operation)}</AlertTitle>
-          {getOperationStartTime(operation)}
-          {operation.status === OperationStatus.FAILED && viewErrorExpanded && (
-            <AlertErrorView>
-              Operation ID: {operation.id}
-              <br />
-              Error: {operation.error.message}
-            </AlertErrorView>
-          )}
-        </Alert>
-      )}
+      {operation && multiPushEnabled && <OperationAlert operation={operation} />}
       {selectedPipelines.length > 0 && (
         <StyledSelectionStatusDiv>
           <div>

@@ -18,21 +18,18 @@ import { IArtifactObj } from 'components/PipelineContextMenu/PipelineTypes';
 import { SUPPORT } from 'components/StatusButton/constants';
 import { OperationType } from './OperationType';
 import { OperationStatus } from './OperationStatus';
+import { ITimeInstant } from 'services/DataFormatter';
 
 export interface IRepositoryPipeline {
   name: string;
   fileHash: string;
   error: string;
   status: SUPPORT;
+  lastSyncDate?: ITimeInstant;
 }
 
 export interface IOperationResource {
   resourceUri: string;
-}
-
-export interface ITimeInstant {
-  seconds: number;
-  nanos: number;
 }
 
 export interface IOperationMeta {
@@ -49,6 +46,11 @@ export interface IOperationError {
 export interface IOperationResourceScopedError {
   resourceUri: string;
   message?: string;
+}
+
+export interface IOperationResourceScopedErrorMessage {
+  type?: string;
+  message: string;
 }
 
 export interface IOperationRun {
@@ -79,6 +81,7 @@ export interface IPipeline {
   };
   sourceControlMeta: {
     fileHash: string;
+    lastSyncedAt?: ITimeInstant;
   };
 }
 
