@@ -16,6 +16,7 @@
 
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import T from 'i18n-react';
 import Table from 'components/shared/Table';
@@ -52,6 +53,8 @@ export const SourceControlManagement = () => {
   const [isUnlinkModalOpen, setIsUnlinkModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
+
   const sourceControlManagementConfig: ISourceControlManagementConfig = useSelector(
     (state) => state.sourceControlManagementConfig
   );
@@ -85,11 +88,16 @@ export const SourceControlManagement = () => {
   ];
 
   const validateConfigAndRedirect = () => {
-    setLoading(true);
     const namespace = getCurrentNamespace();
+    if (sourceControlManagementConfig) {
+      history.push(`/ns/${namespace}/scm/sync`);
+      return;
+    }
+
+    setLoading(true);
     getSourceControlManagement(namespace).subscribe(
       () => {
-        window.location.href = `/ns/${namespace}/scm/sync`;
+        history.push(`/ns/${namespace}/scm/sync`);
       },
       (err) => {
         setErrorMessage(err.message);

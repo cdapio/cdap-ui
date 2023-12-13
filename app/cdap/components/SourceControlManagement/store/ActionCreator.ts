@@ -30,6 +30,7 @@ import { LongRunningOperationApi } from 'api/longRunningOperation';
 import { IPipeline, IPushResponse, IRepositoryPipeline, IOperationRun } from '../types';
 import { SUPPORT } from 'components/StatusButton/constants';
 import { compareTimeInstant } from '../helpers';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 const PREFIX = 'features.SourceControlManagement';
 
@@ -46,6 +47,7 @@ export const getNamespacePipelineList = (namespace, nameFilter = null) => {
         return {
           name: pipeline.name,
           fileHash: pipeline.sourceControlMeta?.fileHash,
+          lastSyncDate: pipeline.sourceControlMeta?.lastSyncedAt,
           error: null,
           status: null,
         };
@@ -431,4 +433,9 @@ export const stopOperation = (namespace: string, operation: IOperationRun) => ()
     // no op, as it's an asynchronous operation.
     // The operation status will be updated by the ongoing poll for the operation.
   });
+};
+
+export const refetchAllPipelines = () => {
+  getNamespacePipelineList(getCurrentNamespace());
+  getRemotePipelineList(getCurrentNamespace());
 };
