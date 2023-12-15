@@ -100,7 +100,7 @@ export const LocalPipelineTable = ({
 
   return (
     <TableBox>
-      <Table stickyHeader>
+      <Table stickyHeader data-testid="local-pipelines-table">
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
