@@ -17,6 +17,11 @@
 import moment from 'moment';
 import { convertBytesToHumanReadable, humanReadableNumber, truncateNumber } from 'services/helpers';
 
+export interface ITimeInstant {
+  seconds: number;
+  nanos?: number;
+}
+
 export const TYPES = {
   STRING: 'STRING',
   NUMBER: 'NUMBER',
@@ -116,4 +121,12 @@ export function format(value, type, options: { concise?: boolean } = {}) {
 
 export function formatAsPercentage(str: string) {
   return `${str}%`;
+}
+
+export function timeInstantToString(t?: ITimeInstant): string {
+  if (!t) {
+    return EMPTY_DATE;
+  }
+
+  return moment(t.seconds * 1000).format('DD-MM-YYYY HH:mm:ss A');
 }

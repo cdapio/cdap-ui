@@ -14,31 +14,25 @@
  * the License.
  */
 
-import { Tab, Tabs } from '@material-ui/core';
 import { EntityTopPanel } from 'components/EntityTopPanel';
-import React, { useState } from 'react';
-import { LocalPipelineListView } from './LocalPipelineListView';
+import React from 'react';
 import { Provider } from 'react-redux';
 import SourceControlManagementSyncStore from './store';
-import styled from 'styled-components';
 import T from 'i18n-react';
-import { RemotePipelineListView } from './RemotePipelineListView';
 import { getCurrentNamespace } from 'services/NamespaceStore';
-import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
+import { useHistory } from 'react-router';
+import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
+import { reset, resetRemote } from './store/ActionCreator';
+import ScmSyncTabs from './SyncTabs';
 
 const PREFIX = 'features.SourceControlManagement';
 
-const StyledDiv = styled.div`
-  padding: 10px;
-  margin-top: 10px;
-`;
-
 const SourceControlManagementSyncView = () => {
-  const [tabIndex, setTabIndex] = useState(0);
-
-  const handleTabChange = (e, newValue) => {
-    setTabIndex(newValue);
-  };
+  const history = useHistory();
+  useOnUnmount(() => {
+    resetRemote();
+    reset();
+  });
 
   const closeAndBackLink = `/ns/${getCurrentNamespace()}/details/scm`;
 
@@ -47,29 +41,14 @@ const SourceControlManagementSyncView = () => {
       <EntityTopPanel
         title={T.translate(`${PREFIX}.syncButton`).toString()}
         closeBtnAnchorLink={() => {
-          window.location.href = closeAndBackLink;
+          history.push(closeAndBackLink);
         }}
         breadCrumbAnchorLabel={T.translate('commons.namespaceAdmin').toString()}
         onBreadCrumbClick={() => {
-          window.location.href = closeAndBackLink;
+          history.push(closeAndBackLink);
         }}
       />
-      <StyledDiv>
-        <Tabs
-          value={tabIndex}
-          onChange={handleTabChange}
-          textColor="primary"
-          indicatorColor="primary"
-        >
-          <Tab data-testid="local-pipeline-tab" label={T.translate(`${PREFIX}.push.tab`)} />
-          <Tab data-testid="remote-pipeline-tab" label={T.translate(`${PREFIX}.pull.tab`)} />
-        </Tabs>
-      </StyledDiv>
-      <FeatureProvider>
-        <StyledDiv>
-          {tabIndex === 0 ? <LocalPipelineListView /> : <RemotePipelineListView />}
-        </StyledDiv>
-      </FeatureProvider>
+      <ScmSyncTabs />
     </Provider>
   );
 };

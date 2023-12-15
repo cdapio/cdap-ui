@@ -17,8 +17,14 @@
 import moment from 'moment';
 import { OperationStatus } from './OperationStatus';
 import { OperationType } from './OperationType';
-import { IResource, IOperationResource, IOperationRun, ITimeInstant } from './types';
+import {
+  IResource,
+  IOperationResource,
+  IOperationRun,
+  IOperationResourceScopedErrorMessage,
+} from './types';
 import T from 'i18n-react';
+import { ITimeInstant, timeInstantToString } from 'services/DataFormatter';
 
 const PREFIX = 'features.SourceControlManagement';
 
@@ -31,6 +37,20 @@ export const parseOperationResource = (resource: IOperationResource): IResource 
     namespace,
     name,
     version,
+  };
+};
+
+export const parseErrorMessage = (errorMessage: string): IOperationResourceScopedErrorMessage => {
+  const firstColonIndex = errorMessage.indexOf(':');
+  if (firstColonIndex === -1) {
+    return {
+      message: errorMessage,
+    };
+  }
+
+  return {
+    type: errorMessage.substring(0, firstColonIndex).trim(),
+    message: errorMessage.substring(firstColonIndex + 1).trim(),
   };
 };
 
@@ -121,5 +141,16 @@ export const compareTimeInstant = (t1: ITimeInstant, t2: ITimeInstant): number =
 };
 
 export const getOperationStartTime = (operation: IOperationRun): string => {
-  return moment(operation.metadata?.createTime.seconds * 1000).format('DD-MM-YYYY HH:mm:ss A');
+  return timeInstantToString(operation.metadata?.createTime);
+};
+
+export const getOperationRunTime = (operation: IOperationRun): string => {
+  if (operation.metadata?.createTime && operation.metadata?.endTime) {
+    return moment
+      .duration(
+        (operation.metadata?.endTime.seconds - operation.metadata?.createTime.seconds) * 1000
+      )
+      .humanize();
+  }
+  return null;
 };

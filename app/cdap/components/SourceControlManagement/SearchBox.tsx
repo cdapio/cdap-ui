@@ -56,12 +56,14 @@ export const SearchBox = ({ nameFilter, setNameFilter }: ISearchBoxProps) => {
               <SearchIcon />
             </InputAdornment>
           ),
-          endAdornment: (
+          endAdornment: nameFilter ? (
             <InputAdornment position="end">
               <IconButton onClick={() => setNameFilter('')}>
                 <CloseIcon />
               </IconButton>
             </InputAdornment>
+          ) : (
+            undefined
           ),
         }}
         label={T.translate(`${PREFIX}.searchLabel`)}

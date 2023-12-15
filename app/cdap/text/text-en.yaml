@@ -3232,6 +3232,10 @@ features:
     pipelineSyncMessage: Syncing 1 pipeline with the remote repository
     pipelineSyncedSuccess: Successfully synced 1 pipeline with the remote repository
     pipelineSyncedFail: Failed to sync 1 pipeline with the remote repository
+    stopOperation: STOP
+    operationStartedAt: Started at {startTime}
+    operationRanFor: Started at {startTime}, Completed in {timeTaken}
+    operationRunningFor: Started at {startTime}, Running for {timeTaken}
     pull:
       emptyPipelineListMessage: There are no pipelines in the remote repository or no pipelines matching the search query "{query}"
       modalTitle: Pull pipeline from remote repository
@@ -3243,12 +3247,12 @@ features:
       pipelinesSelected: "{selected} of {total} pipelines selected"
       pullAppMessage: Pulling {appId} from remote repository now...
       pullAppMessageMulti: Pulling {n} pipelines from the remote repository now...
-      pullButton: Pull to namespace
+      pullButton: Pull from repository
       pullChipTooltip: Click to pull the latest from Git
       pullSuccess: Pipeline {pipelineName} updated
       pullSuccessMulti: Successfully pulled {n} pipelines from the remote repository.
       pullFailureMulti: Failed to pull {n} pipelines from the remote repository.
-      tab: Remote pipelines
+      tab: Repository pipelines
       upToDate: Pipeline is already up to date.
       stopOperation: STOP
     push:
@@ -3264,16 +3268,17 @@ features:
       pipelinesSelected: "{selected} of {total} pipelines selected"
       pushAppMessage: Pushing {appId} to remote repository now...
       pushAppMessageMulti: Pushing {n} pipelines to the remote repository now...
-      pushButton: Push to remote
+      pushButton: Push to repository
       pushSuccess: Successfully pushed pipeline {pipelineName}
       pushSuccessMulti: Successfully pushed {n} pipelines to the remote repository.
       pushFailureMulti: Failed to push {n} pipelines to the remote repository.
       searchLabel: Search by batch pipeline name
-      tab: Local pipelines
+      tab: Namespace pipelines
       stopOperation: STOP
     table:
       connected: Connected
       pipelineName: Pipeline name
+      lastSyncDate: Last sync date
       gitStatus: Connected to Git
       gitStatusHelperText: This status indicates that the pipeline has been pushed to or pulled from the git repository in the past. It does not necessarily mean the content is up to date.
       pullFail: Failed to pull this pipeline from remote.
