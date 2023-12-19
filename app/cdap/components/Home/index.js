@@ -22,7 +22,6 @@ import Loadable from 'react-loadable';
 import NamespaceStore, { validateNamespace } from 'services/NamespaceStore';
 import NamespaceActions from 'services/NamespaceStore/NamespaceActions';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
-import ConfigurationGroupKitchenSync from 'components/shared/ConfigurationGroup/KitchenSync';
 import HomeActions from 'components/Home/HomeActions';
 import ToggleExperiment from 'components/Lab/ToggleExperiment';
 import ee from 'event-emitter';
@@ -178,7 +177,6 @@ export default class Home extends Component {
           />
           <Route path="/ns/:namespace/pipelines" component={PipelineList} />
           <Route path="/ns/:namespace/securekeys" component={SecureKeys} />
-          <Route path="/ns/:namespace/kitchen" component={ConfigurationGroupKitchenSync} />
           <Route path="/ns/:namespace/replication" component={Replicator} />
           <Route
             exact
