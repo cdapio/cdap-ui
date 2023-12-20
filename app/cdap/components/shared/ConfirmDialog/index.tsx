@@ -70,17 +70,17 @@ export const ConfirmDialog = ({
   return (
     <StyledDialog open={isOpen} fullWidth>
       <DialogTitle>{headerTitle}</DialogTitle>
-      {statusMessage && (
-        <Status
-          severity={severity}
-          statusMessage={statusMessage}
-          extendedMessage={extendedMessage}
-          copyableExtendedMessage={copyableExtendedMessage}
-          key={statusMessage.toString()}
-          isExpandedDefault={isExpandedDefault}
-        ></Status>
-      )}
       <DialogContent>
+        {statusMessage && (
+          <Status
+            severity={severity}
+            statusMessage={statusMessage}
+            extendedMessage={extendedMessage}
+            copyableExtendedMessage={copyableExtendedMessage}
+            key={statusMessage.toString()}
+            isExpandedDefault={isExpandedDefault}
+          ></Status>
+        )}
         {confirmationText}
         {confirmationElem}
       </DialogContent>

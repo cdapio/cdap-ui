@@ -25,6 +25,9 @@ export const StyledDialog = styled(Dialog)`
       font-size: 24px;
     }
   }
+  & .MuiDialogContent-root {
+    padding-top: 0px;
+  }
   & .MuiDialogActions-root {
     margin-right: 16px;
     & .MuiButton-label {
@@ -35,12 +38,12 @@ export const StyledDialog = styled(Dialog)`
 
 export const StyledAlert = styled(Alert)`
   font-size: 12px;
-  margin-bottom: 8px;
+  margin: 0 -24px 8px -24px;
 `;
 
 export const StyledBox = styled(Box)`
   overflow-y: auto;
-  max-height: 14vh;
+  max-height: 30vh;
   word-break: break-word;
 
   & pre {
