@@ -18,8 +18,6 @@ import React, { useContext, useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import UploadFile from 'services/upload-file';
 import FileDnD from 'components/FileDnD';
-import Cookies from 'universal-cookie';
-import isNil from 'lodash/isNil';
 import T from 'i18n-react';
 import Button from '@material-ui/core/Button';
 import PropertyRow from 'components/shared/ConfigurationGroup/PropertyRow';
@@ -50,7 +48,6 @@ const useStyle = makeStyles((theme) => {
 
 const PREFIX = 'features.DataPrepConnections.UploadComponent';
 const FILE_SIZE_LIMIT = 10 * 1024 * 1024; // 10 MB
-const cookie = new Cookies();
 
 export default function Upload() {
   const classes = useStyle();
@@ -87,13 +84,6 @@ export default function Upload() {
       'X-Archive-Name': fileName,
       file: fileName,
     };
-
-    if (window.CDAP_CONFIG.securityEnabled) {
-      const token = cookie.get('CDAP_Auth_Token');
-      if (!isNil(token)) {
-        headers.Authorization = `Bearer ${token}`;
-      }
-    }
 
     if (delimiter) {
       headers.recorddelimiter = delimiter;

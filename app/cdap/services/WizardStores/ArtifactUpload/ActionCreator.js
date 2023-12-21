@@ -15,13 +15,9 @@
  */
 
 import UploadFile from 'services/upload-file';
-import Cookies from 'universal-cookie';
 import NamespaceStore from 'services/NamespaceStore';
 import ArtifactUploadStore from 'services/WizardStores/ArtifactUpload/ArtifactUploadStore';
-import isNil from 'lodash/isNil';
 import { getArtifactNameAndVersion } from 'services/helpers';
-
-const cookie = new Cookies();
 
 // FIXME: Extract it out???
 const uploadArtifact = (includeParents = true) => {
@@ -54,12 +50,6 @@ const uploadArtifact = (includeParents = true) => {
     headers['Artifact-Extends'] = state.configure.parentArtifact.join('/');
   }
 
-  if (window.CDAP_CONFIG.securityEnabled) {
-    let token = cookie.get('CDAP_Auth_Token');
-    if (!isNil(token)) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-  }
   return UploadFile({ url, fileContents: state.upload.file, headers });
 };
 const ArtifactUploadActionCreator = {

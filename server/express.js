@@ -113,6 +113,17 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     // This means there was error reading the theme file.
     // We can ignore this as the extract theme takes care of it.
   }
+
+  app.use(cookieParser());
+  app.use(function (req, res, next) {
+    const authCookie = req.cookies['CDAP_Auth_Token'];
+    if (authCookie) {
+      req.headers['Authorization'] = `Bearer ${authCookie}`;
+      req.headers.authorization = `Bearer ${authCookie}`;
+    }
+    next();
+  });
+
   const faviconPath = uiThemeWrapper.getFaviconPath(uiThemeConfig);
 
   // middleware
@@ -132,7 +143,6 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   );
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(cookieParser());
 
   if (!isModeDevelopment()) {
     const proxyBaseUrl = cdapConfig['dashboard.proxy.base.url'];
@@ -573,6 +583,9 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       } else {
         const jsonBody = JSON.parse(nbody);
         jsonBody.isSecure = isSecure;
+        res.cookie('CDAP_Auth_Token', jsonBody.access_token, {
+          path: '/', httpOnly: true, secure: isSecure, sameSite: 'strict'
+        });
         res.send(JSON.stringify(jsonBody));
       }
     });
@@ -607,6 +620,10 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
 
   */
   app.post('/login', authentication);
+  app.post('/logout', function(req, res) {
+    res.clearCookie('CDAP_Auth_Token');
+    res.end();
+  });
 
   app.get('/backendstatus', [
     function(req, res) {

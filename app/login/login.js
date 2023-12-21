@@ -66,12 +66,7 @@ class Login extends Component {
         }
       })
       .then((res) => {
-        const { isSecure, access_token } = res;
-        cookie.set('CDAP_Auth_Token', access_token, {
-          path: '/',
-          secure: isSecure,
-          sameSite: 'strict',
-        });
+        const { isSecure } = res;
         cookie.set('CDAP_Auth_User', this.state.username, { secure: isSecure, sameSite: 'strict' });
         const queryObj = util.getQueryParams(location.search);
         let validRedirectUrl;

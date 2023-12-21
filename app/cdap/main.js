@@ -97,26 +97,13 @@ const Lab = Loadable({
 const client = new ApolloClient({
   uri: '/graphql',
   cache: new InMemoryCache({ fragmentMatcher }),
-  request: (operation) => {
-    if (window.CDAP_CONFIG.securityEnabled && cookie.get('CDAP_Auth_Token')) {
-      const token = `Bearer ${cookie.get('CDAP_Auth_Token')}`;
-
-      operation.setContext({
-        headers: {
-          authorization: token,
-          'Session-Token': SessionTokenStore.getState(),
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-      });
-    } else {
-      operation.setContext({
-        headers: {
-          'Session-Token': SessionTokenStore.getState(),
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-      });
-    }
-  },
+  request: (operation) =>
+    operation.setContext({
+      headers: {
+        'Session-Token': SessionTokenStore.getState(),
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+    }),
 });
 
 class CDAP extends Component {

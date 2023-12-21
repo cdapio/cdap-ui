@@ -20,9 +20,7 @@ import LoadingIndicatorStore, {
 } from 'components/shared/LoadingIndicator/LoadingIndicatorStore';
 import { IAction } from 'services/redux-helpers';
 import { composeEnhancers } from 'services/helpers';
-import Cookies from 'universal-cookie';
 
-const cookie = new Cookies();
 const DEFAULT_STATE = '';
 const SESSION_TOKENS_ACTIONS = {
   SET_TOKEN: 'SET_TOKEN',
@@ -44,9 +42,6 @@ export async function fetchSessionToken() {
     const headers: HeadersInit = {
       'X-Requested-With': 'XMLHttpRequest',
     };
-    if (window.CDAP_CONFIG.securityEnabled && cookie.get('CDAP_Auth_Token')) {
-      headers.authorization = `Bearer ${cookie.get('CDAP_Auth_Token')}`;
-    }
     const sessionTokenRes = await fetch('/sessionToken', { headers });
     const sessionToken = await sessionTokenRes.text();
     store.dispatch({

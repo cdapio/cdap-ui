@@ -37,16 +37,12 @@ import { objectQuery } from 'services/helpers';
 import SystemDelayStore from 'services/SystemDelayStore';
 import SystemDelayActions from 'services/SystemDelayStore/SystemDelayActions';
 import globalEvents from 'services/global-events';
-import Cookies from 'universal-cookie';
 import LoadingIndicatorStore, {
   BACKENDSTATUS,
 } from 'components/shared/LoadingIndicator/LoadingIndicatorStore';
 import { IDataSource } from './IDataSource';
 import { Subscription } from 'rxjs/Subscription';
-import isNil from 'lodash/isNil';
 import { REQUEST_ORIGIN_ROUTER, REQUEST_ORIGIN_MARKET } from './requestTypes';
-
-const cookie = new Cookies();
 
 const CDAP_API_VERSION = 'v3';
 
@@ -303,13 +299,6 @@ export default class DataSource implements IDataSource {
       generatedResource.requestOrigin = REQUEST_ORIGIN_ROUTER;
     }
 
-    if (objectQuery(window, 'CDAP_CONFIG', 'securityEnabled')) {
-      const token = cookie.get('CDAP_Auth_Token');
-      if (!isNil(token)) {
-        generatedResource.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-
     const subject = new Subject();
 
     // We are calling the same request from the polling function as well.
@@ -373,13 +362,6 @@ export default class DataSource implements IDataSource {
       resource.url = `/${apiVersion}${resource.url}`;
       generatedResource.url = `/api${this.buildUrl(resource.url, resource.params)}`;
       generatedResource.requestOrigin = REQUEST_ORIGIN_ROUTER;
-    }
-
-    if (window.CDAP_CONFIG.securityEnabled) {
-      const token = cookie.get('CDAP_Auth_Token');
-      if (!isNil(token)) {
-        generatedResource.headers.Authorization = `Bearer ${token}`;
-      }
     }
 
     const subject = new Subject();

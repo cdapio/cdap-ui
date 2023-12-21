@@ -15,13 +15,9 @@
  */
 
 import UploadFile from 'services/upload-file';
-import Cookies from 'universal-cookie';
 import NamespaceStore from 'services/NamespaceStore';
 import PluginArtifactUploadStore from 'services/WizardStores/PluginArtifactUpload/PluginArtifactUploadStore';
 import { MyArtifactApi } from 'api/artifact';
-import isNil from 'lodash/isNil';
-
-const cookie = new Cookies();
 
 const uploadArtifact = () => {
   const state = PluginArtifactUploadStore.getState();
@@ -34,12 +30,6 @@ const uploadArtifact = () => {
     'Artifact-Extends': state.upload.json.artifactExtends,
     'Artifact-Plugins': state.upload.json.artifactPlugins,
   };
-  if (window.CDAP_CONFIG.securityEnabled) {
-    let token = cookie.get('CDAP_Auth_Token');
-    if (!isNil(token)) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-  }
   return UploadFile({ url, fileContents: state.upload.jar.contents, headers });
 };
 
