@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const babelParser = require('@babel/parser');
 const babelTraverse = require('@babel/traverse').default;
-const { getDirectoryTree, visitDirectoryTree, APPDIR } = require('../lib/treegen');
+const { getDirectoryTree, traverseDirectoryTree, APPDIR } = require('../lib/treegen');
 const { isJs, isTs } = require('../lib/fileUtils');
 const { camelCaseToHyphenated } = require('../lib/strUtils');
 
@@ -14,7 +14,7 @@ const BABEL_PARSER_OPTS = {
 };
 
 const fileList = [];
-visitDirectoryTree(APPDIR, {
+traverseDirectoryTree(APPDIR, {
   visitFile(file) {
     fileList.push(file);
   }
@@ -37,7 +37,7 @@ function getDirectiveUsage(directiveName, sourceFilePath) {
 function getSiblingFiles(filepath) {
   const parentDir = getDirectoryTree(path.resolve(filepath, '..'));
   const siblings = [];
-  visitDirectoryTree(parentDir, {
+  traverseDirectoryTree(parentDir, {
     visitFile(file) {
       siblings.push(file.path);
     }
@@ -48,7 +48,7 @@ function getSiblingFiles(filepath) {
 
 const report = {};
 
-visitDirectoryTree(directivesDir, {
+traverseDirectoryTree(directivesDir, {
   visitFile(file) {
     report[file.path] = {
       filePath: file.path,

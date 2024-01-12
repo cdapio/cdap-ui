@@ -11,6 +11,11 @@ function camelCaseToHyphenated(s) {
   return out;
 }
 
+function getCodeFragment(file, node) {
+  return file.content.slice(node.start, node.end);
+}
+
 module.exports = {
   camelCaseToHyphenated,
+  getCodeFragment,
 };

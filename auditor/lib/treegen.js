@@ -1,13 +1,27 @@
 const fs = require('fs');
 const path = require('path');
-function noop() {}
 
+function noop() {}
 const dircache = {};
+
+function shouldIgnore(name) {
+  if (!name) return true;
+  if (name.startsWith('.') || name.endsWith('.lock')) return true;
+  return [
+    'node_modules',
+    'packaged',
+    'target',
+    'dist',
+    'server_dist'
+  ].includes(name);
+}
 
 function getDirectoryTree(dirpath) {
   if (dircache[dirpath]) return dircache[dirpath];
 
   const tree = fs.readdirSync(dirpath, { withFileTypes: true }).map((item) => {
+    if (shouldIgnore(item.name)) return undefined;
+
     const itempath = path.join(dirpath, item.name);
     if (item.isDirectory()) {
       return getDirectoryTree(itempath);
@@ -20,7 +34,7 @@ function getDirectoryTree(dirpath) {
       ftype: 'file',
       content: fs.readFileSync(itempath, 'utf8'),
     };
-  });
+  }).filter(Boolean);
 
   const dirobj = {
     name: path.basename(dirpath),
@@ -33,11 +47,11 @@ function getDirectoryTree(dirpath) {
   return dirobj;
 }
 
-function visitDirectoryTree (tree, visitor) {
+function traverseDirectoryTree (tree, visitor) {
   const { visitDirectory = noop, visitFile = noop } = visitor;
   if (tree.ftype === 'directory') {
     visitDirectory(tree);
-    tree.children.forEach(item => visitDirectoryTree(item, visitor));
+    tree.children.forEach(item => traverseDirectoryTree(item, visitor));
   }
   else visitFile(tree);
 }
@@ -47,6 +61,6 @@ const APPDIR = getDirectoryTree(appPath);
 
 module.exports = {
   getDirectoryTree,
-  visitDirectoryTree,
+  traverseDirectoryTree,
   APPDIR,
 };
