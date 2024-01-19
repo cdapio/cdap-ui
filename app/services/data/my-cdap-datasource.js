@@ -26,24 +26,7 @@ angular.module(PKG.name + '.services')
     }
 
     MyCDAPDataSource.prototype.poll = function (resource, cb, errorCb) {
-
-      // FIXME: There is a circular dependency and that is why
-      // myAuth.isAuthenticated is not used. There should be a better way to do this.
-      if (window.CDAP_CONFIG.securityEnabled && $cookies.get('CDAP_Auth_Token')) {
-        resource.headers = {
-          Authorization: 'Bearer ' + $cookies.get('CDAP_Auth_Token')
-        };
-      } else if (
-        window.CaskCommon.CDAPHelpers.isAuthSetToManagedMode() &&
-        $rootScope.currentUser &&
-        $rootScope.currentUser.token
-      ) {
-        resource.headers = {
-          Authorization: 'Bearer ' + $rootScope.currentUser.token
-        };
-      } else {
-        resource.headers = {};
-      }
+      resource.headers = {};
 
       if (!resource.url) {
         resource.url = myCdapUrl.constructUrl(resource);
@@ -62,21 +45,7 @@ angular.module(PKG.name + '.services')
     };
 
     MyCDAPDataSource.prototype.request = function(resource, cb, errorCb) {
-      if (window.CDAP_CONFIG.securityEnabled && $cookies.get('CDAP_Auth_Token')) {
-        resource.headers = {
-          Authorization: 'Bearer ' + $cookies.get('CDAP_Auth_Token')
-        };
-      } else if (
-        window.CaskCommon.CDAPHelpers.isAuthSetToManagedMode() &&
-        $rootScope.currentUser &&
-        $rootScope.currentUser.token
-      ) {
-        resource.headers = {
-          Authorization: 'Bearer '+ $rootScope.currentUser.token
-        };
-      } else {
-        resource.headers = {};
-      }
+      resource.headers = {};
 
       if (!resource.url) {
         resource.url = myCdapUrl.constructUrl(resource);

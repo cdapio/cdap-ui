@@ -15,7 +15,6 @@
  */
 
 import UploadFile from 'services/upload-file';
-import Cookies from 'universal-cookie';
 import {Observable} from 'rxjs/Observable';
 import NamespaceStore from 'services/NamespaceStore';
 import MicroserviceUploadStore from 'services/WizardStores/MicroserviceUpload/MicroserviceUploadStore';
@@ -24,10 +23,7 @@ import {findHighestVersion} from 'services/VersionRange/VersionUtilities';
 import {objectQuery} from 'services/helpers';
 import {MyArtifactApi} from 'api/artifact';
 import {MyPipelineApi} from 'api/pipeline';
-import isNil from 'lodash/isNil';
 import isEmpty from 'lodash/isEmpty';
-
-const cookie = new Cookies();
 
 const uploadArtifact = () => {
   const state = MicroserviceUploadStore.getState();
@@ -43,12 +39,6 @@ const uploadArtifact = () => {
     'Artifact-Version': version,
     'Artifact-Extends': state.uploadjson.artifactExtends
   };
-  if (window.CDAP_CONFIG.securityEnabled) {
-    let token = cookie.get('CDAP_Auth_Token');
-    if (!isNil(token)) {
-      headers.Authorization = `Bearer ${token}`;
-    }
-  }
   return UploadFile({url, fileContents: state.uploadjar.contents, headers});
 };
 

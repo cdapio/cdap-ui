@@ -22,17 +22,13 @@ import OneStepDeployActions from 'services/WizardStores/OneStepDeploy/OneStepDep
 import NamespaceStore from 'services/NamespaceStore';
 import { Observable } from 'rxjs/Observable';
 import OneStepDeployWizard from 'components/CaskWizards/OneStepDeploy';
-import Cookies from 'universal-cookie';
 import MarketStore from 'components/Market/store/market-store';
 import T from 'i18n-react';
 import { MyMarketApi } from 'api/market';
 import { MyArtifactApi } from 'api/artifact';
 import ee from 'event-emitter';
 import globalEvents from 'services/global-events';
-import isNil from 'lodash/isNil';
 import SessionStore from 'services/SessionTokenStore';
-
-const cookie = new Cookies();
 
 export default class OneStepDeployPlugin extends Component {
   constructor(props) {
@@ -124,13 +120,6 @@ export default class OneStepDeployPlugin extends Component {
           'Session-Token': SessionStore.getState(),
           'X-Requested-With': 'XMLHttpRequest',
         };
-
-        if (window.CDAP_CONFIG.securityEnabled) {
-          let token = cookie.get('CDAP_Auth_Token');
-          if (!isNil(token)) {
-            headers.Authorization = `Bearer ${token}`;
-          }
-        }
 
         const marketUrl = encodeURIComponent(`${marketHost}${marketPath}`);
         let fetchUrl = `/forwardMarketToCdap?source=${marketUrl}&target=${cdapPath}`;

@@ -23,12 +23,17 @@ export default function RedirectToLogin(data) {
   let { url } = data.resource || {};
   let namespaceAPIRegex = new RegExp(/\/v3\/namespaces$/g);
   if ((statusCode === 401 && namespaceAPIRegex.test(url)) || (statusCode === 401 && !url)) {
-    cookie.remove('CDAP_Auth_Token', { path: '/' });
-    cookie.remove('CDAP_Auth_User', { path: '/' });
-    window.location.href = window.getAbsUIUrl({
-      uiApp: 'login',
-      redirectUrl: location.pathname,
-      clientId: 'cdap',
+    fetch('/logout', {
+      method: 'POST',
+    }).then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        cookie.remove('CDAP_Auth_User', { path: '/' });  
+        window.location.href = window.getAbsUIUrl({
+          uiApp: 'login',
+          redirectUrl: location.pathname,
+          clientId: 'cdap',
+        });
+      }  
     });
   }
   return true;

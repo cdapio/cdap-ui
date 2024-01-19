@@ -78,9 +78,14 @@ module.service('myAuth', function myAuthService (
   this.logout = function () {
     if (this.currentUser){
       persist(null);
-      $cookies.remove('CDAP_Auth_Token', {path: '/'});
-      $cookies.remove('CDAP_Auth_User', {path: '/'});
-      $rootScope.$broadcast(MYAUTH_EVENT.logoutSuccess);
+      $http({
+        url: '/logout',
+        method: 'POST',
+      })
+      .success(function (data) {
+        $cookies.remove('CDAP_Auth_User', {path: '/'});
+        $rootScope.$broadcast(MYAUTH_EVENT.logoutSuccess);
+      });
     }
   };
 
@@ -100,9 +105,8 @@ module.service('myAuth', function myAuthService (
   };
 
   this.updateCredentialsFromCookie = function() {
-    if ($cookies.get('CDAP_Auth_Token') && $cookies.get('CDAP_Auth_User')) {
+    if ($cookies.get('CDAP_Auth_User')) {
       var user = new MyAuthUser({
-        access_token: $cookies.get('CDAP_Auth_Token'),
         username: $cookies.get('CDAP_Auth_User')
       });
       persist(user);
@@ -159,7 +163,6 @@ module.factory('MyAuthUser', function MyAuthUserFactory (MYAUTH_ROLE) {
    * @param {object} user data
    */
   function User(data) {
-    this.token = data.access_token;
     this.username = data.username;
     this.role = MYAUTH_ROLE.user;
 

@@ -17,8 +17,6 @@ import LoadingIndicatorStore, {
   BACKENDSTATUS,
 } from 'components/shared/LoadingIndicator/LoadingIndicatorStore';
 import StatusAlertMessageStore from 'components/shared/StatusAlertMessage/StatusAlertMessageStore';
-import Cookies from 'universal-cookie';
-import isNil from 'lodash/isNil';
 import { Observable } from 'rxjs/Observable';
 import SystemServicesStore, { pollSystemServices, stopSystemServicesPolling } from 'services/SystemServicesStore';
 import SessionTokenStore from 'services/SessionTokenStore';
@@ -28,7 +26,6 @@ let systemServiceSubscription;
 let retries = 0;
 const BACKEND_STATUS_POLL_INTERVAL = 10000;
 const MAX_RETRIES_BEFORE_SHOWING_ERROR_IN_UI = 3;
-const cookie = new Cookies();
 
 const parseAndDispatchBackendStatus = (response) => {
   let loadingState = LoadingIndicatorStore.getState().loading;
@@ -110,10 +107,6 @@ const getRequestInfo = () => {
     credentials: 'include',
   };
   if (window.CDAP_CONFIG.securityEnabled) {
-    let token = cookie.get('CDAP_Auth_Token');
-    if (!isNil(token)) {
-      headers.Authorization = 'Bearer ' + token;
-    }
     headers.sessionToken = SessionTokenStore.getState();
   }
   requestInfo.headers = headers;

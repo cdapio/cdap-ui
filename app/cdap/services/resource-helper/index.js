@@ -16,11 +16,6 @@
 
 export const apiCreator = createApi;
 export const apiCreatorAbsPath = createApiFromExactPath;
-import Cookies from 'universal-cookie';
-import isNil from 'lodash/isNil';
-import { objectQuery } from 'services/helpers';
-
-const cookie = new Cookies();
 
 function createApi(dataSrc, method, type, path, options = {}) {
   // add api version to options to change it to v1
@@ -37,11 +32,6 @@ function createApi(dataSrc, method, type, path, options = {}) {
     }
 
     reqObj.headers = reqObj.headers || {};
-    if (objectQuery(window, 'CDAP_CONFIG', 'securityEnabled') && cookie.get('CDAP_Auth_Token')) {
-      if (!isNil(cookie.get('CDAP_Auth_Token'))) {
-        reqObj.headers.Authorization = `Bearer ${cookie.get('CDAP_Auth_Token')}`;
-      }
-    }
 
     if (type === 'REQUEST') {
       return dataSrc.request(reqObj);
