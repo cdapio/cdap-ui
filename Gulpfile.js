@@ -122,7 +122,6 @@ gulp.task('css:application', function() {
       './app/styles/themes/*.less',
       './app/directives/**/*.less',
       './app/hydrator/**/*.less',
-      './app/tracker/**/*.less',
     ])
     .pipe(plug.less())
     .pipe(plug.concat('app.css'))
@@ -269,10 +268,6 @@ gulp.task('watch:js:app:hydrator', function() {
   return getExtensionBuildPipeline('hydrator').pipe(plug.livereload({ port: 35728 }));
 });
 
-gulp.task('watch:js:app:tracker', function() {
-  return getExtensionBuildPipeline('tracker').pipe(plug.livereload({ port: 35728 }));
-});
-
 gulp.task('watch:js:app:babel', function() {
   return getBabelBuildPipeline().pipe(plug.livereload({ port: 35728 }));
 });
@@ -282,17 +277,13 @@ gulp.task('js:app:hydrator', function() {
   return getExtensionBuildPipeline('hydrator');
 });
 
-gulp.task('js:app:tracker', function() {
-  return getExtensionBuildPipeline('tracker');
-});
-
 gulp.task('js:app:babel', function() {
   return getBabelBuildPipeline();
 });
 
-gulp.task('js:app', gulp.series('js:app:babel', 'js:app:hydrator', 'js:app:tracker'));
+gulp.task('js:app', gulp.series('js:app:babel', 'js:app:hydrator'));
 
-gulp.task('watch:js:app', gulp.series('watch:js:app:hydrator', 'watch:js:app:tracker'));
+gulp.task('watch:js:app', gulp.series('watch:js:app:hydrator'));
 gulp.task('polyfill', function() {
   return gulp
     .src(['./app/polyfill.js', './app/ui-utils/url-generator.js'])
@@ -308,18 +299,17 @@ gulp.task('img', function() {
 gulp.task('html:partials', function() {
   return gulp
     .src([
-      './app/{hydrator,tracker}/**/*.html',
-      '!./app/tracker/tracker.html',
+      './app/hydrator/**/*.html',
       '!./app/hydrator/hydrator.html',
     ])
     .pipe(plug.htmlmin({ removeComments: true }))
-    .pipe(gulp.dest('./packaged/public/dist/assets/features'))
+    .pipe(gulp.dest('./packaged/public/dist/assets/features/hydrator'))
     .pipe(plug.livereload({ port: 35728 }));
 });
 
 gulp.task('html:main', function() {
   return gulp
-    .src(['./app/tracker/tracker.html', './app/hydrator/hydrator.html'])
+    .src(['./app/hydrator/hydrator.html'])
     .pipe(plug.htmlmin({ removeComments: true }))
     .pipe(gulp.dest('./packaged/public/dist'));
 });
@@ -520,7 +510,7 @@ gulp.task('watcher', function(cb) {
 
   gulp.watch('./app/**/*.{less,css}', gulp.series('css'));
   gulp.watch(['./app/directives/**/*.html', './app/services/**/*.html'], gulp.series('tpl'));
-  gulp.watch(['./app/hydrator/**/*.html', './app/tracker/**/*.html'], gulp.series('html:partials'));
+  gulp.watch(['./app/hydrator/**/*.html'], gulp.series('html:partials'));
   cb();
 });
 

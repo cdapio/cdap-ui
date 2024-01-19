@@ -707,15 +707,6 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       },
     ]
   );
-  app.all(
-    ['/metadata', '/metadata/*'],
-    [
-      function(req, res) {
-        removeBCookie(req, res, cookieSettings);
-        res.render('tracker', { nonceVal: res.locals.nonce });
-      },
-    ]
-  );
 
   app.all(
     ['/', '/cdap', '/cdap/*'],
