@@ -1240,6 +1240,8 @@ features:
             fieldLabel: Depth
             label: XML to JSON
             placeholder: Enter depth
+            optionalFieldLabel: Keep Strings
+            optionalPlaceholder: Optional Boolean parameter
         title: Parse
       SetCharEncoding:
         disabledTooltip: Character encoding can only be set on columns of data type 'bytes'
