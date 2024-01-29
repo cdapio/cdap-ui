@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "cdap-get-data-testid",
+  "description": "Developer tool for getting data-testid of any UI element if present, otherwise send an email to a configured email id to add a data-testid for the element in the cdap-ui codebase.",
+  "version": "1.0",
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "images/icon-32.png"
+  },
+  "icons": {
+    "32": "images/icon-32.png"
+  },
+  "background": {
+    "service_worker": "serviceWorker.js"
+  },
+  "permissions": ["activeTab", "scripting", "storage", "clipboardWrite"]
+}
