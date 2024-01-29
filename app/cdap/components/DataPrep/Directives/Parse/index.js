@@ -17,17 +17,19 @@
 import PropTypes from 'prop-types';
 
 import React, { Component } from 'react';
+import T from 'i18n-react';
+import debounce from 'lodash/debounce';
 import classnames from 'classnames';
+
 import { execute } from 'components/DataPrep/store/DataPrepActionCreator';
 import SingleFieldModal from 'components/DataPrep/Directives/Parse/Modals/SingleFieldModal';
 import CSVModal from 'components/DataPrep/Directives/Parse/Modals/CSVModal';
 import LogModal from 'components/DataPrep/Directives/Parse/Modals/LogModal';
 import DateFormatModal from 'components/DataPrep/Directives/Parse/Modals/DateFormatModal';
 import ExcelModal from 'components/DataPrep/Directives/Parse/Modals/ExcelModal';
-import T from 'i18n-react';
+import XmlToJsonModal from 'components/DataPrep/Directives/Parse/Modals/XmlToJsonModal';
 import DataPrepStore from 'components/DataPrep/store';
 import DataPrepActions from 'components/DataPrep/store/DataPrepActions';
-import debounce from 'lodash/debounce';
 import { setPopoverOffset } from 'components/DataPrep/helper';
 
 const SUFFIX = 'features.DataPrep.Directives.Parse';
@@ -136,14 +138,13 @@ export default class ParseDirective extends Component {
   }
 
   renderSingleFieldModal() {
-    let isRequired = this.state.selectedParse === 'FIXEDLENGTH';
+    const isRequired = this.state.selectedParse === 'FIXEDLENGTH';
+    const hasOptionalField = this.state.selectedParse === 'FIXEDLENGTH';
 
     let defaultValue;
-    if (['JSON', 'XMLTOJSON'].indexOf(this.state.selectedParse) !== -1) {
+    if (this.state.selectedParse === 'JSON') {
       defaultValue = '1';
     }
-
-    let hasOptionalField = this.state.selectedParse === 'FIXEDLENGTH';
 
     return (
       <SingleFieldModal
@@ -162,6 +163,15 @@ export default class ParseDirective extends Component {
       <CSVModal
         toggle={this.selectParse.bind(this, null)}
         onApply={this.applyDirective.bind(this)}
+      />
+    );
+  }
+
+  renderXmlToJsonModal() {
+    return (
+      <XmlToJsonModal
+        toggle={this.selectParse.bind(this, null)}
+        onApply={this.applyDirective.bind(this, 'XMLTOJSON')}
       />
     );
   }
@@ -225,6 +235,8 @@ export default class ParseDirective extends Component {
       return this.renderDateTimeModal();
     } else if (this.state.selectedParse === 'EXCEL') {
       return this.renderExcelModal();
+    } else if (this.state.selectedParse === 'XMLTOJSON') {
+      return this.renderXmlToJsonModal();
     } else {
       return this.renderSingleFieldModal();
     }
