@@ -151,8 +151,8 @@ export default class PipelineScheduleButton extends Component {
         className={classnames('pipeline-action-container pipeline-scheduler-container', {
           active: this.state.showScheduler,
         })}
-        data-cy="pipeline-scheduler-btn"
-      >
+        data-cy="pipeline-scheduler-btn" data-testid="pipeline-scheduler-btn">
+
         {this.renderScheduleError()}
         {this.renderScheduleButton()}
         <PipelineScheduler

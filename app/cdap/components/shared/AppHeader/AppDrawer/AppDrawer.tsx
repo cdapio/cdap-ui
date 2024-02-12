@@ -148,6 +148,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
               data-cy="navbar-home-link"
               id="navbar-home"
               isActive={location.pathname === `/cdap/${nsurl}`}
+              data-testid="navbar-home-link"
             />
             <ExperimentalFeature experimentId="data-ingestion">
               <DrawerFeatureLink
@@ -157,6 +158,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
                 componentDidNavigate={componentDidNavigate}
                 data-cy="navbar-ingestion-link"
                 id="navbar-ingestion"
+                data-testid="navbar-ingestion-link"
               />
             </ExperimentalFeature>
             <DrawerFeatureLink
@@ -198,6 +200,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
                 location.pathname.startsWith(`/cdap/${nsurl}/wrangler`) ||
                 location.pathname.startsWith(`/cdap/${nsurl}/connections`)
               }
+              data-testid="navbar-dataprep-link"
             />
             <DrawerFeatureLink
               featureName="Replication"
@@ -207,6 +210,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
               componentDidNavigate={componentDidNavigate}
               data-cy="navbar-replication-link"
               id="navbar-replication"
+              data-testid="navbar-replication-link"
             />
             <DrawerFeatureLink
               featureUrl={`/${nsurl}/experiments`}
@@ -215,6 +219,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
               featureName={Theme.featureNames.analytics}
               componentDidNavigate={componentDidNavigate}
               data-cy="navbar-experiments-link"
+              data-testid="navbar-experiments-link"
             />
             <DrawerFeatureLink
               featureUrl={`/${nsurl}/rulesengine`}
@@ -223,6 +228,7 @@ class AppDrawer extends React.PureComponent<IAppDrawerProps> {
               featureName={Theme.featureNames.rulesEngine}
               componentDidNavigate={componentDidNavigate}
               data-cy="navbar-rulesengine-link"
+              data-testid="navbar-rulesengine-link"
             />
             <DrawerFeatureLink
               featureUrl={`/${nsurl}/metadata`}

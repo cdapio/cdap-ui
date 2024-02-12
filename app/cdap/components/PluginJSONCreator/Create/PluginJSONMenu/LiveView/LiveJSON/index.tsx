@@ -43,7 +43,7 @@ interface ILiveJSONProps extends WithStyles<typeof styles> {
 const LiveJSONView: React.FC<ILiveJSONProps> = ({ classes, JSONOutput }) => {
   return (
     <div className={classes.JSONLiveCode}>
-      <pre className={classes.output} data-cy="live-json">
+      <pre className={classes.output} data-cy="live-json" data-testid="live-json">
         {JSON.stringify(JSONOutput, undefined, 2)}
       </pre>
     </div>

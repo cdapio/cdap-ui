@@ -51,6 +51,7 @@ const SaveCallsView: React.FC<ISaveCallsProps> = ({ saveCalls, toggleSaveCalls }
         color="primary"
         name="checkedB"
         inputProps={{ 'aria-label': 'primary checkbox' }}
+        data-testid="save-mode-btn"
       />
       Save calls
     </div>

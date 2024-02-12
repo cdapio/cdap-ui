@@ -42,13 +42,18 @@ const GroupActionButtonsView: React.FC<IGroupActionButtonsProps> = ({
 }) => {
   return (
     <div className={classes.groupActionButtons}>
-      <IconButton onClick={onAddConfigurationGroup} data-cy="add-configuration-group-btn">
+      <IconButton
+        onClick={onAddConfigurationGroup}
+        data-cy="add-configuration-group-btn"
+        data-testid="add-configuration-group-btn"
+      >
         <AddIcon fontSize="small" />
       </IconButton>
       <IconButton
         onClick={onDeleteConfigurationGroup}
         color="secondary"
         data-cy="delete-configuration-group-btn"
+        data-testid="delete-configuration-group-btn"
       >
         <DeleteIcon fontSize="small" />
       </IconButton>

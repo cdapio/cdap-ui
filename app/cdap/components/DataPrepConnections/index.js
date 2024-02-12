@@ -581,6 +581,7 @@ export default class DataPrepConnections extends Component {
                 onClick={this.handlePropagation.bind(this, { ...gcs, name: ConnectionType.GCS })}
                 isNativeLink={this.props.singleWorkspaceMode}
                 data-cy={`wrangler-${ConnectionType.GCS}-connection-${gcs.name}`}
+                data-testid={`wrangler-${ConnectionType.GCS}-connection-${gcs.name}`}
               >
                 {gcs.name}
               </NavLinkWrapper>
@@ -626,6 +627,7 @@ export default class DataPrepConnections extends Component {
                 })}
                 isNativeLink={this.props.singleWorkspaceMode}
                 data-cy={`wrangler-${ConnectionType.BIGQUERY}-connection-${bq.id}`}
+                data-testid={`wrangler-${ConnectionType.BIGQUERY}-connection-${bq.id}`}
               >
                 {bq.name}
               </NavLinkWrapper>
@@ -671,6 +673,7 @@ export default class DataPrepConnections extends Component {
                 })}
                 isNativeLink={this.props.singleWorkspaceMode}
                 data-cy={`wrangler-${ConnectionType.SPANNER}-connection-${spanner.id}`}
+                data-testid={`wrangler-${ConnectionType.SPANNER}-connection-${spanner.id}`}
               >
                 {spanner.name}
               </NavLinkWrapper>

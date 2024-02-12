@@ -28,6 +28,7 @@ const SearchBox = ({ search, onChange }) => {
       value={search}
       onChange={onChange}
       data-cy="gcs-search-box"
+      data-testid="gcs-search-box"
     />
   );
 };

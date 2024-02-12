@@ -127,6 +127,7 @@ const ConfigurationGroupPage = () => {
             color="primary"
             onClick={addConfigurationGroup(0)}
             data-cy="add-configuration-group-btn"
+            data-testid="add-configuration-group-btn"
           >
             Add Configuration Group
           </Button>

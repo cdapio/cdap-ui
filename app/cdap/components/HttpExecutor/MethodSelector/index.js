@@ -48,6 +48,7 @@ function MethodSelectorView({ onChange, value }) {
         data-cy="request-method-selector"
         value={value}
         onChange={onChange}
+        data-testid="request-method-selector"
       >
         {METHODS.map((method) => {
           return (

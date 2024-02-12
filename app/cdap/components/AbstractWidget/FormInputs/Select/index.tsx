@@ -170,6 +170,7 @@ const CustomSelect: React.FC<ISelectProps> = ({
             key={opt.value}
             disabled={opt.disabled || !isNilOrEmptyString(opt.placeholder)}
             data-cy={`option-${opt.value}`}
+            data-testid={`option-${opt.value}`}
           >
             {opt.label}
           </OptionItem>

@@ -103,6 +103,7 @@ export default class UncontrolledPopover extends Component {
         id={this.state.id}
         onClick={this.togglePopover}
         data-cy={this.props['data-cy']}
+        data-testid={this.props['data-cy']}
       >
         {this.renderPopover()}
       </span>

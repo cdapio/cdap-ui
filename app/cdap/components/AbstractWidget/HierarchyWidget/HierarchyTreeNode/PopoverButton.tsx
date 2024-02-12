@@ -69,6 +69,7 @@ const PopoverButton = ({ setShowMultiSelect, addNewRecordToParent }: IPopoverBut
           horizontal: 'center',
         }}
         data-cy="add-popup"
+        data-testid="add-popup"
       >
         <fieldset className={classes.popoverContainer}>
           <ButtonIcon
@@ -77,6 +78,7 @@ const PopoverButton = ({ setShowMultiSelect, addNewRecordToParent }: IPopoverBut
               setAnchorEl(null);
             }}
             data-cy="add-child"
+            data-testid="add-child"
           >
             Add a child field
           </ButtonIcon>

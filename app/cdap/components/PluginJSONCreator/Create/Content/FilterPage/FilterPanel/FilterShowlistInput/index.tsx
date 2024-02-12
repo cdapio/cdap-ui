@@ -86,7 +86,7 @@ const FilterShowlistInput: React.FC<IFilterShowlistInputProps> = ({ filterID }) 
           }
           const show = showToInfo.get(showID);
           return (
-            <div key={showID} data-cy={`show-${showIndex}`}>
+            <div key={showID} data-cy={`show-${showIndex}`} data-testid={`show-${showIndex}`}>
               <ShowPropertyRow
                 showName={show.get('name')}
                 showType={show.get('type')}

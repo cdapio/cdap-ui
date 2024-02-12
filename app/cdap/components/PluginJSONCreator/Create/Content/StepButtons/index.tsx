@@ -87,6 +87,7 @@ const StepButtonsView: React.FC<IStepButtonProps> = ({
           onClick={handlePreviousClick}
           className={classes.actionButton}
           data-cy="previous-step-btn"
+          data-testid="previous-step-btn"
         >
           Previous
         </Button>
@@ -99,6 +100,7 @@ const StepButtonsView: React.FC<IStepButtonProps> = ({
           disabled={nextDisabled}
           data-cy="next-step-btn"
           className={classes.actionButton}
+          data-testid="next-step-btn"
         >
           Next
         </Button>

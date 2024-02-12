@@ -194,6 +194,7 @@ export default class PostRunActionsWizard extends Component<IPostRunActionsWizar
                   data-cy="validate-btn"
                   type="button"
                   onClick={this.validatePluginProperties}
+                  data-testid="validate-btn"
                 >
                   {this.state.isValidating ? (
                     <span>

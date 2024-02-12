@@ -171,10 +171,12 @@ class SystemServicesDelayView extends React.Component<ISystemDelayProps> {
             color="primary"
             onClick={this.closeNotification}
             data-cy="snooze-system-delay-notification"
+            data-testid="snooze-system-delay-notification"
           >
             Snooze for 1 hour
           </Button>
         }
+        data-testid="system-delay-snackbar"
       />
     );
   }

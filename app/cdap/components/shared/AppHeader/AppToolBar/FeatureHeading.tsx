@@ -90,6 +90,7 @@ class FeatureHeading extends React.PureComponent<WithStyles, IFeatureHeadingStat
         type={HeadingTypes.h4}
         label={this.state.featureName}
         className={this.props.classes.featureHeading}
+        data-testid="feature-heading"
       />
     );
   }

@@ -58,14 +58,18 @@ function TimeRangePicker({ classes }) {
       return null;
     }
     return (
-      <div className={classes.timeRangeContainer} data-cy="time-range-selector">
+      <div
+        className={classes.timeRangeContainer}
+        data-cy="time-range-selector"
+        data-testid="time-range-selector"
+      >
         <ExpandableTimeRange onDone={setCustomTimeRange} inSeconds={true} start={start} end={end} />
       </div>
     );
   };
 
   return (
-    <div data-cy="fll-time-picker">
+    <div data-cy="fll-time-picker" data-testid="fll-time-picker">
       <span className={classes.view}>{T.translate(`${PREFIX}.view`)}</span>
       <Select
         value={selection}
@@ -75,10 +79,11 @@ function TimeRangePicker({ classes }) {
           getContentAnchorEl: null,
         }}
         data-cy="time-picker-dropdown"
+        data-testid="time-picker-dropdown"
       >
         {TIME_OPTIONS.map((option) => {
           return (
-            <MenuItem value={option} key={option} data-cy={option}>
+            <MenuItem value={option} key={option} data-cy={option} data-testid={option}>
               {T.translate(`${PREFIX}.TimeRangeOptions.${option}`)}
             </MenuItem>
           );

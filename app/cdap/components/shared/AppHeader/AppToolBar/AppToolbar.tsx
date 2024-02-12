@@ -71,7 +71,11 @@ class AppToolbar extends React.PureComponent<IAppToolbarProps, IAppToolbarState>
     const { onMenuIconClick, classes } = this.props;
     const { namespace } = this.props.context;
     return (
-      <Toolbar className={classes.customToolbar} data-cy="navbar-toolbar">
+      <Toolbar
+        className={classes.customToolbar}
+        data-cy="navbar-toolbar"
+        data-testid="navbar-toolbar"
+      >
         <IconButton
           onClick={onMenuIconClick}
           color="inherit"

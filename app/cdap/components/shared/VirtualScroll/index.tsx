@@ -125,6 +125,7 @@ const VirtualScroll = ({
             transform: `translateY(${offsetY}px)`,
           }}
           data-cy={dataCy}
+          data-testid={dataCy}
         >
           {list}
         </div>

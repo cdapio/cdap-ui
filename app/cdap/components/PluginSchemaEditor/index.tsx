@@ -422,6 +422,7 @@ class PluginSchemaEditorBase extends React.PureComponent<
           className={this.props.classes.fieldset}
           key={i}
           data-cy="schema-editor-fieldset-container"
+          data-testid="schema-editor-fieldset-container"
         >
           <RefreshableSchemaEditor
             visibleRows={this.state.schemaRowCount}
@@ -503,6 +504,7 @@ class PluginSchemaEditorBase extends React.PureComponent<
         disabled={this.props.disabled}
         className={this.props.classes.fieldset}
         data-cy="schema-editor-fieldset-container"
+        data-testid="schema-editor-fieldset-container"
       >
         <SchemaEditor
           key={i}
@@ -608,6 +610,7 @@ class PluginSchemaEditorBase extends React.PureComponent<
         className={classes.container}
         ref={(ref) => (this.containerRef = ref)}
         data-cy={`${this.props.schemaTitle}`}
+        data-testid={`${this.props.schemaTitle}`}
       >
         {this.renderHeader()}
         <If condition={this.state.loading}>

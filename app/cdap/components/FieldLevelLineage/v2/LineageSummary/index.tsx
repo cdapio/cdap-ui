@@ -308,7 +308,11 @@ class LineageSummary extends React.Component<{ classes }, ILineageState> {
                     </g>
                     <g id="selected-links" />
                   </svg>
-                  <div data-cy="cause-fields" className={this.props.classes.summaryCol}>
+                  <div
+                    data-cy="cause-fields"
+                    className={this.props.classes.summaryCol}
+                    data-testid="cause-fields"
+                  >
                     <FllHeader type="cause" total={Object.keys(visibleCauseSets).length} />
                     <If condition={Object.keys(visibleCauseSets).length === 0}>
                       <FllTable type="cause" />
@@ -326,11 +330,19 @@ class LineageSummary extends React.Component<{ classes }, ILineageState> {
                       );
                     })}
                   </div>
-                  <div data-cy="target-fields" className={this.props.classes.summaryCol}>
+                  <div
+                    data-cy="target-fields"
+                    className={this.props.classes.summaryCol}
+                    data-testid="target-fields"
+                  >
                     <FllHeader type="target" total={targetFields.fields.length} />
                     <FllTable tableId={target} tableInfo={targetFields} type="target" />
                   </div>
-                  <div data-cy="impact-fields" className={this.props.classes.summaryCol}>
+                  <div
+                    data-cy="impact-fields"
+                    className={this.props.classes.summaryCol}
+                    data-testid="impact-fields"
+                  >
                     <FllHeader type="impact" total={Object.keys(visibleImpactSets).length} />
                     <If condition={Object.keys(visibleImpactSets).length === 0}>
                       <FllTable type="impact" />

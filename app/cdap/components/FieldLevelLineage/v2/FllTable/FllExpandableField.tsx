@@ -49,6 +49,7 @@ function ExpandableField({ isExpanded, handleClick, tablename, classes }: IExpan
       className={classnames('grid-row', 'grid-link', classes.root)}
       data-cy={`${isExpanded ? 'hide' : 'show'}-fields-panel-${tablename}`}
       onClick={handleClick}
+      data-testid={`${isExpanded ? 'hide' : 'show'}-fields-panel-${tablename}`}
     >
       {message}
       {arrowIcon}

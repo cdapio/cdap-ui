@@ -36,6 +36,7 @@ const NullableBase = ({ nullable, onNullable: onChange }: INullableBaseProps) =>
         onChange(e.target.checked);
       }}
       disabled={typeof onChange !== 'function'}
+      data-testid="schema-field-nullable-checkbox"
     />
   );
 };

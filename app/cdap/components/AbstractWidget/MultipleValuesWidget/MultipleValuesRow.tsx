@@ -97,6 +97,7 @@ class MultipleValuesRow extends AbstractRow<IMultipleValuesRowProps, {}> {
               inputRef={i === 0 ? this.props.forwardedRef : null}
               autoFocus={i === 0 ? this.props.autofocus : null}
               onKeyPress={this.handleKeyPress}
+              data-testid={`multiple-values-input-${i}`}
             />
           );
         })}

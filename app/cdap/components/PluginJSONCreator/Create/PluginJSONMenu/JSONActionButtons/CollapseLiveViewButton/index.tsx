@@ -39,7 +39,11 @@ export const CollapseLiveViewButtonView = ({ classes, collapseLiveView }) => {
       }}
       title="Close"
     >
-      <IconButton onClick={collapseLiveView} data-cy="collapse-live-view-btn">
+      <IconButton
+        onClick={collapseLiveView}
+        data-cy="collapse-live-view-btn"
+        data-testid="collapse-live-view-btn"
+      >
         <CloseIcon />
       </IconButton>
     </Tooltip>

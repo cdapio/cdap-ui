@@ -243,6 +243,7 @@ class SchemaContainer extends React.Component<ISchemaContainerProps, ISchemaCont
                       variant="outlined"
                       onClick={this.handleMenuOpen}
                       data-cy="schema-select-btn"
+                      data-testid="schema-select-btn"
                     >
                       <span>{T.translate(`${I18N_PREFIX_TABLE}.checkboxHeader`)}</span>
                       <IconSVG name="icon-caret-down" className={classes.tableHeaderSelectIcon} />
@@ -255,12 +256,14 @@ class SchemaContainer extends React.Component<ISchemaContainerProps, ISchemaCont
                       <MenuItem
                         onClick={() => this.handleMenuClose('All')}
                         data-cy="select-all-option"
+                        data-testid="select-all-option"
                       >
                         {T.translate(`${I18N_PREFIX_TABLE}.selectMenuItems.all`)}
                       </MenuItem>
                       <MenuItem
                         onClick={() => this.handleMenuClose('None')}
                         data-cy="select-none-option"
+                        data-testid="select-none-option"
                       >
                         {T.translate(`${I18N_PREFIX_TABLE}.selectMenuItems.none`)}
                       </MenuItem>
@@ -304,12 +307,14 @@ class SchemaContainer extends React.Component<ISchemaContainerProps, ISchemaCont
         expanded={this.props.stage.expanded}
         onChange={this.toggleExpansionPanel}
         data-cy={`${this.props.stage.name}-stage-expansion-panel`}
+        data-testid={`${this.props.stage.name}-stage-expansion-panel`}
       >
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <Typography
             variant="h6"
             className={classes.stageName}
             data-cy={`${this.props.stage.name}-input-stage`}
+            data-testid={`${this.props.stage.name}-input-stage`}
           >
             {this.props.stage.name}
           </Typography>

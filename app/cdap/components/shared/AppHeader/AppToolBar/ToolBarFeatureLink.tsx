@@ -64,6 +64,7 @@ class ToolBarFeatureLink extends React.PureComponent<IToolBarFeatureLinkProps> {
         href={`/cdap${featureUrl}`}
         data-cy={featureName}
         onClick={onClick}
+        data-testid={featureName}
       >
         {featureName}
       </Button>

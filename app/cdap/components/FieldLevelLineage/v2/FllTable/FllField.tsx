@@ -88,10 +88,11 @@ function FllField({ field, isActive, classes }: IFieldProps) {
       data-hovering={isHovering}
       data-target={isTarget}
       data-cy={`${field.type}-${field.name}`}
+      data-testid={`${field.type}-${field.name}`}
     >
       <span className={classes.fieldname}>{field.name}</span>
       <If condition={isHovering && !isTarget}>
-        <span data-cy="view-lineage">
+        <span data-cy="view-lineage" data-testid="view-lineage">
           <Link to={linkPath} className={classes.hoverText} title={field.name}>
             {T.translate('features.FieldLevelLineage.v2.FllTable.FllField.viewLineage')}
           </Link>
@@ -101,7 +102,12 @@ function FllField({ field, isActive, classes }: IFieldProps) {
         <FllMenu hasIncomingOps={field.hasIncomingOps} hasOutgoingOps={field.hasOutgoingOps} />
       </If>
       <If condition={activeField.id && field.id === activeField.id && isTarget && showingOneField}>
-        <span className={classes.targetView} onClick={handleReset} data-cy="reset-lineage">
+        <span
+          className={classes.targetView}
+          onClick={handleReset}
+          data-cy="reset-lineage"
+          data-testid="reset-lineage"
+        >
           {T.translate('features.FieldLevelLineage.v2.FllTable.FllField.resetLineage')}
         </span>
       </If>

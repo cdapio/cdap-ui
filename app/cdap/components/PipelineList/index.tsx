@@ -43,7 +43,11 @@ const PipelineList: React.SFC = () => {
     <FeatureProvider>
       <div className="pipeline-list-view">
         <Helmet title={pageTitle} />
-        <h4 className="view-header" data-cy="pipeline-list-view-header">
+        <h4
+          className="view-header"
+          data-cy="pipeline-list-view-header"
+          data-testid="pipeline-list-view-header"
+        >
           <NavLink exact to={basepath} className="option" activeClassName="active">
             {T.translate(`${PREFIX}.deployed`)}
           </NavLink>

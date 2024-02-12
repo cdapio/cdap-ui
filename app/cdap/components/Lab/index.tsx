@@ -148,6 +148,7 @@ class Lab extends React.Component<ILabProps, ILabState> {
                             onChange={this.updateExperimentValue}
                             name={`${experiment.experimentId}-value`}
                             defaultValue={getExperimentValue(experiment.experimentId)}
+                            data-testid={`${experiment.experimentId}-field`}
                           ></TextField>
                         </If>
                       </TableCell>
@@ -162,6 +163,7 @@ class Lab extends React.Component<ILabProps, ILabState> {
                               onChange={this.updatePreference}
                               checked={experiment.enabled}
                               value={experiment.enabled}
+                              data-testid={`${experiment.experimentId}-switch`}
                             />
                           }
                         />

@@ -20,7 +20,14 @@ import React from 'react';
 
 export default function SelectWithOptions({ className, value, onChange, options = [], dataCy }) {
   return (
-    <Input type="select" value={value} className={className} onChange={onChange} data-cy={dataCy}>
+    <Input 
+      type="select" 
+      value={value} 
+      className={className} 
+      onChange={onChange} 
+      data-cy={dataCy} 
+      data-testid={dataCy}
+    >
       {options.map((o) => {
         if (typeof o === 'object') {
           return (

@@ -25,15 +25,25 @@ const LabExperimentTest: React.FC = () => {
   return (
     <div>
       <ExperimentalFeature experimentId={DEFAULT_EXPERIMENT}>
-        <p data-cy="experimental-feature-selector">This is an experimental component.</p>
+        <p data-cy="experimental-feature-selector" data-testid="experimental-feature-selector">
+          This is an experimental component.
+        </p>
       </ExperimentalFeature>
       <ToggleExperiment
         experimentId={DEFAULT_EXPERIMENT}
         defaultComponent={
-          <p data-cy="default-feature-toggle-selector">This is default component for the toggle.</p>
+          <p
+            data-cy="default-feature-toggle-selector"
+            data-testid="default-feature-toggle-selector"
+          >
+            This is default component for the toggle.
+          </p>
         }
         experimentalComponent={
-          <p data-cy="experimental-feature-toggle-selector">
+          <p
+            data-cy="experimental-feature-toggle-selector"
+            data-testid="experimental-feature-toggle-selector"
+          >
             This is experimental component for the toggle.
           </p>
         }

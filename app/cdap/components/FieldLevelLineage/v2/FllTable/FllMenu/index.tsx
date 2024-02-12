@@ -76,7 +76,12 @@ function FllMenu({ hasIncomingOps, hasOutgoingOps, classes }: IFllMenuProps) {
 
   return (
     <span className={classes.root}>
-      <Button onClick={handleViewClick} className={classes.targetView} data-cy="fll-view-dropdown">
+      <Button
+        onClick={handleViewClick}
+        className={classes.targetView}
+        data-cy="fll-view-dropdown"
+        data-testid="fll-view-dropdown"
+      >
         {T.translate(`${PREFIX}.FllField.viewDropdown`)}
         <KeyboardArrowDownIcon />
       </Button>
@@ -89,8 +94,13 @@ function FllMenu({ hasIncomingOps, hasOutgoingOps, classes }: IFllMenuProps) {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         data-cy="fll-field-menu"
+        data-testid="fll-field-menu"
       >
-        <MenuItem onClick={handleViewCauseImpact} data-cy="fll-cause-impact">
+        <MenuItem
+          onClick={handleViewCauseImpact}
+          data-cy="fll-cause-impact"
+          data-testid="fll-cause-impact"
+        >
           {T.translate(`${PREFIX}.FllMenu.causeImpact`)}
         </MenuItem>
         <Divider variant="middle" />
@@ -98,6 +108,7 @@ function FllMenu({ hasIncomingOps, hasOutgoingOps, classes }: IFllMenuProps) {
           onClick={hasIncomingOps ? handleShowOperations.bind(this, 'incoming') : undefined}
           disabled={!hasIncomingOps}
           data-cy="fll-view-incoming"
+          data-testid="fll-view-incoming"
         >
           {T.translate(`${PREFIX}.FllMenu.viewIncoming`)}
         </MenuItem>
@@ -105,6 +116,7 @@ function FllMenu({ hasIncomingOps, hasOutgoingOps, classes }: IFllMenuProps) {
           onClick={hasOutgoingOps ? handleShowOperations.bind(this, 'outgoing') : undefined}
           disabled={!hasOutgoingOps}
           data-cy="fll-view-outgoing"
+          data-testid="fll-view-outgoing"
         >
           {T.translate(`${PREFIX}.FllMenu.viewOutgoing`)}
         </MenuItem>
