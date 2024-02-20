@@ -124,6 +124,7 @@ const FilterPage = () => {
             color="primary"
             onClick={addFilter(0)}
             data-cy="add-filter-btn"
+            data-testid="add-filter-btn"
           >
             Add Filters
           </Button>

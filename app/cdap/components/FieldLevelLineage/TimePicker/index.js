@@ -65,7 +65,7 @@ export class TimePickerView extends Component {
 
   render() {
     return (
-      <div className="time-picker-dropdown" data-cy="fll-time-picker">
+      <div className="time-picker-dropdown" data-cy="fll-time-picker" data-testid="fll-time-picker">
         <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
           <DropdownToggle caret>
             <h5>{T.translate(`${PREFIX}.${this.props.selections}`)}</h5>
@@ -77,7 +77,7 @@ export class TimePickerView extends Component {
                 <DropdownItem
                   data-cy={option}
                   key={option}
-                  onClick={setTimeRange.bind(null, option)}
+                  onClick={setTimeRange.bind(null, option)} data-testid={option}
                 >
                   {T.translate(`${PREFIX}.${option}`)}
                 </DropdownItem>

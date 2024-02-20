@@ -98,6 +98,7 @@ const InputFieldWrapper = ({
         disableUnderline={true}
         readOnly={disabled}
         data-cy="input"
+        data-testid="input"
       />
     </InputFieldContainer>
   );

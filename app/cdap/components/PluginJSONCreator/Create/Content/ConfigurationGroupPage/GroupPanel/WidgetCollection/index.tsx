@@ -129,6 +129,7 @@ const WidgetCollectionView: React.FC<IWidgetCollectionProps> = ({ classes, group
               color="primary"
               onClick={addWidgetToGroup(0)}
               data-cy="add-properties-btn"
+              data-testid="add-properties-btn"
             >
               Add Properties
             </Button>

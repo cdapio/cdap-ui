@@ -58,6 +58,7 @@ const CronInput = ({ value, label, onChange, colWidth = 2, dataCy }) => {
         onChange={onChange}
         className="form-control"
         data-cy={dataCy}
+        data-testid={dataCy}
       />
     </div>
   );

@@ -257,7 +257,11 @@ class FieldRowBase extends React.Component<IFieldRowProps, IFieldRowState> {
                     title={errorMap[this.props.field.id]}
                     placement="right"
                   >
-                    <ErrorIcon data-cy="error-icon" className={classes.errorIcon} />
+                    <ErrorIcon
+                      data-cy="error-icon"
+                      className={classes.errorIcon}
+                      data-testid="error-icon"
+                    />
                   </Tooltip>
                 </If>
                 <If condition={typeof this.state.collapsed === 'boolean'} invisible>
@@ -265,12 +269,14 @@ class FieldRowBase extends React.Component<IFieldRowProps, IFieldRowState> {
                     <KeyboardArrowRightIcon
                       onClick={this.onToggleCollapse}
                       data-cy="expand-button"
+                      data-testid="expand-button"
                     />
                   </If>
                   <If condition={!this.state.collapsed}>
                     <KeyboardArrowDownIcon
                       onClick={this.onToggleCollapse}
                       data-cy="collapse-button"
+                      data-testid="collapse-button"
                     />
                   </If>
                 </If>

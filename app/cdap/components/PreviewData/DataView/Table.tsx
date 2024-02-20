@@ -128,6 +128,7 @@ const DataTableView: React.FC<IDataTableProps> = ({
             className={classnames(classes.row, { oddRow: (i + startNode + 1) % 2 })}
             key={`gridrow-${i}`}
             data-cy="preview-data-row"
+            data-testid="preview-data-row"
           >
             <Grid item className={classnames(classes.cell, classes.indexCell)}>
               {i + 1 + startNode}

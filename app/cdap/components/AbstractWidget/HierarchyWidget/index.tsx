@@ -137,7 +137,7 @@ const HierarchyWidget = ({
         }}
       >
         <AddIcon />
-        <Heading type={HeadingTypes.h6} label="ADD RECORD" data-cy="add" />
+        <Heading type={HeadingTypes.h6} label="ADD RECORD" data-cy="add" data-testid="add" />
       </IconWrapper>
     </div>
   );

@@ -122,7 +122,9 @@ const ConnectionsWidget: React.FC<IConnectionProps> = ({
             [classes.disabled]: disabled,
           })}
         >
-          <strong data-cy={dataCy}>{displayValue}</strong>
+          <strong data-cy={dataCy} data-testid={dataCy}>
+            {displayValue}
+          </strong>
         </div>
         <If condition={!disabled && !!value}>
           <br />

@@ -95,6 +95,7 @@ export const WizardConfigureConfirmStep = (props: IWizardConfigureConfirmStepPro
                 setIsValidating(true);
                 props.onNextButtonClick(getConfirmedAction(), setIsValidating);
               }}
+              data-testid="next-btn"
             >
               {isValidating ? (
                 <span>
@@ -113,6 +114,7 @@ export const WizardConfigureConfirmStep = (props: IWizardConfigureConfirmStepPro
               onClick={() => {
                 props.addPostAction(getConfirmedAction());
               }}
+              data-testid="confirm-btn"
             >
               Confirm
             </button>

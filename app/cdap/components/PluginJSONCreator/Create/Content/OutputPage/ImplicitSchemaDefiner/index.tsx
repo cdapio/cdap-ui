@@ -58,7 +58,7 @@ const ImplicitSchemaDefiner = () => {
   };
 
   return (
-    <div data-cy="implicit-schema-definer">
+    <div data-cy="implicit-schema-definer" data-testid="implicit-schema-definer">
       <WidgetWrapper
         widgetProperty={{
           name: 'schema',
@@ -74,7 +74,14 @@ const ImplicitSchemaDefiner = () => {
         value={localSchema}
         onChange={onSchemaChange}
       />
-      <Button variant="contained" color="primary" onClick={saveSchema} data-cy="save-schema-btn">
+
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={saveSchema}
+        data-cy="save-schema-btn"
+        data-testid="save-schema-btn"
+      >
         Save
       </Button>
       <Alert

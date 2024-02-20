@@ -269,8 +269,8 @@ export default class PipelineScheduler extends Component {
           <button
             className="btn btn-primary save-schedule-btn"
             data-cy="save-schedule-btn-studio"
-            onClick={this.saveSchedule.bind(this, false)}
-          >
+            onClick={this.saveSchedule.bind(this, false)} data-testid="save-schedule-btn-studio">
+
             <span>{T.translate(`${PREFIX}.saveSchedule`)}</span>
           </button>
         </div>
@@ -284,6 +284,7 @@ export default class PipelineScheduler extends Component {
           className="btn btn-primary start-schedule-btn"
           onClick={this.startScheduleAndClose}
           disabled={buttonDisabled || this.state.savingSchedule || this.state.savingAndScheduling}
+          data-testid="save-start-schedule-btn"
         >
           <span>
             {this.state.isScheduleChanged
@@ -299,6 +300,7 @@ export default class PipelineScheduler extends Component {
           className="btn btn-secondary start-schedule-btn"
           onClick={this.saveSchedule.bind(this, false)}
           disabled={buttonDisabled || this.state.savingSchedule || this.state.savingAndScheduling}
+          data-testid="save-schedule-btn"
         >
           <span>{T.translate(`${PREFIX}.saveSchedule`)}</span>
           {this.state.savingSchedule ? <IconSVG name="icon-spinner" className="fa-spin" /> : null}

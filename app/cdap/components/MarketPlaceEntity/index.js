@@ -174,6 +174,7 @@ export default class MarketPlaceEntity extends Component {
                 className="btn btn-primary"
                 onClick={() => this.setState({ performSingleAction: true })}
                 data-cy={`${this.state.entityDetail.actions[0].type}-btn`}
+                data-testid={`${this.state.entityDetail.actions[0].type}-btn`}
               >
                 {T.translate(
                   'features.Market.action-types.' +

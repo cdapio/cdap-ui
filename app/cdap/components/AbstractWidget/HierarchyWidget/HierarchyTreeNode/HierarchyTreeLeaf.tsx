@@ -66,6 +66,7 @@ const HierarchyTreeLeaf = ({ option, selected }: IHierarchyTreeLeafProps) => {
               option={child}
               selected={selected}
               data-cy={`option-${option.name}`}
+              data-testid={`option-${option.name}`}
             />
           ))}
       </div>

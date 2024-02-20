@@ -174,6 +174,7 @@ export default class ConnectionPopover extends Component {
             className="btn btn-primary"
             onClick={this.delete}
             data-cy={`wrangler-${type}-delete-confirmation-btn`}
+            data-testid={`wrangler-${type}-delete-confirmation-btn`}
           >
             {T.translate(`${PREFIX}.Confirmations.DatabaseDelete.deleteButton`)}
           </button>
@@ -236,11 +237,13 @@ export default class ConnectionPopover extends Component {
             popperClassName="connection-action-popover"
             fade={false}
             data-cy={`connection-action-popover-toggle-${type}-${id}`}
+            data-testid={`connection-action-popover-toggle-${type}-${id}`}
           >
             <div
               className="connection-action-item"
               onClick={this.toggleEdit}
               data-cy={`wrangler-${this.props.connectionInfo.type}-connection-edit`}
+              data-testid={`wrangler-${this.props.connectionInfo.type}-connection-edit`}
             >
               <span>{T.translate(`${PREFIX}.edit`)}</span>
             </div>
@@ -249,6 +252,7 @@ export default class ConnectionPopover extends Component {
               className="connection-action-item"
               onClick={this.toggleDuplicate}
               data-cy={`wrangler-${this.props.connectionInfo.type}-connection-duplicate`}
+              data-testid={`wrangler-${this.props.connectionInfo.type}-connection-duplicate`}
             >
               <span>{T.translate(`${PREFIX}.duplicate`)}</span>
             </div>
@@ -257,6 +261,7 @@ export default class ConnectionPopover extends Component {
               className="connection-action-item"
               onClick={this.toggleDeleteConfirmation}
               data-cy={`wrangler-${this.props.connectionInfo.type}-connection-delete`}
+              data-testid={`wrangler-${this.props.connectionInfo.type}-connection-delete`}
             >
               <span>{T.translate(`${PREFIX}.delete`)}</span>
             </div>

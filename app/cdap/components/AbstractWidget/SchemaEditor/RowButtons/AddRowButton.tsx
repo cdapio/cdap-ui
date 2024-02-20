@@ -25,6 +25,7 @@ function AddRowButton({ onAdd, ...rest }) {
       data-cy="schema-field-add-button"
       disabled={typeof onAdd !== 'function'}
       {...rest}
+      data-testid="schema-field-add-button"
     >
       <AddIcon />
     </IconWrapper>

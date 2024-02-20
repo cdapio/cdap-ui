@@ -72,6 +72,7 @@ const JSONImportButtonView: React.FC<IJSONImportButtonProps> = ({
         className={classes.fileInput}
         onChange={processFileUpload()}
         data-cy="plugin-json-uploader"
+        data-testid="plugin-json-uploader"
       />
       <label htmlFor="raised-button-file">
         <Tooltip
@@ -87,6 +88,7 @@ const JSONImportButtonView: React.FC<IJSONImportButtonProps> = ({
               component="span"
               color="primary"
               data-cy="plugin-json-import-btn"
+              data-testid="plugin-json-import-btn"
             >
               <IconSVG name="icon-import" className={classes.importIcon} />
             </IconButton>

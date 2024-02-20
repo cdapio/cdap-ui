@@ -119,7 +119,11 @@ const WidgetAttributesPanelView: React.FC<IWidgetAttributesPanelProps> = ({
           toggle={closeWidgetAttributes}
           headerText={'Widget Attributes'}
         >
-          <div className={classes.setAttributes} data-cy="widget-attributes-dialog">
+          <div
+            className={classes.setAttributes}
+            data-cy="widget-attributes-dialog"
+            data-testid="widget-attributes-dialog"
+          >
             <WidgetInfoInput widgetID={widgetID} />
             <If condition={attributeFields && attributeFields.length > 0}>
               <div className={classes.widgetAttributesTitle}>
@@ -130,7 +134,7 @@ const WidgetAttributesPanelView: React.FC<IWidgetAttributesPanelProps> = ({
               <LoadingSVGCentered />
             </If>
             <If condition={!loading}>
-              <div data-cy="widget-attributes-inputs">
+              <div data-cy="widget-attributes-inputs" data-testid="widget-attributes-inputs">
                 {attributeFields.map((field, fieldIndex) => {
                   return (
                     <WidgetAttributeInput
@@ -151,6 +155,7 @@ const WidgetAttributesPanelView: React.FC<IWidgetAttributesPanelProps> = ({
                 onClick={() => closeWidgetAttributes()}
                 className={classes.cancelButton}
                 data-cy="close-widget-attributes-btn"
+                data-testid="close-widget-attributes-btn"
               >
                 Cancel
               </Button>
@@ -161,6 +166,7 @@ const WidgetAttributesPanelView: React.FC<IWidgetAttributesPanelProps> = ({
                 onClick={saveWidgetToAttributes()}
                 className={classes.saveButton}
                 data-cy="save-widget-attributes-btn"
+                data-testid="save-widget-attributes-btn"
               >
                 Save
               </Button>

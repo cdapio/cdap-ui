@@ -44,10 +44,15 @@ const WidgetActionButtonsView: React.FC<IWidgetActionButtonsProps> = ({
 }) => {
   return (
     <div className={classes.widgetActionButtons}>
-      <IconButton onClick={addWidgetToGroup} data-cy="add-widget-btn">
+      <IconButton onClick={addWidgetToGroup} data-cy="add-widget-btn" data-testid="add-widget-btn">
         <AddIcon fontSize="small" />
       </IconButton>
-      <IconButton onClick={deleteWidgetFromGroup} color="secondary" data-cy="delete-widget-btn">
+      <IconButton
+        onClick={deleteWidgetFromGroup}
+        color="secondary"
+        data-cy="delete-widget-btn"
+        data-testid="delete-widget-btn"
+      >
         <DeleteIcon fontSize="small" />
       </IconButton>
     </div>

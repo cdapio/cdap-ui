@@ -281,7 +281,7 @@ const HierarchyTreeNode = ({
             disabled={disabled}
             className={classes.buttonIcon}
           >
-            <DeleteIcon data-cy="remove" />
+            <DeleteIcon data-cy="remove" data-testid="remove" />
           </IconButton>
         </RowButtonsWraper>
       </RowInputContainer>
@@ -329,6 +329,7 @@ const HierarchyTreeNode = ({
                   {...params}
                   InputProps={{ ...params.InputProps, disableUnderline: true }}
                   data-cy="autocomplete-input"
+                  data-testid="autocomplete-input"
                 />
               )}
             />

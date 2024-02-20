@@ -125,6 +125,7 @@ const RecordTableView: React.FC<IRecordTableProps> = ({
               className={classnames(classes.cell, classes.recordCell)}
               title={processedFieldName}
               data-cy={`fieldname-${processedFieldName}`}
+              data-testid={`fieldname-${processedFieldName}`}
             >
               {processedFieldName}
             </Grid>
@@ -133,6 +134,7 @@ const RecordTableView: React.FC<IRecordTableProps> = ({
               className={classnames(classes.cell, classes.recordCell)}
               title={processedValue}
               data-cy={`value-${processedValue}`}
+              data-testid={`value-${processedValue}`}
             >
               {processedValue}
             </Grid>

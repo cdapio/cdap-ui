@@ -50,6 +50,7 @@ export default function PipelineResources({
           value={memoryMB}
           onChange={onMemoryMBChange}
           data-cy={'internalModel'}
+          data-testid={'internalModel'}
         />
         <span className="control-label mb">{T.translate(`${PREFIX}.mb`)}</span>
       </div>

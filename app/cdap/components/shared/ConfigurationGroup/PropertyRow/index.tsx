@@ -232,6 +232,7 @@ class PropertyRowView extends React.Component<IPropertyRowProps, IState> {
           <div
             className={classnames(classes.errorText, classes.errorRow, 'propertyError')}
             data-cy="property-row-error"
+            data-testid="property-row-error"
           >
             {propertyLevelErrorMsg}
           </div>

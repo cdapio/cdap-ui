@@ -93,7 +93,7 @@ function FllTableHeader({
         </div>
       </If>
       <If condition={isHovering}>
-        <span data-cy="view-lineage" className={classes.tableSubheader}>
+        <span data-cy="view-lineage" className={classes.tableSubheader} data-testid="view-lineage">
           <Link to={linkPath} className={classes.hoverText} title={tableName}>
             {T.translate('features.FieldLevelLineage.v2.FllTable.FllTableHeader.viewLineage')}
           </Link>

@@ -291,6 +291,7 @@ class SqlSelectorWidgetView extends React.PureComponent<
               size="small"
               onClick={this.toggleExpandAll}
               data-cy="sql-selector-expand-collapse-btn"
+              data-testid="sql-selector-expand-collapse-btn"
             >
               {this.state.expandAll
                 ? T.translate(`${I18N_PREFIX}.collapseAll`)

@@ -168,7 +168,7 @@ const TopPanelView: React.FC<ITopPanelProps> = ({
   }
 
   return (
-    <div className={classes.root} data-cy="log-viewer-top-panel">
+    <div className={classes.root} data-cy="log-viewer-top-panel" data-testid="log-viewer-top-panel">
       <If condition={loading}>
         <div className={classes.loadingContainer}>
           <LoadingSVG />

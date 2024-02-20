@@ -230,6 +230,7 @@ export default class GCSConnection extends Component {
         disabled={disabled}
         darker={true}
         data-cy={`wrangler-${ConnectionType.GCS}-test-connection-button`}
+        data-testid={`wrangler-${ConnectionType.GCS}-test-connection-button`}
       />
     );
   }
@@ -250,6 +251,7 @@ export default class GCSConnection extends Component {
           onClick={onClickFn}
           disabled={disabled}
           data-cy={`wrangler-${ConnectionType.GCS}-add-connection-button`}
+          data-testid={`wrangler-${ConnectionType.GCS}-add-connection-button`}
         >
           {T.translate(`${PREFIX}.Buttons.${this.props.mode}`)}
         </button>
@@ -287,6 +289,7 @@ export default class GCSConnection extends Component {
                   disabled={this.props.mode === 'EDIT'}
                   placeholder={T.translate(`${PREFIX}.Placeholders.name`)}
                   data-cy={`wrangler-${ConnectionType.GCS}-connection-name`}
+                  data-testid={`wrangler-${ConnectionType.GCS}-connection-name`}
                 />
               </div>
             </div>
@@ -303,6 +306,7 @@ export default class GCSConnection extends Component {
                   onChange={this.handleChange.bind(this, 'projectId')}
                   placeholder={T.translate(`${PREFIX}.Placeholders.projectId`)}
                   data-cy={`wrangler-${ConnectionType.GCS}-connection-projectid`}
+                  data-testid={`wrangler-${ConnectionType.GCS}-connection-projectid`}
                 />
               </div>
             </div>
@@ -321,13 +325,14 @@ export default class GCSConnection extends Component {
                   onChange={this.handleChange.bind(this, 'serviceAccountKeyfile')}
                   placeholder={T.translate(`${PREFIX}.Placeholders.serviceAccountKeyfile`)}
                   data-cy={`wrangler-${ConnectionType.GCS}-connection-serviceaccount-filepath`}
+                  data-testid={`wrangler-${ConnectionType.GCS}-connection-serviceaccount-filepath`}
                 />
               </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      </div>);
+
   }
 
   renderError() {

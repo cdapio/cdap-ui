@@ -99,7 +99,7 @@ export default class PostRunActions extends Component<IPostRunActionsProps> {
       return (
         <>
           {this.state.actions.length > 0 && (
-            <div data-cy="saved-alerts">
+            <div data-cy="saved-alerts" data-testid="saved-alerts">
               <AlertTableTitle>Saved Alerts</AlertTableTitle>
               <table className="table table-bordered">
                 <thead>
@@ -144,6 +144,7 @@ export default class PostRunActions extends Component<IPostRunActionsProps> {
                             onClick={() => {
                               this.setActiveActionWizard(action, 'view');
                             }}
+                            data-testid="action-view"
                           >
                             <IconSVG name="icon-eye" />
                           </a>
@@ -155,7 +156,8 @@ export default class PostRunActions extends Component<IPostRunActionsProps> {
               </table>
             </div>
           )}
-          <AddAlerts data-cy="post-run-alerts-create">
+
+          <AddAlerts data-cy="post-run-alerts-create" data-testid="post-run-alerts-create">
             <h1
               onClick={() => {
                 this.setActiveActionWizard(null, 'create');
@@ -210,6 +212,7 @@ export default class PostRunActions extends Component<IPostRunActionsProps> {
                       role="button"
                       data-cy="action-view"
                       onClick={this.setActiveActionWizard.bind(this, action)}
+                      data-testid="action-view"
                     >
                       View
                     </a>

@@ -244,6 +244,7 @@ export default class Wizard extends Component {
         data-cy="wizard-next-btn"
         onClick={this.goToNextStep.bind(this, matchedStep.id)}
         disabled={btnsDisabled}
+        data-testid="wizard-next-btn"
       >
         <span>{T.translate('features.Wizard.NavigationButtons.next')}</span>
         <IconSVG name="icon-chevron-right" />
@@ -255,6 +256,7 @@ export default class Wizard extends Component {
         data-cy="wizard-previous-btn"
         onClick={this.goToPreviousStep.bind(this, matchedStep.id)}
         disabled={btnsDisabled}
+        data-testid="wizard-previous-btn"
       >
         <IconSVG name="icon-chevron-left" />
         <span>{T.translate('features.Wizard.NavigationButtons.previous')}</span>
@@ -270,6 +272,7 @@ export default class Wizard extends Component {
             ? 'disabled'
             : null
         }
+        data-testid="wizard-finish-btn"
       >
         <span>{T.translate('features.Wizard.NavigationButtons.finish')}</span>
       </button>
@@ -366,8 +369,8 @@ export default class Wizard extends Component {
         <div
           className="close-section float-right"
           onClick={this.props.onClose.bind(null, true)}
-          data-cy="wizard-result-icon-close-btn"
-        >
+          data-cy="wizard-result-icon-close-btn" data-testid="wizard-result-icon-close-btn">
+
           <IconSVG name="icon-close" />
         </div>
         <div className="result-container">

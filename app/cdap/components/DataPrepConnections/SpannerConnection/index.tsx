@@ -251,6 +251,7 @@ export default class SpannerConnection extends React.PureComponent<
           label={T.translate(`${PREFIX}.testConnection`)}
           darker={true}
           data-cy={`wrangler-${ConnectionType.SPANNER}-test-connection-button`}
+          data-testid={`wrangler-${ConnectionType.SPANNER}-test-connection-button`}
         />
       </span>
     );
@@ -272,6 +273,7 @@ export default class SpannerConnection extends React.PureComponent<
           onClick={onClickFn}
           disabled={disabled}
           data-cy={`wrangler-${ConnectionType.SPANNER}-add-connection-button`}
+          data-testid={`wrangler-${ConnectionType.SPANNER}-add-connection-button`}
         >
           {T.translate(`${PREFIX}.Buttons.${this.props.mode}`)}
         </button>
@@ -309,6 +311,7 @@ export default class SpannerConnection extends React.PureComponent<
                   disabled={this.props.mode === ConnectionMode.Edit}
                   placeholder={T.translate(`${PREFIX}.Placeholders.name`).toString()}
                   data-cy={`wrangler-${ConnectionType.SPANNER}-connection-name`}
+                  data-testid={`wrangler-${ConnectionType.SPANNER}-connection-name`}
                 />
               </div>
             </div>
@@ -325,6 +328,7 @@ export default class SpannerConnection extends React.PureComponent<
                   onChange={this.handleChange.bind(this, 'projectId')}
                   placeholder={T.translate(`${PREFIX}.Placeholders.projectId`).toString()}
                   data-cy={`wrangler-${ConnectionType.SPANNER}-connection-projectid`}
+                  data-testid={`wrangler-${ConnectionType.SPANNER}-connection-projectid`}
                 />
               </div>
             </div>
@@ -345,6 +349,7 @@ export default class SpannerConnection extends React.PureComponent<
                     `${PREFIX}.Placeholders.serviceAccountKeyfile`
                   ).toString()}
                   data-cy={`wrangler-${ConnectionType.SPANNER}-connection-serviceaccount-filepath`}
+                  data-testid={`wrangler-${ConnectionType.SPANNER}-connection-serviceaccount-filepath`}
                 />
               </div>
             </div>

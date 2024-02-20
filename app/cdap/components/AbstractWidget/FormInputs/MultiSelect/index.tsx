@@ -180,9 +180,15 @@ function MultiSelectBase({
       }}
       classes={classes}
       ref={ref}
+      data-testid={`multiselect-${dataCy}`}
     >
       {options.map((opt) => (
-        <MenuItem value={opt.id} key={opt.id} data-cy={`multioption-${opt.label}`}>
+        <MenuItem
+          value={opt.id}
+          key={opt.id}
+          data-cy={`multioption-${opt.label}`}
+          data-testid={`multioption-${opt.label}`}
+        >
           <Checkbox checked={selectionsSet.has(opt.id)} color="primary" />
           <ListItemText primary={opt.label} />
         </MenuItem>

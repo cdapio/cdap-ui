@@ -149,7 +149,11 @@ export const ActionButtons = ({
         {previewMode ? (
           //   PREVIEW MODE BUTTONS
           <>
-            <PreviewModeButton onClick={togglePreviewMode} data-cy="preview-active-btn">
+            <PreviewModeButton
+              onClick={togglePreviewMode}
+              data-cy="preview-active-btn"
+              data-testid="preview-active-btn"
+            >
               <div>
                 <IconSVG name="icon-eye"></IconSVG>
                 <ButtonLabel>Preview</ButtonLabel>
@@ -161,6 +165,7 @@ export const ActionButtons = ({
               onClick={!previewLoading && !previewRunning && toggleConfig}
               id="preview-config-btn"
               data-cy="preview-config-btn"
+              data-testid="preview-config-btn"
             >
               <div>
                 <IconSliders name="icon-sliders"></IconSliders>
@@ -189,7 +194,11 @@ export const ActionButtons = ({
                   </span>
                 </CustomTooltip>
               ) : (
-                <CommonButton onClick={startOrStopPreview} data-cy="stop-preview-btn">
+                <CommonButton
+                  onClick={startOrStopPreview}
+                  data-cy="stop-preview-btn"
+                  data-testid="stop-preview-btn"
+                >
                   <div>
                     <IconStop name="icon-stop"></IconStop>
                     <ButtonLabel>Stop</ButtonLabel>
@@ -197,7 +206,7 @@ export const ActionButtons = ({
                 </CommonButton>
               ))}
             {previewLoading && (
-              <CommonButton data-cy="starting-preview-btn">
+              <CommonButton data-cy="starting-preview-btn" data-testid="starting-preview-btn">
                 <div>
                   <IconLoading className="fa fa-refresh fa-spin"></IconLoading>
                   <ButtonLabel>{loadingLabel}</ButtonLabel>
@@ -248,6 +257,7 @@ export const ActionButtons = ({
               onClick={toggleConfig}
               id="pipeline-configure-modeless-btn"
               data-cy="pipeline-configure-modeless-btn"
+              data-testid="pipeline-configure-modeless-btn"
             >
               <div>
                 <IconSliders name="icon-sliders"></IconSliders>
@@ -267,6 +277,7 @@ export const ActionButtons = ({
                     onClick={!hasNodes || toggleScheduler}
                     id="pipeline-schedule-modeless-btn"
                     data-cy="pipeline-schedule-modeless-btn"
+                    data-testid="pipeline-schedule-modeless-btn"
                   >
                     <div>
                       <IconSchedule name="icon-runtimestarttime"></IconSchedule>
