@@ -143,8 +143,9 @@ const CustomConfig = ({
         <a
           className="add-custom-config-label"
           onClick={toggleCustomConfig}
-          data-cy="engine-config-tab-custom" data-testid="engine-config-tab-custom">
-
+          data-cy="engine-config-tab-custom"
+          data-testid="engine-config-tab-custom"
+        >
           <IconSVG name={showCustomConfig ? 'icon-caret-down' : 'icon-caret-right'} />
           {T.translate(`${PREFIX}.showCustomConfig`)}
         </a>

@@ -60,7 +60,8 @@ function RequestMetadataView({ activeTab, onTabClick, method }) {
             active: activeTab === 0,
           })}
           onClick={onTabClick.bind(null, 0, false)}
-          data-cy="header-btn" data-testid="header-btn"
+          data-cy="header-btn"
+          data-testid="header-btn"
         >
           <span>{T.translate(`${PREFIX}.header`)}</span>
         </div>
@@ -70,7 +71,8 @@ function RequestMetadataView({ activeTab, onTabClick, method }) {
             disabled: bodyDisabled,
           })}
           onClick={onTabClick.bind(null, 1, bodyDisabled)}
-          data-cy="body-btn" data-testid="body-btn"
+          data-cy="body-btn"
+          data-testid="body-btn"
         >
           <span>{T.translate(`${PREFIX}.body`)}</span>
         </div>

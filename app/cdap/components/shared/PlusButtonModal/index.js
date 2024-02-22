@@ -91,10 +91,10 @@ export default class PlusButtonModal extends Component {
             </span>
           </span>
           <div className="float-right">
-            <div 
-              className="modal-close-btn" 
-              onClick={this.closeHandler} 
-              data-cy="hub-close-btn" 
+            <div
+              className="modal-close-btn"
+              onClick={this.closeHandler}
+              data-cy="hub-close-btn"
               data-testid="hub-close-btn"
             >
               <IconSVG name="icon-close" />

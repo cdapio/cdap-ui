@@ -369,8 +369,9 @@ export default class Wizard extends Component {
         <div
           className="close-section float-right"
           onClick={this.props.onClose.bind(null, true)}
-          data-cy="wizard-result-icon-close-btn" data-testid="wizard-result-icon-close-btn">
-
+          data-cy="wizard-result-icon-close-btn"
+          data-testid="wizard-result-icon-close-btn"
+        >
           <IconSVG name="icon-close" />
         </div>
         <div className="result-container">
