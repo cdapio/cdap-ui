@@ -2,7 +2,6 @@ dist/
 cdap_dist/
 common_dist/
 node_modules/
-bower_components/
 commmon/
 directives/
 features/
