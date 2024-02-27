@@ -149,7 +149,7 @@ export const RemotePipelineTable = ({
 
   return (
     <TableBox lastOperationInfoShown={lastOperationInfoShown}>
-      <Table data-testid="remote-pipelines-table" stickyHeader>
+      <Table data-testid="remote-pipelines-table" stickyHeader size="small">
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
