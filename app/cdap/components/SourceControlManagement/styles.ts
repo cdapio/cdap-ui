@@ -22,8 +22,8 @@ export const TableBox = styled(TableContainer)`
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 20%);
   margin-top: 10px;
   margin-bottom: 30px;
-  max-height: calc(80vh - 200px);
-  min-height: calc(80vh - 300px);
+  max-height: calc(80vh - ${(props) => (props.lastOperationInfoShown ? '280px' : '200px')});
+  min-height: calc(80vh - ${(props) => (props.lastOperationInfoShown ? '380px' : '200px')});
 `;
 
 export const StyledTableCell = styled(TableCell)`
@@ -81,4 +81,17 @@ export const FailStatusDiv = styled.div`
 
 export const AlertErrorView = styled.p`
   margin: 1rem 0;
+`;
+
+export const FiltersAndStatusWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+`;
+
+export const SyncStatusWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;

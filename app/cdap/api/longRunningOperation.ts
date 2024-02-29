@@ -27,13 +27,13 @@ export const LongRunningOperationApi = {
     dataSrc,
     'GET',
     'REQUEST',
-    `${basePath}/?pageSize=1&filter=${PUSH_FILTER}`
+    `${basePath}/?pageSize=10&filter=${PUSH_FILTER}`
   ),
   getLatestPull: apiCreator(
     dataSrc,
     'GET',
     'REQUEST',
-    `${basePath}/?pageSize=1&filter=${PULL_FILTER}`
+    `${basePath}/?pageSize=10&filter=${PULL_FILTER}`
   ),
   pollOperation: apiCreator(dataSrc, 'GET', 'POLL', `${basePath}/:operationId`),
   stopOperation: apiCreator(dataSrc, 'POST', 'REQUEST', `${basePath}/:operationId/stop`),

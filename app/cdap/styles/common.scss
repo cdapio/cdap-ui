@@ -60,6 +60,10 @@ body {
     margin-top: 48px;
     overflow-y: auto;
     height: calc(100vh - (#{$height-of-footer} + #{$height-of-header})); // Header + footer heights
+
+    &.no-footer {
+      height: calc(100vh - #{$height-of-header});
+    }
   }
   .container-fluid {
     padding-bottom: 52px; // footer height

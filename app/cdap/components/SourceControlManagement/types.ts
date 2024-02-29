@@ -20,12 +20,16 @@ import { OperationType } from './OperationType';
 import { OperationStatus } from './OperationStatus';
 import { ITimeInstant } from 'services/DataFormatter';
 
+export type TSyncStatusFilter = 'all' | 'in_sync' | 'out_of_sync';
+export type TSyncStatus = 'not_available' | 'in_sync' | 'out_of_sync' | 'not_connected';
+
 export interface IRepositoryPipeline {
   name: string;
   fileHash: string;
   error: string;
   status: SUPPORT;
   lastSyncDate?: ITimeInstant;
+  syncStatus?: TSyncStatus;
 }
 
 export interface IOperationResource {
