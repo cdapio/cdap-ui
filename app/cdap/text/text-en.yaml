@@ -3206,6 +3206,14 @@ features:
           tokenNameHelperText: Give personal access token a name for secure store. The name can contain lower case alphabets, numbers, _, and -
           username: User name
           usernameHelperText: Add a username to your token
+        repositoryAccessToken:
+          label: Repository access token
+          token: Token
+          tokenHelperText: Refer to the biybucket docs to generate the token
+          tokenName: Token name
+          tokenNameHelperText: Give personal access token a name for secure store. The name can contain lower case alphabets, numbers, _, and -
+          username: User name
+          usernameHelperText: Add a username to your token
       authHeader: Authentication
       basicHeader: Basic
       branch:

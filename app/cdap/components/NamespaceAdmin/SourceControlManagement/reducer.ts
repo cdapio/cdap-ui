@@ -27,7 +27,7 @@ export const defaultSourceControlManagement: ISourceControlManagement = {
     defaultBranch: '',
     pathPrefix: '',
     auth: {
-      type: scmAuthType[0].id,
+      type: scmAuthType[providers.github][0].id,
       token: '',
       patConfig: {
         passwordName: '',

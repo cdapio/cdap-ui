@@ -18,14 +18,35 @@ import T from 'i18n-react';
 
 const PREFIX = 'features.SourceControlManagement';
 
-export const scmAuthType = [
+export const scmAuthTypeGit = [
   { id: 'PAT', label: T.translate(`${PREFIX}.configModal.auth.pat.label`) },
+];
+
+export const scmAuthTypeBitbucket = [
+  { id: 'PAT', label: T.translate(`${PREFIX}.configModal.auth.pat.label`) },
+  {
+    id: 'REPOSITORY_ACCESS_TOKEN',
+    label: T.translate(`${PREFIX}.configModal.auth.repositoryAccessToken.label`),
+  },
 ];
 
 export const providers = {
   github: 'GITHUB',
+  gitlab: 'GITLAB',
+  bitbucket: 'BITBUCKET',
+  bitbucketCloud: 'BITBUCKET CLOUD',
+};
+
+export const scmAuthType = {
+  [providers.github]: scmAuthTypeGit,
+  [providers.gitlab]: scmAuthTypeGit,
+  [providers.bitbucket]: scmAuthTypeBitbucket,
+  [providers.bitbucketCloud]: scmAuthTypeBitbucket,
 };
 
 export const authKeys = ['type', 'token'];
 
 export const patConfigKeys = ['passwordName', 'username'];
+
+export const providersRequiringUsername = [providers.bitbucket, providers.bitbucketCloud];
+export const providersWithRepoToken = [providers.bitbucket, providers.bitbucketCloud];
