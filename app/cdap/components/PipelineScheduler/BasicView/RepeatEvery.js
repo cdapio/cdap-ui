@@ -176,9 +176,9 @@ const RepeatEveryComponent = ({ intervalOption }) => {
   switch (intervalOption) {
     case INTERVAL_OPTIONS.HOURLY:
       SelectComponent = (
-        <span 
-          data-cy="schedule-repeats-every-hourly" 
-          className="schedule-values" 
+        <span
+          data-cy="schedule-repeats-every-hourly"
+          className="schedule-values"
           data-testid="schedule-repeats-every-hourly"
         >
           <SelectHourInterval className="form-control small-dropdown" />
@@ -188,9 +188,9 @@ const RepeatEveryComponent = ({ intervalOption }) => {
       break;
     case INTERVAL_OPTIONS.DAILY:
       SelectComponent = (
-        <span 
-          data-cy="schedule-repeats-every-daily" 
-          className="schedule-values" 
+        <span
+          data-cy="schedule-repeats-every-daily"
+          className="schedule-values"
           data-testid="schedule-repeats-every-daily"
         >
           <SelectDayInterval className="form-control small-dropdown" />
@@ -200,9 +200,9 @@ const RepeatEveryComponent = ({ intervalOption }) => {
       break;
     case INTERVAL_OPTIONS.WEEKLY:
       SelectComponent = (
-        <span 
-          className="schedule-values" 
-          data-cy="schedule-repeats-every-weekly" 
+        <span
+          className="schedule-values"
+          data-cy="schedule-repeats-every-weekly"
           data-testid="schedule-repeats-every-weekly"
         >
           {DAY_OF_WEEK_OPTIONS.map((option) => {
@@ -225,9 +225,9 @@ const RepeatEveryComponent = ({ intervalOption }) => {
       break;
     case INTERVAL_OPTIONS.MONTHLY:
       SelectComponent = (
-        <span 
-          className="schedule-values" 
-          data-cy="schedule-repeats-every-monthly" 
+        <span
+          className="schedule-values"
+          data-cy="schedule-repeats-every-monthly"
           data-testid="schedule-repeats-every-monthly"
         >
           <SelectDateOfMonthInterval className="form-control small-dropdown" />
@@ -237,9 +237,9 @@ const RepeatEveryComponent = ({ intervalOption }) => {
       break;
     case INTERVAL_OPTIONS.YEARLY:
       SelectComponent = (
-        <span 
-          className="schedule-values" 
-          data-cy="schedule-repeats-every-yearly" 
+        <span
+          className="schedule-values"
+          data-cy="schedule-repeats-every-yearly"
           data-testid="schedule-repeats-every-yearly"
         >
           <SelectMonthInterval className="form-control small-dropdown" />

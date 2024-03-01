@@ -38,7 +38,8 @@ function StatusCodeView({ code }) {
           'text-success': code < 300,
           'text-danger': code !== null && code >= 300,
         })}
-        data-cy="response-status-code" data-testid="response-status-code"
+        data-cy="response-status-code"
+        data-testid="response-status-code"
       >
         {code}
       </div>

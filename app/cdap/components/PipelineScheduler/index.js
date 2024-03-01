@@ -269,8 +269,9 @@ export default class PipelineScheduler extends Component {
           <button
             className="btn btn-primary save-schedule-btn"
             data-cy="save-schedule-btn-studio"
-            onClick={this.saveSchedule.bind(this, false)} data-testid="save-schedule-btn-studio">
-
+            onClick={this.saveSchedule.bind(this, false)}
+            data-testid="save-schedule-btn-studio"
+          >
             <span>{T.translate(`${PREFIX}.saveSchedule`)}</span>
           </button>
         </div>

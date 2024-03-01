@@ -53,7 +53,11 @@ export default function MaxConcurrentRuns() {
   return (
     <div className="form-group row max-concurrent-runs">
       <label className="col-3 control-label">{T.translate(`${PREFIX}.maxConcurrentRuns`)}</label>
-      <div className="col-4 schedule-values-container" data-cy="schedule-concurrent-runs" data-testid="schedule-concurrent-runs">
+      <div
+        className="col-4 schedule-values-container"
+        data-cy="schedule-concurrent-runs"
+        data-testid="schedule-concurrent-runs"
+      >
         <span className="schedule-values">
           <SelectMaxConcurrentRuns className="form-control small-dropdown" />
         </span>

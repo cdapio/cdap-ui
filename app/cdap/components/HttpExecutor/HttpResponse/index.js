@@ -35,7 +35,9 @@ function HttpResponseView({ response }) {
 
   return (
     <div className="response-container">
-      <pre data-cy="response" data-testid="response">{viewResponse}</pre>
+      <pre data-cy="response" data-testid="response">
+        {viewResponse}
+      </pre>
     </div>
   );
 }
