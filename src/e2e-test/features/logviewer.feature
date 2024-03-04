@@ -54,6 +54,7 @@ Feature: Logviewer - Validate log viewer functionalities
 
   @LOGVIEWER_TEST
   Scenario: Log viewer content should contain correct information
+    Then Deployed pipeline status is "Succeeded"
     Then Click on log viewer button
     Then Log viewer content should contain message "is started by user"
     Then Log viewer content should not contain message "This is a WARN"
