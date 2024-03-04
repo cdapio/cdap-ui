@@ -127,20 +127,16 @@ public class Logviewer {
 
   @Then("Log viewer content should contain message {string}")
   public void logViewerContentMessageExists(String message) {
-    Assert.assertTrue(
-      Helper.isElementExists(
-        By.xpath("//div[@data-testid='log-viewer-content']//*[contains(text(), '" + message + "')]")
-      )
-    );
+    Assert.assertTrue(Helper.isElementExistsByTestid("log-viewer-content"));
+    WebElement logViewerContentElement = Helper.locateElementByTestId("log-viewer-content");
+    Assert.assertTrue(logViewerContentElement.getText().contains(message));
   }
 
   @Then("Log viewer content should not contain message {string}")
   public void logViewerContentMessageNotExists(String message) {
-    Assert.assertFalse(
-      Helper.isElementExists(
-        By.xpath("//div[@data-testid='log-viewer-content']//*[contains(text(), '" + message + "')]")
-      )
-    );
+    Assert.assertTrue(Helper.isElementExistsByTestid("log-viewer-content"));
+    WebElement logViewerContentElement = Helper.locateElementByTestId("log-viewer-content");
+    Assert.assertFalse(logViewerContentElement.getText().contains(message));
   }
 
   @Then("Click on advanced logs")
