@@ -73,17 +73,23 @@ export default class AdminTabSwitch extends React.PureComponent<IAdminTabSwitchP
     return (
       <span className="tab-title">
         <h5 className={classnames({ active: activeTab === MANAGEMENT })}>
-          <Link to="/administration">{T.translate(`${PREFIX}.Tabs.management`)}</Link>
+          <Link to="/administration" data-testid="admin-management-tab">
+            {T.translate(`${PREFIX}.Tabs.management`)}
+          </Link>
         </h5>
         <span className="divider"> | </span>
         <h5 className={classnames({ active: activeTab === CONFIGURATION })}>
-          <Link to="/administration/configuration">{T.translate(`${PREFIX}.Tabs.config`)}</Link>
+          <Link to="/administration/configuration" data-testid="admin-configuration-tab">
+            {T.translate(`${PREFIX}.Tabs.config`)}
+          </Link>
         </h5>
         {Theme.tethering && (
           <>
             <span className="divider"> | </span>
             <h5 className={classnames({ active: activeTab === TETHERING })}>
-              <Link to="/administration/tethering">{T.translate(`${PREFIX}.Tabs.tethering`)}</Link>
+              <Link to="/administration/tethering" data-testid="admin-tethering-tab">
+                {T.translate(`${PREFIX}.Tabs.tethering`)}
+              </Link>
             </h5>
           </>
         )}

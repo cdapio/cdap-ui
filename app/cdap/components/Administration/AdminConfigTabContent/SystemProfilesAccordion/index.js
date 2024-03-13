@@ -82,6 +82,7 @@ class SystemProfilesAccordion extends Component {
             <Link
               className="btn btn-secondary create-profile-button"
               to="/ns/system/profiles/create"
+              data-testid="create-profile-btn"
             >
               {T.translate(`${PREFIX}.create`)}
             </Link>
@@ -109,6 +110,7 @@ class SystemProfilesAccordion extends Component {
         className={classnames('admin-config-container system-profiles-container', {
           expanded: this.props.expanded,
         })}
+        data-testid="system-profiles-accordion"
       >
         {this.renderLabel()}
         {this.renderContent()}

@@ -88,8 +88,12 @@ export default class AdminConfigTabContent extends Component {
           })}
         />
         <div className="action-buttons">
-          <ReloadSystemArtifacts />
-          <Link to="/httpexecutor" className="btn btn-secondary">
+          <ReloadSystemArtifacts btnDataTestId={`admin-config-tab-reload-artifacts-btn`} />
+          <Link
+            to="/httpexecutor"
+            className="btn btn-secondary"
+            data-testid="admin-config-tab-make-http-calls-btn"
+          >
             {T.translate(`${I18N_PREFIX}.buttons.MakeRESTCalls.label`)}
           </Link>
         </div>
