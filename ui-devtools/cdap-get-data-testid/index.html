@@ -19,7 +19,7 @@
     <style type="text/css">
       body {
         width: 300px;
-        height: 150px;
+        height: 250px;
         padding: 10px;
         font-family: sans-serif;
       }
@@ -43,6 +43,16 @@
         margin-bottom: 8px;
       }
 
+      input[type="radio"] {
+        width: 32px;
+        vertical-align: middle;
+        margin: 2px 0;
+      }
+
+      label {
+        vertical-align: middle;
+      }
+
       button {
         padding: 8px 16px;
         color: white;
@@ -61,6 +71,12 @@
     </p>
     <p>Email missing <code>data-testid</code> alerts to:</p>
     <input type="text" placeholder="Comma separated email ids" id="email_input" />
+    <br/>
+    <p>Copyable tooltip for UI elements should contain:</p>
+    <input type="radio" name="popover_content_mode" id="data_testid_radio" />
+    <label for="data_testid_radio">data-testid</label><br/>
+    <input type="radio" name="popover_content_mode" id="xpath_radio" checked/>
+    <label for="xpath_radio">xpath</label><br/>
     <br/>
     <button id="save_button">Save</button>
 
