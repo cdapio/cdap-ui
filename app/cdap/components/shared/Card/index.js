@@ -101,6 +101,7 @@ export default class Card extends Component {
         onClick={this.onClickHandler.bind(this)}
         style={this.props.cardStyle}
         ref={(ref) => (this.container = ref)}
+        data-testid={this.props.dataTestId}
       >
         {this.getHeader()}
         {this.getBody()}
@@ -123,4 +124,5 @@ Card.propTypes = {
   cardStyle: PropTypes.object,
   onClick: PropTypes.func,
   id: PropTypes.string,
+  dataTestId: PropTypes.string,
 };

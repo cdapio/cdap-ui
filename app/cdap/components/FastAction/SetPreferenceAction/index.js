@@ -95,6 +95,7 @@ export default class SetPreferenceAction extends Component {
           iconClasses={iconClasses}
           action={this.toggleModal}
           id={tooltipID}
+          dataTestId={this.props.dataTestId}
         />
         <Tooltip
           placement="top"
@@ -133,6 +134,7 @@ SetPreferenceAction.propTypes = {
   modalIsOpen: PropTypes.func,
   onSuccess: PropTypes.func,
   savedMessageState: PropTypes.bool,
+  dataTestId: PropTypes.string,
 };
 
 SetPreferenceAction.defaultProps = {

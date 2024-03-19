@@ -118,7 +118,12 @@ export default class DeleteAction extends Component {
 
     return (
       <span className="btn btn-secondary btn-sm">
-        <FastActionButton icon="icon-trash" action={this.toggleModal} id={tooltipID} />
+        <FastActionButton
+          icon="icon-trash"
+          action={this.toggleModal}
+          id={tooltipID}
+          dataTestId={this.props.dataTestId}
+        />
         <Tooltip
           placement="top"
           className="fast-action-tooltip"
@@ -159,4 +164,5 @@ DeleteAction.propTypes = {
     type: PropTypes.oneOf(['application', 'artifact', 'dataset']).isRequired,
   }),
   onSuccess: PropTypes.func,
+  dataTestId: PropTypes.string,
 };

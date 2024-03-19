@@ -33,6 +33,9 @@ import {
 import isNil from 'lodash/isNil';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { MyAppApi } from 'api/app';
+import { getDataTestid } from '../../../testids/TestidsProvider';
+
+const TESTID_PREFIX = 'features.entityListView';
 
 export default class HomeListView extends Component {
   constructor(props) {
@@ -237,7 +240,12 @@ export default class HomeListView extends Component {
           />
         )}
         <ListViewHeader />
-        <div className="entities-all-list-container">{content}</div>
+        <div
+          className="entities-all-list-container"
+          data-testid={getDataTestid(`${TESTID_PREFIX}.allEntities`)}
+        >
+          {content}
+        </div>
       </div>
     );
   }

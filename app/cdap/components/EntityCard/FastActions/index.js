@@ -20,6 +20,9 @@ import React, { Component } from 'react';
 import FastAction from 'components/FastAction';
 import { objectQuery } from 'services/helpers';
 import isNil from 'lodash/isNil';
+import { getDataTestid } from '../../../testids/TestidsProvider';
+
+const TESTID_PREFIX = 'features.entityListView.entity.fastActions';
 
 export default class FastActions extends Component {
   constructor(props) {
@@ -86,6 +89,7 @@ export default class FastActions extends Component {
                     ? {}
                     : this.props.argsToActions[action]
                 }
+                dataTestId={getDataTestid(`${TESTID_PREFIX}.${action}`)}
               />
             );
           } else {
@@ -100,6 +104,7 @@ export default class FastActions extends Component {
                     ? {}
                     : this.props.argsToActions[action]
                 }
+                dataTestId={getDataTestid(`${TESTID_PREFIX}.${action}`)}
               />
             );
           }

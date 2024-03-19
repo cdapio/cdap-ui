@@ -18,9 +18,9 @@ import PropTypes from 'prop-types';
 
 import React from 'react';
 
-export default function FastActionLink({icon, link}) {
+export default function FastActionLink({ icon, link, dataTestId }) {
   return (
-    <a href={link} className="btn btn-link">
+    <a href={link} className="btn btn-link" data-testid={dataTestId}>
       <span className={icon}></span>
     </a>
   );
@@ -28,5 +28,6 @@ export default function FastActionLink({icon, link}) {
 
 FastActionLink.propTypes = {
   icon: PropTypes.string,
-  link: PropTypes.string
+  link: PropTypes.string,
+  dataTestId: PropTypes.string,
 };
