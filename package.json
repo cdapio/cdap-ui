@@ -184,7 +184,7 @@
     "dataloader": "2.0.0",
     "ejs": "3.0.1",
     "event-emitter": "0.3.5",
-    "express": "4.17.1",
+    "express": "4.19.2",
     "express-http-proxy": "1.6.0",
     "finalhandler": "1.1.2",
     "font-awesome": "4.7.0",
