@@ -30,8 +30,10 @@ import isNil from 'lodash/isNil';
 import capitalize from 'lodash/capitalize';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { objectQuery } from 'services/helpers';
-
 require('./EntityCard.scss');
+import { getDataTestid } from '../../testids/TestidsProvider';
+
+const TESTID_PREFIX = 'features.entityListView.entity';
 
 export default class EntityCard extends Component {
   constructor(props) {
@@ -126,6 +128,7 @@ export default class EntityCard extends Component {
             : `entity-cards-${this.props.entity.type}`
         }
         onClick={this.onClick.bind(this)}
+        dataTestId={getDataTestid(`${TESTID_PREFIX}.named`, this.props.entity.id)}
       >
         <div className="entity-information clearfix">
           <div

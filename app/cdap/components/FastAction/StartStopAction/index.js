@@ -186,6 +186,7 @@ export default class StartStopAction extends Component {
               iconClasses={iconClass}
               action={this.toggleModal}
               id={this.tooltipID}
+              dataTestId={this.props.dataTestId}
             />
             <Tooltip
               placement="top"
@@ -211,4 +212,5 @@ StartStopAction.propTypes = {
     programType: PropTypes.string.isRequired,
   }),
   onSuccess: PropTypes.func,
+  dataTestId: PropTypes.string,
 };

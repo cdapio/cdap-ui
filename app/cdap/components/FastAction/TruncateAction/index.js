@@ -119,6 +119,7 @@ export default class TruncateAction extends Component {
           action={this.toggleModal}
           id={tooltipID}
           iconClasses={classnames({ 'text-success': this.state.success })}
+          dataTestId={this.props.dataTestId}
         />
         <Tooltip
           placement="top"
@@ -158,4 +159,5 @@ TruncateAction.propTypes = {
     type: PropTypes.oneOf(['dataset']).isRequired,
   }),
   onSuccess: PropTypes.func,
+  dataTestId: PropTypes.string,
 };

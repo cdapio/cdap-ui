@@ -40,6 +40,7 @@ export default class FastAction extends Component {
             entity={this.props.entity}
             onSuccess={this.props.onSuccess}
             argsToAction={objectQuery(this.props.argsToAction)}
+            dataTestId={this.props.dataTestId}
           />
         );
       case 'truncate':
@@ -48,6 +49,7 @@ export default class FastAction extends Component {
             entity={this.props.entity}
             onSuccess={this.props.onSuccess}
             argsToAction={objectQuery(this.props.argsToAction)}
+            dataTestId={this.props.dataTestId}
           />
         );
       case 'startStop':
@@ -56,6 +58,7 @@ export default class FastAction extends Component {
             entity={this.props.entity}
             onSuccess={this.props.onSuccess}
             argsToAction={objectQuery(this.props.argsToAction)}
+            dataTestId={this.props.dataTestId}
           />
         );
       case 'setPreferences':
@@ -64,6 +67,7 @@ export default class FastAction extends Component {
             entity={this.props.entity}
             onSuccess={this.props.onSuccess}
             argsToAction={objectQuery(this.props.argsToAction)}
+            dataTestId={this.props.dataTestId}
           />
         );
       case 'log':
@@ -71,6 +75,7 @@ export default class FastAction extends Component {
           <LogAction
             entity={this.props.entity}
             argsToAction={objectQuery(this.props.argsToAction)}
+            dataTestId={this.props.dataTestId}
           />
         );
       default:
@@ -89,4 +94,5 @@ FastAction.propTypes = {
   onSuccess: PropTypes.func,
   opened: PropTypes.bool,
   argsToAction: PropTypes.object,
+  dataTestId: PropTypes.string,
 };

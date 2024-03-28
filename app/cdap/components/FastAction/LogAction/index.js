@@ -86,7 +86,7 @@ export default class LogAction extends Component {
     // have to do this because ID cannot start with a number
     const tooltipID = `logs-${this.props.entity.uniqueId}`;
     const renderDisabled = (
-      <button className="btn btn-link" disabled>
+      <button className="btn btn-link" disabled data-testid={this.props.dataTestId}>
         <IconSVG name="icon-file-text-o" />
       </button>
     );
@@ -94,7 +94,13 @@ export default class LogAction extends Component {
     const link = this.generateLink();
 
     const renderLog = (
-      <a href={link} target="_blank" className="btn btn-link" rel="noopener noreferrer">
+      <a
+        href={link}
+        target="_blank"
+        className="btn btn-link"
+        rel="noopener noreferrer"
+        data-testid={this.props.dataTestId}
+      >
         <IconSVG name="icon-file-text" />
       </a>
     );
@@ -128,4 +134,5 @@ LogAction.propTypes = {
     programType: PropTypes.string.isRequired,
     runId: PropTypes.string,
   }),
+  dataTestId: PropTypes.string,
 };

@@ -34,6 +34,9 @@ import SearchStoreActions from 'components/EntityListView/SearchStore/SearchStor
 import { SCOPES } from 'services/global-constants';
 import { MyAppApi } from 'api/app';
 require('./JustAddedSection.scss');
+import { getDataTestid } from '../../../testids/TestidsProvider';
+
+const TESTID_PREFIX = 'features.entityListView.justAdded';
 
 export default class JustAddedSection extends Component {
   constructor(props) {
@@ -276,7 +279,9 @@ export default class JustAddedSection extends Component {
           <span>{T.translate('features.EntityListView.JustAddedSection.subtitle')}</span>
         </div>
 
-        <div className="just-added-entities-list">{content}</div>
+        <div className="just-added-entities-list" data-testid={getDataTestid(TESTID_PREFIX)}>
+          {content}
+        </div>
       </div>
     );
   }
