@@ -25,9 +25,11 @@ import isNil from 'lodash/isNil';
 import classnames from 'classnames';
 import T from 'i18n-react';
 import { Theme } from 'services/ThemeHelper';
+import { getDataTestid } from '../../../testids/TestidsProvider';
 require('./AdminTabSwitch.scss');
 
 const PREFIX = 'features.Administration';
+const TESTID_PREFIX = 'features.administration';
 const TAB_LABELS = {
   MANAGEMENT: 'management',
   CONFIGURATION: 'configuration',
@@ -73,17 +75,29 @@ export default class AdminTabSwitch extends React.PureComponent<IAdminTabSwitchP
     return (
       <span className="tab-title">
         <h5 className={classnames({ active: activeTab === MANAGEMENT })}>
-          <Link to="/administration">{T.translate(`${PREFIX}.Tabs.management`)}</Link>
+          <Link to="/administration" data-testid={getDataTestid(`${TESTID_PREFIX}.management.tab`)}>
+            {T.translate(`${PREFIX}.Tabs.management`)}
+          </Link>
         </h5>
         <span className="divider"> | </span>
         <h5 className={classnames({ active: activeTab === CONFIGURATION })}>
-          <Link to="/administration/configuration">{T.translate(`${PREFIX}.Tabs.config`)}</Link>
+          <Link
+            to="/administration/configuration"
+            data-testid={getDataTestid(`${TESTID_PREFIX}.configuration.tab`)}
+          >
+            {T.translate(`${PREFIX}.Tabs.config`)}
+          </Link>
         </h5>
         {Theme.tethering && (
           <>
             <span className="divider"> | </span>
             <h5 className={classnames({ active: activeTab === TETHERING })}>
-              <Link to="/administration/tethering">{T.translate(`${PREFIX}.Tabs.tethering`)}</Link>
+              <Link
+                to="/administration/tethering"
+                data-testid={getDataTestid(`${TESTID_PREFIX}.tethering.tab`)}
+              >
+                {T.translate(`${PREFIX}.Tabs.tethering`)}
+              </Link>
             </h5>
           </>
         )}

@@ -25,10 +25,12 @@ import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import { Theme } from 'services/ThemeHelper';
 import T from 'i18n-react';
+import { getDataTestid } from '../../../testids/TestidsProvider';
 
 require('./AdminConfigTabContent.scss');
 
 const I18N_PREFIX = 'features.Administration.Configure';
+const TESTID_PREFIX = 'features.administration.configuration';
 
 export const ADMIN_CONFIG_ACCORDIONS = {
   namespaces: 'NAMESPACES',
@@ -88,8 +90,14 @@ export default class AdminConfigTabContent extends Component {
           })}
         />
         <div className="action-buttons">
-          <ReloadSystemArtifacts />
-          <Link to="/httpexecutor" className="btn btn-secondary">
+          <ReloadSystemArtifacts
+            btnDataTestId={getDataTestid(`${TESTID_PREFIX}.reload-sys-artifacts-btn`)}
+          />
+          <Link
+            to="/httpexecutor"
+            className="btn btn-secondary"
+            data-testid={getDataTestid(`${TESTID_PREFIX}.make-http-calls-btn`)}
+          >
             {T.translate(`${I18N_PREFIX}.buttons.MakeRESTCalls.label`)}
           </Link>
         </div>

@@ -15,6 +15,7 @@
  */
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import { MyArtifactApi } from 'api/artifact';
 import T from 'i18n-react';
@@ -28,6 +29,10 @@ export default class ReloadSystemArtifacts extends Component {
     loading: false,
     errorMessage: null,
     extendedMessage: null,
+  };
+
+  static propTypes = {
+    btnDataTestId: PropTypes.string,
   };
 
   onClick = () => {
@@ -65,7 +70,11 @@ export default class ReloadSystemArtifacts extends Component {
 
     return (
       <span>
-        <button className="btn btn-secondary" onClick={this.onClick}>
+        <button
+          className="btn btn-secondary"
+          onClick={this.onClick}
+          data-testid={this.props.btnDataTestId}
+        >
           {T.translate(`${PREFIX}.label`)}
         </button>
 

@@ -28,10 +28,12 @@ import { Label, Input } from 'reactstrap';
 import { getProfiles, resetProfiles } from 'components/Cloud/Profiles/Store/ActionCreator';
 import { SYSTEM_NAMESPACE } from 'services/global-constants';
 import { Theme } from 'services/ThemeHelper';
+import { getDataTestid } from '../../../../testids/TestidsProvider';
 import If from 'components/shared/If';
 require('./SystemProfilesAccordion.scss');
 
 const PREFIX = 'features.Administration.Accordions.SystemProfiles';
+const TESTID_PREFIX = 'features.administration.configuration';
 
 class SystemProfilesAccordion extends Component {
   static propTypes = {
@@ -82,6 +84,7 @@ class SystemProfilesAccordion extends Component {
             <Link
               className="btn btn-secondary create-profile-button"
               to="/ns/system/profiles/create"
+              data-testid={getDataTestid(`${TESTID_PREFIX}.create-profile-btn`)}
             >
               {T.translate(`${PREFIX}.create`)}
             </Link>
@@ -109,6 +112,7 @@ class SystemProfilesAccordion extends Component {
         className={classnames('admin-config-container system-profiles-container', {
           expanded: this.props.expanded,
         })}
+        data-testid={getDataTestid(`${TESTID_PREFIX}.system-profiles-accordion`)}
       >
         {this.renderLabel()}
         {this.renderContent()}
