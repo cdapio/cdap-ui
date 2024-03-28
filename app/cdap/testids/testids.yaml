@@ -1,0 +1,23 @@
+---
+# Keys in this file can contain only alphanumeric characters and underscore.
+#
+# Keys in this file are kept alphabetically sorted.
+# Sorting of the keys (if necessary) is done in the custom webpack loader.
+# Code of the custom loader is located at ui-devtools/testid-yaml-loader.
+#
+# Please do not modify this comment section at the top.
+# This section is added by the testid-yaml-loader.
+
+features:
+  entityListView:
+    allEntities: ~
+    entity:
+      fastActions:
+        delete: ~
+        explore: ~
+        log: ~
+        setPreferences: ~
+        startStop: ~
+        truncate: ~
+      named: ~
+    justAdded: ~

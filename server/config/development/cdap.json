@@ -1,4 +1,5 @@
 {
+  "ui.validate.testids.enabled": true,
   "router.ssl.bind.port": "10443",
   "dashboard.bind.address": "0.0.0.0",
   "router.ssl.server.port": "10443",

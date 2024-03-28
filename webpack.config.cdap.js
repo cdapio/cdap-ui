@@ -76,6 +76,7 @@ var plugins = [
     collections: true,
     caching: true,
     flattening: true,
+    paths: true,
   }),
   new CopyWebpackPlugin(
     [
@@ -131,6 +132,11 @@ var rules = [
   {
     test: /\.s?css$/,
     use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
+  },
+  {
+    enforce: 'pre',
+    test: /testids\.yaml$/,
+    loader: 'testid-yaml-loader',
   },
   {
     test: /\.ya?ml$/,
@@ -251,6 +257,11 @@ var webpackConfig = {
       api: __dirname + '/app/cdap/api',
       lib: __dirname + '/app/lib',
       styles: __dirname + '/app/cdap/styles',
+    },
+  },
+  resolveLoader: {
+    alias: {
+      'testid-yaml-loader': path.resolve(__dirname, 'ui-devtools/testid-yaml-loader/index.js'),
     },
   },
 };

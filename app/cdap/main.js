@@ -65,6 +65,7 @@ import history from 'services/history';
 import { CookieBanner } from 'components/CookieBanner';
 // See ./graphql/fragements/README.md
 import introspectionQueryResultData from '../../graphql/fragments/fragmentTypes.json';
+import { TestidProvider } from './testids/TestidsProvider';
 
 require('../ui-utils/url-generator');
 require('font-awesome-sass-loader!./styles/font-awesome.config.js');
@@ -423,7 +424,11 @@ CDAP.propTypes = {
 };
 
 const RootComp = hot(() => {
-  return <ThemeWrapper render={() => <CDAP />} />;
+  return (
+    <TestidProvider>
+      <ThemeWrapper render={() => <CDAP />} />
+    </TestidProvider>
+  );
 });
 
 ReactDOM.render(<RootComp />, document.getElementById('app-container'));

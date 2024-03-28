@@ -267,8 +267,8 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       analyticsTag: cdapConfig['ui.analyticsTag'],
       googleTagManager: cdapConfig['ui.GTM'],
       cookieBannerText: cdapConfig['ui.cookieBannerText'],
-      cookieBannerLink: cdapConfig['ui.cookieBannerLink']
-
+      cookieBannerLink: cdapConfig['ui.cookieBannerLink'],
+      uiValidateTestids: cdapConfig['ui.validate.testids.enabled'] || false,
     });
 
     res.header({
