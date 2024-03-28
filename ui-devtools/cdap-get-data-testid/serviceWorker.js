@@ -50,11 +50,13 @@ chrome.runtime.onInstalled.addListener(() => {
 
 async function notifyStateChange(port) {
   const emailIds = await getConfiguredEmailIds();
+  const popoverContentMode = await getPopoverContentMode();
   const active = await getActivationStatus();
   return port.postMessage({
     action: 'state_change',
     emailIds,
     active,
+    popoverContentMode,
   });
 }
 
@@ -62,6 +64,7 @@ chrome.runtime.onConnect.addListener(function(port) {
   if (port.name !== 'cdap-get-data-testid') return;
 
   port.onMessage.addListener(async function(request) {
+    const isActive = await getActivationStatus();
     switch (request.action) {
       case 'enable_testid_finder':
         await enableTestidFinder();
@@ -82,6 +85,15 @@ chrome.runtime.onConnect.addListener(function(port) {
         await port.postMessage({ action: 'saved_emails' });
         return;
 
+      case 'set_popover_content_mode':
+        await configurePopoverContentMode(request.mode);
+        if (isActive) {
+          await disableTestidFinder();
+          await enableTestidFinder();
+        }
+        await notifyStateChange(port);
+        return;
+
       default:
         return;
     }
@@ -91,10 +103,11 @@ chrome.runtime.onConnect.addListener(function(port) {
 async function enableTestidFinder() {
   const tab = await getCurrentTab();
   const emailIds = await getConfiguredEmailIds();
+  const popoverContentMode = await getPopoverContentMode();
   chrome.scripting.executeScript({
     target: {tabId: tab.id, allFrames: true},
     func: modifyPage,
-    args: [emailIds],
+    args: [emailIds, popoverContentMode],
   });
 
   await activateAction(tab.id);
@@ -110,7 +123,7 @@ async function disableTestidFinder() {
   await deactivateAction(tab.id);
 }
 
-function modifyPage(emailIds) {
+function modifyPage(emailIds, popoverContentMode) {
   async function captureScreen () {
     const swidth = window.screen.width;
     const sheight = window.screen.height;
@@ -159,6 +172,31 @@ function modifyPage(emailIds) {
       console.error("Error: " + err);
       return false;
     }
+  }
+
+  function isUniquelyIdentifiable (listOfTestids) {
+    if (listOfTestids.length === 0) return false;
+
+    const selector = listOfTestids.map(x => `[data-testid="${x}"]`).join(' ');
+    return document.querySelectorAll(selector).length === 1;
+  }
+
+  function getUniqueXpath(el) {
+    if (!el.dataset.testid) return '';
+    const list = [];
+
+    let cur = el;
+    while (cur) {
+      if (cur.dataset.testid) {
+        list.unshift(cur.dataset.testid);
+        if (isUniquelyIdentifiable(list)) {
+          return list.map((x) => `//*[@data-testid="${x}"]`).join('');
+        }
+      }
+      cur = cur.parentNode;
+    }
+
+    return '';
   }
 
   function getDOMPath(el) {
@@ -213,10 +251,11 @@ function modifyPage(emailIds) {
     e.stopPropagation();
 
     const node = e.target;
-    if (node.dataset.testid) {
-      await navigator.clipboard.writeText(node.dataset.testid);
-      info.innerText = `[COPIED] ${node.dataset.testid}`;
-      window.setTimeout(() => { info.innerText = node.dataset.testid; }, 300);
+    const popoverContent = popoverContentMode === 'xpath' ? getUniqueXpath(node) : node.dataset.testid;
+    if (popoverContent) {
+      await navigator.clipboard.writeText(popoverContent);
+      info.innerText = `[COPIED] ${popoverContent}`;
+      window.setTimeout(() => { info.innerText = popoverContent; }, 300);
       return;
     }
 
@@ -251,16 +290,16 @@ function modifyPage(emailIds) {
     if (node.dataset.cdapGetTestidHovered) return;
 
     node.dataset.cdapGetTestidHovered = true;
-    if (node.dataset.testid) {
-      const offsets = node.getBoundingClientRect();
+    const popoverContent = popoverContentMode === 'xpath' ? getUniqueXpath(node) : node.dataset.testid;
+    if (popoverContent) {
       info.style.top = `${Math.max(e.clientY - 20, 10)}px`;
       info.style.left = `${Math.min(e.clientX + 20, window.screen.width - 100)}px`;
       info.style.display = 'block';
       info.style.zIndex = 99999;
-      info.innerText = node.dataset.testid;
-      highlightNode(node, 'rgba(153, 255, 102, 0.5)', 'green')
+      info.innerText = popoverContent;
+      highlightNode(node, 'rgba(153, 255, 102, 0.5)', 'green');
     } else {
-      highlightNode(node, 'rgba(255, 153, 51, 0.5)', 'red')
+      highlightNode(node, 'rgba(255, 153, 51, 0.5)', 'red');
     }
 
     node.addEventListener('click', handleNodeClick, true);
@@ -339,4 +378,13 @@ async function getConfiguredEmailIds() {
 
 function configureEmailIds(emailIds) {
   chrome.storage.local.set({ emailIds });
+}
+
+async function getPopoverContentMode() {
+  const result = await chrome.storage.local.get(['popoverContentMode']);
+  return result.popoverContentMode || 'xpath';
+}
+
+function configurePopoverContentMode(popoverContentMode) {
+  chrome.storage.local.set({ popoverContentMode });
 }

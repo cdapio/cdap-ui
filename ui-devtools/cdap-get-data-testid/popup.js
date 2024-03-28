@@ -17,10 +17,26 @@
 const enableBtn = document.getElementById("enable_button");
 const saveBtn = document.getElementById("save_button");
 const emailInput = document.getElementById("email_input");
+const dataTestidRadio = document.getElementById("data_testid_radio");
+const xpathRadio = document.getElementById("xpath_radio");
 
 (async () => {
   const port = chrome.runtime.connect({ name: "cdap-get-data-testid" });
   port.postMessage({ action: 'get_state' });
+
+  function savePopoverContentMode(mode) {
+    port.postMessage({ action: 'set_popover_content_mode', mode });
+  }
+
+  xpathRadio.addEventListener('change', function (e) {
+    const isChecked = xpathRadio.checked;
+    if (isChecked) savePopoverContentMode('xpath');
+  });
+
+  dataTestidRadio.addEventListener('change', function (e) {
+    const isChecked = dataTestidRadio.checked;
+    if (isChecked) savePopoverContentMode('data_testid');
+  });
 
   saveBtn.addEventListener('click', async function() {
     const emailIds = emailInput.value;
@@ -36,7 +52,7 @@ const emailInput = document.getElementById("email_input");
   port.onMessage.addListener(function(msg) {
     switch (msg.action) {
       case 'state_change':
-        updateUiState(msg.active, msg.emailIds);
+        updateUiState(msg.active, msg.emailIds, msg.popoverContentMode);
         return;
 
       case 'saved_emails':
@@ -50,7 +66,7 @@ const emailInput = document.getElementById("email_input");
 })();
 
 
-function updateUiState(active, emailIds) {
+function updateUiState(active, emailIds, popoverContentMode) {
   if (active) {
     enableBtn.innerText = 'Disable';
     enableBtn.style.background = 'red';
@@ -60,6 +76,12 @@ function updateUiState(active, emailIds) {
   }
 
   emailInput.value = emailIds;
+
+  if (popoverContentMode === 'xpath') {
+    xpathRadio.checked = true;
+  } else {
+    dataTestidRadio.checked = true;
+  }
 }
 
 function blinkSaved() {
