@@ -9,6 +9,17 @@
 # This section is added by the testid-yaml-loader.
 
 features:
+  administration:
+    configuration:
+      create-profile-btn: ~
+      make-http-calls-btn: ~
+      reload-sys-artifacts-btn: ~
+      system-profiles-accordion: ~
+      tab: ~
+    management:
+      tab: ~
+    tethering:
+      tab: ~
   entityListView:
     allEntities: ~
     entity:
