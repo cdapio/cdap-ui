@@ -66,4 +66,4 @@ Please see the [guidelines for contributing](./CONTRIBUTING.md) to the project a
 
 ## License
 
-Please the [license](./LICENSE.txt).
+Please see the [license](./LICENSE.txt).
