@@ -1,7 +1,7 @@
 # CDAP-UI
 
-This repo contains the code for the CDAP UI. The main
-repo for the CDAP project is [cdapio/cdap](https://github.com/cdapio/cdap).
+This repository contains the code for the CDAP UI. For
+ the main CDAP project, please refer to [cdapio/cdap](https://github.com/cdapio/cdap).
 
 ## Running CDAP-UI
 
