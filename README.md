@@ -1,7 +1,6 @@
 # CDAP-UI
 
-This repo contains the code for the CDAP UI. The main
-repo for the CDAP project is [cdapio/cdap](https://github.com/cdapio/cdap).
+This repository contains the code for the CDAP UI. For the main CDAP project, please refer to [cdapio/cdap](https://github.com/cdapio/cdap).
 
 ## Running CDAP-UI
 
@@ -9,20 +8,15 @@ CDAP-UI requires an instance of CDAP to run.
 
 ### System requirements
 
-Running CDAP-UI requires Java 8 (for CDAP) and Node.js
-(please use the most recent long-term support version).
+To run CDAP-UI, you need Java 8 (required for CDAP) and the latest long-term support version of Node.js.
 
 ### Using the sandbox
 
-CDAP-UI is packaged with the CDAP sandbox. You can
-[download the sandbox](https://cdap.io/get-started/)
-and follow the directions to run CDAP.
+ [download the sandbox](https://cdap.io/get-started/) and follow the provided instructions to run CDAP.
 
 ## Building CDAP-UI
 
-You can build CDAP-UI as part of the full CDAP build,
-or build only the UI and use a sandbox for the CDAP
-backend.
+You can either build CDAP-UI as part of the complete CDAP build or build only the UI component and use a sandbox for the CDAP backend.
 
 ### Running a full CDAP build
 
@@ -66,4 +60,4 @@ Please see the [guidelines for contributing](./CONTRIBUTING.md) to the project a
 
 ## License
 
-Please the [license](./LICENSE.txt).
+Please see the [license](./LICENSE.txt).
