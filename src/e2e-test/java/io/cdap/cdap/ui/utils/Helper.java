@@ -32,6 +32,18 @@ import io.cdap.e2e.utils.ElementHelper;
 import io.cdap.e2e.utils.PluginPropertyUtils;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
@@ -58,19 +70,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class Helper implements CdfHelper {
 
@@ -497,14 +496,14 @@ public class Helper implements CdfHelper {
     SeleniumDriver.openPage(Constants.BASE_PIPELINES_URL + "/view/" + pipelineName);
   }
 
-  public static void createSCMRemoteBranch() throws IOException, GitAPIException {
+  public static void createSCMRemoteBranch(ScmProviderType scmProviderType) throws IOException, GitAPIException {
     String branch = PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME);
     if (Strings.isNullOrEmpty(branch)) {
       throw new IllegalArgumentException("SCM testing default branch is not specified");
     }
 
     Path tempDir = Files.createTempDirectory("e2e-clone-repo");
-    CredentialsProvider creds = getCredentialsProvider();
+    CredentialsProvider creds = getCredentialsProvider(scmProviderType);
     try (Git git = cloneRemote(tempDir, creds)) {
       git.checkout().setCreateBranch(true).setName(branch).call();
       git.push()
@@ -516,9 +515,9 @@ public class Helper implements CdfHelper {
     DirUtils.deleteDirectoryContents(tempDir.toFile());
   }
 
-  public static void cleanupSCMTestBranch() throws IOException, GitAPIException {
+  public static void cleanupSCMTestBranch(ScmProviderType providerType) throws IOException, GitAPIException {
     Path tempDir = Files.createTempDirectory("e2e-clone-repo");
-    CredentialsProvider creds = getCredentialsProvider();
+    CredentialsProvider creds = getCredentialsProvider(providerType);
     try (Git git = cloneRemote(tempDir, creds)) {
       String branch = PluginPropertyUtils.pluginProp(Constants.GIT_BRANCH_PROP_NAME);
       //delete branch on remote
@@ -531,13 +530,17 @@ public class Helper implements CdfHelper {
     DirUtils.deleteDirectoryContents(tempDir.toFile());
   }
 
-  private static CredentialsProvider getCredentialsProvider() {
+  private static CredentialsProvider getCredentialsProvider(ScmProviderType providerType) {
     String token = PluginPropertyUtils.pluginProp(Constants.GIT_PAT_PROP_NAME);
     if (Strings.isNullOrEmpty(token)) {
       throw new IllegalArgumentException("SCM testing token is not specified");
     }
 
-    return new UsernamePasswordCredentialsProvider("oauth2", token);
+    String userName = "oauth2";
+    if (providerType == ScmProviderType.BITBUCKET_CLOUD) {
+      userName = "x-token-auth";
+    }
+    return new UsernamePasswordCredentialsProvider(userName, token);
   }
 
   private static Git cloneRemote(Path dir, CredentialsProvider creds) throws GitAPIException {

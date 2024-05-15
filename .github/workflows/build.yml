@@ -81,6 +81,10 @@ jobs:
         GCP_SERVICE_ACCOUNT_PATH: '${{ github.workspace }}/key_file.json'
         SCM_TEST_REPO_URL: ${{ secrets.SCM_TEST_REPO_URL }}
         SCM_TEST_REPO_PAT: ${{ secrets.SCM_TEST_REPO_PAT }}
+        SCM_TEST_REPO_URL_GITLAB: ${{ secrets.SCM_TEST_REPO_URL_GITLAB }}
+        SCM_TEST_REPO_PAT_GITLAB: ${{ secrets.SCM_TEST_REPO_PAT_GITLAB }}
+        SCM_TEST_REPO_URL_BITBUCKET: ${{ secrets.SCM_TEST_REPO_URL_BITBUCKET }}
+        SCM_TEST_REPO_PAT_BITBUCKET: ${{ secrets.SCM_TEST_REPO_PAT_BITBUCKET }}
       run: |
         echo $GCP_SERVICE_ACCOUNT_CONTENTS > ./key_file.json
         yarn run cdap-full-build-more-memory # Build UI

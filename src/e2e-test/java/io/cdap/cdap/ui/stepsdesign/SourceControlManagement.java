@@ -42,6 +42,14 @@ public class SourceControlManagement {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("link-repository-button"));
   }
 
+  private void selectScmProvider(String providerType) {
+    WebElement scmProviderSelect = Helper.locateElementByTestId("select-provider");
+    ElementHelper.clickOnElement(scmProviderSelect);
+    WebElement providerOption = Helper.locateElementByTestId("option-" + providerType);
+    WaitHelper.waitForElementToBeDisplayed(providerOption);
+    ElementHelper.clickOnElement(providerOption);
+  }
+
   private void addRepoUrl(String repoUrl) {
     WebElement repoUrlInput = Helper.locateElementByTestId("repoUrl");
     ElementHelper.clearElementValue(repoUrlInput);
@@ -122,6 +130,7 @@ public class SourceControlManagement {
 
   @Then("Add test repository configuration")
   public void addTestRepositoryConfiguration() {
+    selectScmProvider(PluginPropertyUtils.pluginProp(Constants.SCM_PROVIDER_PROP_NAME));
     addRepoUrl(PluginPropertyUtils.pluginProp(Constants.GIT_REPO_URL_PROP_NAME));
     addTokenName(Constants.FAKE_TOKEN_NAME);
     addToken(PluginPropertyUtils.pluginProp(Constants.GIT_PAT_PROP_NAME));
@@ -174,6 +183,7 @@ public class SourceControlManagement {
   @When("Initialize the repository config")
   public void initializeRepoConfig() {
     openAddRepositoryButton();
+    selectScmProvider(PluginPropertyUtils.pluginProp(Constants.SCM_PROVIDER_PROP_NAME));
     addRepoUrl(PluginPropertyUtils.pluginProp(Constants.GIT_REPO_URL_PROP_NAME));
     addToken(PluginPropertyUtils.pluginProp(Constants.GIT_PAT_PROP_NAME));
     addTokenName("e2e-test-token");

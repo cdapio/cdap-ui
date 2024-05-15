@@ -183,7 +183,7 @@
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
-          <version>0.10</version>
+          <version>0.11</version>
           <executions>
             <execution>
               <id>rat-check</id>
@@ -599,6 +599,8 @@
             <configuration>
               <includes>
                 <include>TestRunner.java</include>
+                <include>TestRunnerWithGitlab.java</include>
+                <include>TestRunnerWithBitbucket.java</include>
               </includes>
               <parallel>classes</parallel> <!--Running TestRunner classes in parallel-->
               <threadCount>4</threadCount> <!--Number of classes to run in parallel-->

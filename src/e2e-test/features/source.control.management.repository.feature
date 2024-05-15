@@ -14,7 +14,7 @@
 # the License.
 #
 
-@Integration_Tests
+@Integration_Tests @SCM_GITHUB_TEST @SCM_GITLAB_TEST @SCM_BITBUCKET_TEST
 Feature: Source Control Management - Repository Configuration CRUD operations
 
   @SOURCE_CONTROL_MANAGEMENT_TEST

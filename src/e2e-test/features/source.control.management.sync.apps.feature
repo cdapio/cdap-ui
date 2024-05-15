@@ -14,7 +14,7 @@
 # the License.
 #
 
-@Integration_Tests
+@Integration_Tests @SCM_GITHUB_TEST @SCM_GITLAB_TEST @SCM_BITBUCKET_TEST
 Feature: Source Control Management - Pulling and pushing applications
   Background:
     When Open Source Control Management Page

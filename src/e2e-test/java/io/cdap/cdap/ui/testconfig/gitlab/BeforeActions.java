@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Cask Data, Inc.
+ * Copyright © 2024 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,29 @@
  * the License.
  */
 
-package io.cdap.cdap.ui.stepsdesign;
+package io.cdap.cdap.ui.testconfig.gitlab;
 
+import io.cdap.cdap.ui.testconfig.common.ScmConfigHelper;
+import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
+import io.cdap.cdap.ui.utils.ScmProviderType;
+import io.cdap.e2e.utils.PluginPropertyUtils;
 import io.cucumber.java.Before;
 import java.io.IOException;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BeforeActions {
   private static final Logger logger = LoggerFactory.getLogger(stepsdesign.BeforeActions.class);
 
-  @Before(order = 0)
-  public void loginIfRequired() throws IOException {
-    logger.info("-----------------Logging in if required------------------");
-    Helper.loginIfRequired();
+  @Before(order = 1, value = "@SCM_GITLAB_TEST")
+  public void createGitlabBranchConfig() throws GitAPIException, IOException {
+    logger.info("----------------- Using Gitlab for SCM ------------------");
+    PluginPropertyUtils.addPluginProp(Constants.SCM_PROVIDER_PROP_NAME, "GITLAB");
+    ScmConfigHelper.setupScmCredentials(
+        "SCM_TEST_REPO_URL_GITLAB",
+        "SCM_TEST_REPO_PAT_GITLAB");
+    Helper.createSCMRemoteBranch(ScmProviderType.GITLAB);
   }
 }

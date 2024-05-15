@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Cask Data, Inc.
+ * Copyright © 2024 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,20 +14,11 @@
  * the License.
  */
 
-package io.cdap.cdap.ui.stepsdesign;
+package io.cdap.cdap.ui.utils;
 
-import io.cdap.cdap.ui.utils.Helper;
-import io.cucumber.java.Before;
-import java.io.IOException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class BeforeActions {
-  private static final Logger logger = LoggerFactory.getLogger(stepsdesign.BeforeActions.class);
-
-  @Before(order = 0)
-  public void loginIfRequired() throws IOException {
-    logger.info("-----------------Logging in if required------------------");
-    Helper.loginIfRequired();
-  }
+public enum ScmProviderType {
+  GITHUB,
+  GITLAB,
+  BITBUCKET_SERVER,
+  BITBUCKET_CLOUD
 }

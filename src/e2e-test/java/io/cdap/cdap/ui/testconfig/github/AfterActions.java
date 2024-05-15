@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Cask Data, Inc.
+ * Copyright © 2024 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,28 +14,17 @@
  * the License.
  */
 
-package io.cdap.cdap.ui.stepsdesign;
+package io.cdap.cdap.ui.testconfig.github;
 
-import io.cdap.cdap.ui.utils.Constants;
 import io.cdap.cdap.ui.utils.Helper;
+import io.cdap.cdap.ui.utils.ScmProviderType;
 import io.cucumber.java.After;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
+import org.eclipse.jgit.api.errors.GitAPIException;
 
-/**
- * Represents after action.
- */
 public class AfterActions {
-
-  @After(order = 0)
-  public static void cleanupDownloadDirectory() {
-    Path downloadsDirPath = Paths.get(Constants.DOWNLOADS_DIR);
-    if (Files.exists(downloadsDirPath)) {
-      File downloadsDir = new File(Constants.DOWNLOADS_DIR);
-      System.out.println(downloadsDir);
-      Helper.cleanupDirectory(downloadsDir);
-    }
+  @After(order = 1, value = "@SCM_GITHUB_TEST")
+  public void cleanUpTestBranch() throws IOException, GitAPIException {
+    Helper.cleanupSCMTestBranch(ScmProviderType.GITHUB);
   }
 }

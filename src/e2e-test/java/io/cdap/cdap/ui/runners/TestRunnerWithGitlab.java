@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 Cask Data, Inc.
+ * Copyright © 2024 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -25,12 +25,12 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(
-  features = {"src/e2e-test/features"},
-  glue = {"io.cdap.cdap.ui.stepsdesign", "io.cdap.cdap.ui.testconfig.github", "stepsdesign"},
-  tags = {"not @ignore"},
-  plugin = {"pretty", "html:target/cucumber-html-report/tethering",
-    "json:target/cucumber-reports/cucumber-tethering.json",
-    "junit:target/cucumber-reports/cucumber-tethering.xml"}
+    features = {"src/e2e-test/features"},
+    glue = {"io.cdap.cdap.ui.stepsdesign", "io.cdap.cdap.ui.testconfig.gitlab", "stepsdesign"},
+    tags = {"@SCM_GITLAB_TEST"},
+    plugin = {"pretty", "html:target/cucumber-html-report/tethering",
+        "json:target/cucumber-reports/cucumber-tethering.json",
+        "junit:target/cucumber-reports/cucumber-tethering.xml"}
 )
-public class TestRunner {
+public class TestRunnerWithGitlab {
 }

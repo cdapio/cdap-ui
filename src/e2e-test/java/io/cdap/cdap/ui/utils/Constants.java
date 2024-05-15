@@ -96,4 +96,5 @@ public class Constants {
   public static final int GIT_COMMAND_TIMEOUT_SECONDS = 10;
   public static final String GIT_PAT_PROP_NAME = "gitPAT";
   public static final String GIT_PATH_PREFIX_PROP_NAME = "gitRepositoryPathPrefix";
+  public static final String SCM_PROVIDER_PROP_NAME = "scmProvider";
 }
