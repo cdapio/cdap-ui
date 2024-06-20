@@ -31,6 +31,7 @@ interface IRepositoryPipelineTableProps {
   showFailedOnly: boolean;
   enableMultipleSelection?: boolean;
   disabled?: boolean;
+  lastOperationInfoShown?: boolean;
 }
 
 export const RemotePipelineTable = ({
@@ -39,6 +40,7 @@ export const RemotePipelineTable = ({
   showFailedOnly,
   enableMultipleSelection = false,
   disabled = false,
+  lastOperationInfoShown = true,
 }: IRepositoryPipelineTableProps) => {
   const isSelected = (name: string) => selectedPipelines.indexOf(name) !== -1;
 
@@ -91,8 +93,8 @@ export const RemotePipelineTable = ({
   };
 
   return (
-    <TableBox>
-      <Table data-testid="remote-pipelines-table" stickyHeader>
+    <TableBox lastOperationInfoShown={lastOperationInfoShown}>
+      <Table data-testid="remote-pipelines-table" stickyHeader size="small">
         <TableHead>
           <TableRow>
             <TableCell padding="checkbox">

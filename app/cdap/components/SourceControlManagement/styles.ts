@@ -22,8 +22,8 @@ export const TableBox = styled(TableContainer)`
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 20%);
   margin-top: 10px;
   margin-bottom: 30px;
-  max-height: calc(80vh - 200px);
-  min-height: calc(80vh - 300px);
+  max-height: calc(80vh - ${(props) => (props.lastOperationInfoShown ? '280px' : '200px')});
+  min-height: calc(80vh - ${(props) => (props.lastOperationInfoShown ? '380px' : '200px')});
 `;
 
 export const StyledTableCell = styled(TableCell)`

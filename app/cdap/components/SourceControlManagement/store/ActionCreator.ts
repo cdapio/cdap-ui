@@ -439,3 +439,10 @@ export const refetchAllPipelines = () => {
   getNamespacePipelineList(getCurrentNamespace());
   getRemotePipelineList(getCurrentNamespace());
 };
+
+export const dismissOperationAlert = () => {
+  SourceControlManagementSyncStore.dispatch({
+    type: OperationRunActions.setShowLastOperationInfo,
+    payload: false,
+  });
+};

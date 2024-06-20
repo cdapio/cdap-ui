@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import {
   countPushFailedPipelines,
+  dismissOperationAlert,
   fetchLatestOperation,
   getNamespacePipelineList,
   pushMultipleSelectedPipelines,
@@ -59,7 +60,7 @@ export const LocalPipelineListView = () => {
     showFailedOnly,
   } = useSelector(({ push }) => push);
 
-  const { running: isAnOperationRunning, operation } = useSelector(
+  const { running: isAnOperationRunning, operation, showLastOperationInfo } = useSelector(
     ({ operationRun }) => operationRun
   );
 
@@ -145,6 +146,7 @@ export const LocalPipelineListView = () => {
             showFailedOnly={showFailedOnly}
             enableMultipleSelection={multiPushEnabled}
             disabled={isAnOperationRunning}
+            lastOperationInfoShown={showLastOperationInfo}
           />
           <PrimaryContainedButton
             onClick={toggleCommitModal}
@@ -162,8 +164,10 @@ export const LocalPipelineListView = () => {
 
   return (
     <PipelineListContainer>
+      {operation && multiPushEnabled && showLastOperationInfo && (
+        <OperationAlert operation={operation} onClose={dismissOperationAlert} />
+      )}
       <SearchBox nameFilter={nameFilter} setNameFilter={setNameFilter} />
-      {operation && multiPushEnabled && <OperationAlert operation={operation} />}
       {selectedPipelines.length > 0 && (
         <StyledSelectionStatusDiv>
           <div>

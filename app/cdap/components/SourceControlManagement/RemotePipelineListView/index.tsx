@@ -34,6 +34,7 @@ import {
   toggleRemoteShowFailedOnly,
   pullAndDeployMultipleSelectedRemotePipelines,
   fetchLatestOperation,
+  dismissOperationAlert,
 } from '../store/ActionCreator';
 import { LoadingAppLevel } from 'components/shared/LoadingAppLevel';
 import { getCurrentNamespace } from 'services/NamespaceStore';
@@ -53,9 +54,13 @@ const PREFIX = 'features.SourceControlManagement.pull';
 
 interface IRemotePipelineListViewProps {
   redirectOnSubmit?: boolean;
+  singlePipelineMode?: boolean;
 }
 
-export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineListViewProps) => {
+export const RemotePipelineListView = ({
+  redirectOnSubmit,
+  singlePipelineMode,
+}: IRemotePipelineListViewProps) => {
   const {
     ready,
     remotePipelines,
@@ -66,13 +71,13 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
     pullViewErrorMsg,
   } = useSelector(({ pull }) => pull);
 
-  const { running: isAnOperationRunning, operation } = useSelector(
+  const { running: isAnOperationRunning, operation, showLastOperationInfo } = useSelector(
     ({ operationRun }) => operationRun
   );
 
-  const multiPullEnabled = useFeatureFlagDefaultFalse(
-    'source.control.management.multi.app.enabled'
-  );
+  const multiPullEnabled =
+    useFeatureFlagDefaultFalse('source.control.management.multi.app.enabled') &&
+    !singlePipelineMode;
   const pullFailedCount = countPullFailedPipelines();
 
   useEffect(() => {
@@ -158,6 +163,7 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
             showFailedOnly={showFailedOnly}
             enableMultipleSelection={multiPullEnabled}
             disabled={isAnOperationRunning}
+            lastOperationInfoShown={showLastOperationInfo}
           />
           <PrimaryContainedButton
             size="large"
@@ -182,8 +188,10 @@ export const RemotePipelineListView = ({ redirectOnSubmit }: IRemotePipelineList
         onClose={() => setPullViewErrorMsg()}
       />
       <PipelineListContainer>
+        {operation && multiPullEnabled && showLastOperationInfo && (
+          <OperationAlert operation={operation} onClose={dismissOperationAlert} />
+        )}
         <SearchBox nameFilter={nameFilter} setNameFilter={setRemoteNameFilter} />
-        {operation && multiPullEnabled && <OperationAlert operation={operation} />}
         {selectedPipelines.length > 0 && (
           <StyledSelectionStatusDiv>
             <div>

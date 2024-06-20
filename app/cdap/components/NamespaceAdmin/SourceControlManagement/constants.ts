@@ -24,6 +24,9 @@ export const scmAuthType = [
 
 export const githubOnlyProviders = {
   github: 'GITHUB',
+  gitlab: 'GITLAB',
+  bitbucket: 'BITBUCKET_SERVER',
+  bitbucketCloud: 'BITBUCKET_CLOUD',
 };
 
 export const providers = {
