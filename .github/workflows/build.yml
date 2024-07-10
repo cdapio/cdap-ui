@@ -57,6 +57,16 @@ jobs:
         repository: cdapio/cdap
         path: cdap
 
+    - name: Get Secrets from GCP Secret Manager
+        id: secrets
+        uses: 'google-github-actions/get-secretmanager-secrets@v2'
+        with:
+          secrets: |-
+            GCP_PROJECTID:cdapio-github-builds/CDAP_UI_E2E_GCP_PROJECTID
+            GCP_SERVICE_ACCOUNT_CONTENTS:cdapio-github-builds/CDAP_UI_E2E_GCP_SERVICE_ACCOUNT_CONTENTS
+            SCM_TEST_REPO_URL:cdapio-github-builds/CDAP_UI_E2E_SCM_TEST_REPO_URL
+            SCM_TEST_REPO_PAT:cdapio-github-builds/CDAP_UI_E2E_SCM_TEST_REPO_PAT
+
     - name: Make CDAP pom available to CDAP-UI
       run: |
         mv cdap ..
@@ -76,11 +86,11 @@ jobs:
 
     - name: Start CDAP-UI and run the tests
       env:
-        GCP_PROJECTID: ${{ secrets.GCP_PROJECTID }}
-        GCP_SERVICE_ACCOUNT_CONTENTS: ${{ secrets.GCP_SERVICE_ACCOUNT_CONTENTS }}
+        GCP_PROJECTID: ${{ steps.secrets.outputs.GCP_PROJECTID }}
+        GCP_SERVICE_ACCOUNT_CONTENTS: ${{ steps.secrets.outputs.GCP_SERVICE_ACCOUNT_CONTENTS }}
         GCP_SERVICE_ACCOUNT_PATH: '${{ github.workspace }}/key_file.json'
-        SCM_TEST_REPO_URL: ${{ secrets.SCM_TEST_REPO_URL }}
-        SCM_TEST_REPO_PAT: ${{ secrets.SCM_TEST_REPO_PAT }}
+        SCM_TEST_REPO_URL: ${{ steps.secrets.outputs.SCM_TEST_REPO_URL }}
+        SCM_TEST_REPO_PAT: ${{ steps.secrets.outputs.SCM_TEST_REPO_PAT }}
       run: |
         echo $GCP_SERVICE_ACCOUNT_CONTENTS > ./key_file.json
         yarn run cdap-full-build-more-memory # Build UI
