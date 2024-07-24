@@ -39,6 +39,7 @@ export const MyArtifactApi = {
   delete: apiCreator(dataSrc, 'DELETE', 'REQUEST', baseArtifactPath),
   loadPluginConfiguration: apiCreator(dataSrc, 'PUT', 'REQUEST', basePluginArtifactJSON),
   list: apiCreator(dataSrc, 'GET', 'REQUEST', basepath),
+  listScopedArtifacts: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}?scope=:scope`),
   reloadSystemArtifacts: apiCreator(dataSrc, 'POST', 'REQUEST', '/namespaces/system/artifacts'),
   fetchPluginDetails: apiCreator(
     dataSrc,

@@ -70,7 +70,7 @@ const getWebpackDllPlugins = (mode) => {
 var plugins = [
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),
-  ...getWebpackDllPlugins(mode),
+  //...getWebpackDllPlugins(mode),
   new LodashModuleReplacementPlugin({
     shorthands: true,
     collections: true,
@@ -170,6 +170,19 @@ var rules = [
     ],
     exclude: loaderExclude,
     include: [path.join(__dirname, 'app'), path.join(__dirname, '.storybook')],
+  },
+  {
+    test: /node_modules[\/\\]@?reactflow[\/\\].*.js$/,
+    use: {
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-env', "@babel/preset-react"],
+        plugins: [
+          "@babel/plugin-proposal-optional-chaining",
+          "@babel/plugin-proposal-nullish-coalescing-operator",
+        ]
+      }
+    }
   },
   {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
