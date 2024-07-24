@@ -27,6 +27,10 @@ import ToggleExperiment from 'components/Lab/ToggleExperiment';
 import ee from 'event-emitter';
 require('./Home.scss');
 
+const StudioV2 = Loadable({
+  loader: () => import(/* webpackChunkName: "StudioV2" */ 'components/StudioV2'),
+  loading: LoadingSVGCentered,
+});
 const EntityListView = Loadable({
   loader: () => import(/* webpackChunkName: "EntityListView" */ 'components/EntityListView'),
   loading: LoadingSVGCentered,
@@ -144,6 +148,7 @@ export default class Home extends Component {
         <Switch>
           <Route exact path="/ns/:namespace" component={HomeActions} />
           <Route exact path="/ns/:namespace/control" component={EntityListView} />
+          <Route path="/ns/:namespace/studio" component={StudioV2} />
           <Route
             exact
             path="/ns/:namespace/datasets/:datasetId/fields"
