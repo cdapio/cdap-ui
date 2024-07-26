@@ -307,7 +307,9 @@
     "yml-loader": "2.1.0"
   },
   "resolutions": {
-    "**/cypress": "5.6.0"
+    "**/cypress": "5.6.0",
+    "@reactflow/**/@types/d3": "7.4.0",
+    "@types/d3": "link:./node_modules/.cache/null"
   },
   "engines": {
     "yarn": ">= 1.0.0"
