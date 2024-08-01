@@ -2494,6 +2494,7 @@ features:
         noInfo: Profile information unavailable
       runsCurrentlyRunning: Runs currently running - select one to view
       status: Status
+      tooltipRunLimit: Pipeline runs for only the last {runLimit} days are displayed
       warnings: Warnings
     startTime: Start time
     TopPanel:

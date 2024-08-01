@@ -86,6 +86,8 @@ const CurrentRunIndex = ({
     runsCount - (runs.length - currentRunIndex)
   );
 
+  const runLimit = Number(window.CDAP_CONFIG.cdap.runRecordsTtl) || 0;
+
   const pipelineLink = getHydratorUrl({
     stateName: 'hydrator.detail',
     stateParams: {
@@ -192,7 +194,16 @@ const CurrentRunIndex = ({
 
   return (
     <div className="run-number-container run-info-container">
-      <h4 className="run-number">
+      <h4
+        className="run-number"
+        title={
+          runLimit > 0
+            ? T.translate(`${PREFIX}.tooltipRunLimit`, {
+                runLimit,
+              }).toString()
+            : ''
+        }
+      >
         {T.translate(`${PREFIX}.currentRunIndex`, {
           currentRunIndex: runIndexInTotalRunsCount + 1,
           numRuns: runsCount,
