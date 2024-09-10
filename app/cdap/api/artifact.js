@@ -20,6 +20,7 @@ let dataSrc = DataSourceConfigurer.getInstance();
 const basepath = '/namespaces/:namespace/artifacts';
 const baseArtifactPath = basepath + '/:artifactId/versions/:version';
 const basePluginArtifactJSON = baseArtifactPath + '/properties';
+const extensionsBasePath = `${basepath}/:pipelineType/versions/:version/extensions`;
 
 export const MyArtifactApi = {
   get: apiCreator(dataSrc, 'GET', 'REQUEST', baseArtifactPath),
@@ -59,4 +60,5 @@ export const MyArtifactApi = {
     'REQUEST',
     '/namespaces/:namespace/artifacts/:artifactName?scope=:scope'
   ),
+  fetchExtensions: apiCreator(dataSrc, 'GET', 'REQUEST', `${extensionsBasePath}?scope=system`),
 };

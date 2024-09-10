@@ -3307,6 +3307,15 @@ features:
 
   StatusAlertMessage:
     message: 'Services are back online'
+
+  Studio:
+    modals:
+      unsavedPipelineConfirmation:
+        text: "Do you wish to save your work before navigating away?"
+        dontSaveButton: "Don't save"
+        cancelButton: Cancel
+        saveButton: Save
+
   Tags:
     allTags: All Tags
     labelWithCount: Tags ({count})

@@ -36,8 +36,9 @@ const extensionsFetchBase =
   '/namespaces/:namespace/artifacts/:pipelineType/versions/:version/extensions';
 const pluginFetchBase = `${extensionsFetchBase}/:extensionType`;
 const pluginsFetchPath = `${pluginFetchBase}?scope=system`;
-var pipelineV1AppPath = '/namespaces/system/apps/pipeline/services/studio/methods/v1';
-var pipelineV1AppContextPath = `${pipelineV1AppPath}/contexts/:context`;
+const pipelineV1AppPath = '/namespaces/system/apps/pipeline/services/studio/methods/v1';
+const pipelineV1AppContextPath = `${pipelineV1AppPath}/contexts/:context`;
+const allArtifactPropertiesPath = '/namespaces/:namespace/artifactproperties';
 
 export const MyPipelineApi = {
   list: apiCreator(dataSrc, 'GET', 'REQUEST', '/namespaces/:namespace/apps'),
@@ -80,4 +81,7 @@ export const MyPipelineApi = {
   ),
 
   getAppVersions: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/versions`),
+
+  fetchExtensions: apiCreator(dataSrc, 'GET', 'REQUEST', `${extensionsFetchBase}?scope=system`),
+  fetchAllPluginsProperties: apiCreator(dataSrc, 'POST', 'REQUEST', allArtifactPropertiesPath),
 };

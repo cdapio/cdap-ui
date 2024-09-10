@@ -24,6 +24,7 @@ import { Button } from '@material-ui/core';
 import styled from 'styled-components';
 import AvailablePluginsStore from 'services/AvailablePluginsStore';
 import { useOnUnmount } from 'services/react/customHooks/useOnUnmount';
+import StudioV2Store from 'components/StudioV2/store';
 
 interface ILeftPanelProps {
   onArtifactChange: (value: any) => void;
@@ -34,9 +35,8 @@ interface ILeftPanelProps {
   groups: any[];
   groupGenericName: string;
   onPanelItemClick: (event: any, plugin: any) => void;
-  toggleSideBar: () => void;
-  isSideBarExpanded: boolean;
   isEdit: boolean;
+  isV2?: boolean;
   createPluginTemplate: (node: any, mode: 'edit' | 'create') => void;
 }
 
@@ -57,14 +57,23 @@ export const LeftPanel = ({
   onPanelItemClick,
   isEdit,
   createPluginTemplate,
+  isV2,
 }: ILeftPanelProps) => {
   // angular has this saved in local storage - is this necessary?
+  const AvlPluginStore = isV2 ? StudioV2Store : AvailablePluginsStore;
+  let initialAvlPluginsState = AvlPluginStore.getState(); 
+  initialAvlPluginsState = isV2 ? 
+    { plugins: initialAvlPluginsState.availablePlugins } 
+    : initialAvlPluginsState;
+
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
-  const [availablePlugins, setAvailablePlugins] = useState(AvailablePluginsStore.getState());
+  const [availablePlugins, setAvailablePlugins] = useState(initialAvlPluginsState);
+
   let unsub;
   useEffect(() => {
-    unsub = AvailablePluginsStore.subscribe(() => {
-      const avp = AvailablePluginsStore.getState();
+    unsub = AvlPluginStore.subscribe(() => {
+      let avp = AvlPluginStore.getState();
+      avp = isV2 ? { plugins: avp.availablePlugins } : avp;
       if (avp.plugins) {
         setAvailablePlugins(avp);
       }
@@ -74,6 +83,8 @@ export const LeftPanel = ({
   useOnUnmount(() => {
     unsub();
   });
+
+
 
   return (
     <div className={`left-panel-wrapper ${isExpanded ? 'expanded' : ''}`}>
