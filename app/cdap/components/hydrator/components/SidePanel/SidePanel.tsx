@@ -161,7 +161,7 @@ export const SidePanel = ({
   }, [availablePlugins]);
 
   useEffect(() => {
-    setPluginGroups(organizePlugins(pluginGroups, availablePlugins));
+    setPluginGroups(organizePlugins(groups, availablePlugins));
   }, [numberOfPlugins, JSON.stringify(groups)]);
 
   const handleSetSearch = debounce((text) => {
