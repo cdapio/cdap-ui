@@ -14,17 +14,13 @@
  * the License.
  */
 
-import React from 'react';
-import { Route, Switch } from 'react-router';
-import CreatePipelineView from './CreatePipelineView';
-import PipelineDetailsView from './PipelineDetailsView';
-import './app.css';
+import { HYDRATOR_DEFAULT_VALUES } from "services/global-constants";
+import { IConfigState } from "./reducer";
 
-export default function StudioV2() {
-  return (
-    <Switch>
-      <Route exact path="/ns/:namespace/studio" component={CreatePipelineView} />
-      <Route path="/ns/:namespace/studio/:pipelineId/details" component={PipelineDetailsView} />
-    </Switch>
-  );
+export function getEngine(state: IConfigState) {
+  return state.config.engine || HYDRATOR_DEFAULT_VALUES.engine;
+}
+
+export function getAppType(state: IConfigState) {
+  return state.artifact.name;
 }
