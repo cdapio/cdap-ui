@@ -30,11 +30,13 @@ export default function LeftPanelV2() {
     pluginsMap,
 
     onArtifactChange,
+    onItemClicked,
+    createPluginTemplate,
   } = useLeftPanelController();
 
   // console.log(artifacts || 'hello');
+  // console.log({ pluginsMap });
 
-  console.log({ pluginsMap });
   return (
     <LeftPanel
       onArtifactChange={onArtifactChange}
@@ -44,9 +46,9 @@ export default function LeftPanelV2() {
       itemGenericName="plugins"
       groups={pluginsMap}
       groupGenericName="artifacts"
-      onPanelItemClick={noop}
+      onPanelItemClick={onItemClicked}
       isEdit={false}
-      createPluginTemplate={noop}
+      createPluginTemplate={createPluginTemplate}
       isV2={true}
     />
   );

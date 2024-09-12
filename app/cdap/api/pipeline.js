@@ -84,4 +84,10 @@ export const MyPipelineApi = {
 
   fetchExtensions: apiCreator(dataSrc, 'GET', 'REQUEST', `${extensionsFetchBase}?scope=system`),
   fetchAllPluginsProperties: apiCreator(dataSrc, 'POST', 'REQUEST', allArtifactPropertiesPath),
+  fetchPluginProperties: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${pluginFetchBase}/plugins/:pluginName?scope=system`
+  ),
 };

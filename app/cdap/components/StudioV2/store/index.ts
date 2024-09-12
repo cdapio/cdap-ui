@@ -21,6 +21,7 @@ import { consoleReducer, consoleInitialState } from './console/reducer';
 import { plugins, pluginsInitialState } from './plugins/reducer';
 import { preview, previewInitialState } from './preview/reducer';
 import { uiState, uiInitialState } from './uistate/reducer';
+import { config, configInitialState } from './config/reducer';
 
 const defaultInitialState = {
   common: commonDefaultInitialState,
@@ -29,6 +30,7 @@ const defaultInitialState = {
   plugins: pluginsInitialState,
   preview: previewInitialState,
   uiState: uiInitialState,
+  config: configInitialState,
 };
 
 const StudioV2Store = createStore(
@@ -38,6 +40,7 @@ const StudioV2Store = createStore(
     plugins,
     preview,
     uiState,
+    config,
     console: consoleReducer,
   }),
   defaultInitialState,

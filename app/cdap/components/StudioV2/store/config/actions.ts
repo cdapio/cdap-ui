@@ -14,17 +14,10 @@
  * the License.
  */
 
-import React from 'react';
-import { Route, Switch } from 'react-router';
-import CreatePipelineView from './CreatePipelineView';
-import PipelineDetailsView from './PipelineDetailsView';
-import './app.css';
+import StudioV2Store from '..';
 
-export default function StudioV2() {
-  return (
-    <Switch>
-      <Route exact path="/ns/:namespace/studio" component={CreatePipelineView} />
-      <Route path="/ns/:namespace/studio/:pipelineId/details" component={PipelineDetailsView} />
-    </Switch>
-  );
-}
+const PREFIX = 'CONFIG_ACTIONS';
+
+export const ConfigActions = {
+  DUMMY_ACTION: `${PREFIX}/DUMMY_ACTION`,
+};

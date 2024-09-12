@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHideFooterInPage } from 'components/FooterContext';
 import { Provider } from 'react-redux';
 import { CanvasWrapper, DagWrapper, LeftPanelWrapper, RightWrapper } from '../styles';
@@ -30,6 +30,15 @@ function noop() {}
 
 export default function CreatePipelineView() {
   useHideFooterInPage();
+  useEffect(() => {
+    document.body.classList.add("theme-cdap");
+    document.body.classList.add("state-hydrator-create");
+
+    return () => {
+      document.body.classList.remove("theme-cdap");
+      document.body.classList.remove("state-hydrator-create");
+    };
+  }, []);
 
   function getSchedulerInfo(): IScheduleInfo {
     return {
@@ -51,7 +60,7 @@ export default function CreatePipelineView() {
   console.log('IN THE PAGE');
   return (
     <Provider store={StudioV2Store}>
-      <CanvasWrapper>
+      <CanvasWrapper className="react-version">
         <LeftPanelWrapper>
         <LeftPanelV2 />
         </LeftPanelWrapper>

@@ -28,33 +28,15 @@ import { fetchPlugins } from '../store/availablePlugins/actions';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import VersionStore from 'services/VersionStore';
 import { fetchPluginsDefaultVersions } from '../store/plugins/actions';
+import { useLocation } from 'react-router';
+import qs from 'query-string';
 
 interface IStudioV2PageParams {
   namespace: string;
   isEdit?: boolean;
 }
 
-interface IHydratorConfigStore {
-  // TODO: fill in the details from ../stores
-}
-
-interface IPluginActions {
-  // TODO: fill in the details from ../actions
-}
-
-interface IHydratorNodeActions {
-  // TODO: fill in the details from ../actions
-}
-
-interface IHydratorUiModalActions {
-  // TODO: fill in the details from ../actions
-}
-
-interface IHydratorSettings {
-  // fill in the types
-  get();
-  set();
-}
+export type TStudioUiMode = 'create' | 'edit';
 
 interface ILeftPanelController {
   artifacts: any[];
@@ -62,6 +44,8 @@ interface ILeftPanelController {
   pluginsMap: any[];
 
   onArtifactChange: (value: any) => void;
+  onItemClicked: (event: React.MouseEvent<HTMLElement>, node: any) => void;
+  createPluginTemplate: (node: any, mode: TStudioUiMode) => void;
 }
 
 export function useLeftPanelController(): ILeftPanelController {
@@ -85,6 +69,11 @@ export function useLeftPanelController(): ILeftPanelController {
   const extensions = useSelector((state) => state.plugins.extensions);
   const pluginsList = useSelector((state) => state.plugins.pluginTypes);
   const availablePluginsMap = useSelector((state) => state.availablePlugins.pluginsMap);
+
+  const location = useLocation();
+  const queryParams = qs.parse(location.search);
+  const isEdit = queryParams.isEdit === 'true';
+  console.log(isEdit, queryParams);
 
   useEffect(() => {
     fetchSystemArtifacts();
@@ -123,7 +112,7 @@ export function useLeftPanelController(): ILeftPanelController {
     });
   }
 
-  async function checkAndShowConfirmationModalOnDirtyState() {
+  function checkAndShowConfirmationModalOnDirtyState() {
     const proceedDefer = new Defer<boolean>();
     const closeModal = (shouldProceed) => {
       proceedDefer.resolve(shouldProceed);
@@ -154,15 +143,49 @@ export function useLeftPanelController(): ILeftPanelController {
       return;
     }
 
-    console.log(newSelectedArtifact);
     setSelectedArtifact(newSelectedArtifact);
     // TODO: set relevant configs for the selected artifact
+  }
+
+  // TODO: Add correct type for node
+  function onItemClicked (event: React.MouseEvent<HTMLElement>, node: any) {
+    if (event) {
+      event.stopPropagation();
+    }
+
+    if (node.action === 'createTemplate') {
+      createPluginTemplate(node.contentData, 'create');
+    } else if (node.action === 'deleteTemplate') {
+      deletePluginTemplate(node.contentData);
+    } else if (node.action === 'editTemplate') {
+      createPluginTemplate(node.contentData, 'edit');
+    } else {
+      addPluginToCanvas(event, node);
+    }
+  }
+
+  // TODO: add correct types for node
+  async function createPluginTemplate(node: any, mode: TStudioUiMode) {
+
+  }
+
+  // TODO: add correct types for node
+  async function deletePluginTemplate(node: any) {
+
+  }
+
+  // TODO: add correct types for node
+  async function addPluginToCanvas(event: React.MouseEvent<HTMLElement>, node: any) {
+
   }
 
   return {
     artifacts,
     selectedArtifact,
     pluginsMap,
+
     onArtifactChange,
+    onItemClicked,
+    createPluginTemplate,
   };
 }

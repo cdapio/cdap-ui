@@ -28,13 +28,15 @@ export const CanvasWrapper = styled.div`
 
 export const LeftPanelWrapper = styled.div`
   display: flex;
-  width: 100%;
+  width: 270px;
+  overflow: auto;
+  z-index: 1;
 `; 
 
 export const RightWrapper = styled.div`
   position: absolute;
   z-index: 0;
-  left: 190px;
+  left: 270px;
   right: 0;
   top: 0;
   bottom: 0;

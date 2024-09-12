@@ -25,3 +25,19 @@ export interface IArtifactSummary {
 export interface ILabeledArtifactSummary extends IArtifactSummary {
   label: string;
 }
+
+export interface IPipelineConfig {
+  resources: any;
+  driverResources: any;
+  connections: any[];
+  comments: any[];
+  postActions: any[];
+  properties: any;
+
+  processTimingEnabled?: boolean;
+  stageLoggingEnabled?: boolean;
+
+  schedule?: string;
+  instances?: number;
+  engine?: string;
+};
