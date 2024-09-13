@@ -16,6 +16,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router';
+import qs from 'query-string';
+import _isEqual from 'lodash/isEqual';
+
 import { getPluginIcon, getPluginTypeDisplayName, orderPluginTypes } from '../utils/pluginUtils';
 import { ILabeledArtifactSummary } from '../types';
 import { fetchSystemArtifacts, setSelectedArtifact } from '../store/common/actions';
@@ -27,9 +31,8 @@ import { MyPipelineApi } from 'api/pipeline';
 import { fetchPlugins } from '../store/availablePlugins/actions';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import VersionStore from 'services/VersionStore';
-import { fetchPluginsDefaultVersions } from '../store/plugins/actions';
-import { useLocation } from 'react-router';
-import qs from 'query-string';
+import { fetchPluginsDefaultVersions, updatePluginDefaultVersion } from '../store/plugins/actions';
+
 
 interface IStudioV2PageParams {
   namespace: string;
@@ -67,7 +70,7 @@ export function useLeftPanelController(): ILeftPanelController {
   const selectedArtifact = useSelector((state) => state.common.selectedArtifact);
 
   const extensions = useSelector((state) => state.plugins.extensions);
-  const pluginsList = useSelector((state) => state.plugins.pluginTypes);
+  const pluginTypes = useSelector((state) => state.plugins.pluginTypes);
   const availablePluginsMap = useSelector((state) => state.availablePlugins.pluginsMap);
 
   const location = useLocation();
@@ -86,7 +89,7 @@ export function useLeftPanelController(): ILeftPanelController {
   };
 
   extensions.forEach((ext) => {
-    const plugins = pluginsList[ext];
+    const plugins = pluginTypes[ext];
     const fetchedPluginsMap = fetchPluginsFromMap(ext);
 
     if (!fetchedPluginsMap.length) {
@@ -176,8 +179,92 @@ export function useLeftPanelController(): ILeftPanelController {
 
   // TODO: add correct types for node
   async function addPluginToCanvas(event: React.MouseEvent<HTMLElement>, node: any) {
+    const getMatchedPlugin = (plugin) => {
+      if (plugin.pluginTemplate) {
+        return plugin;
+      }
+      let item = [plugin];
+      const plugins = pluginTypes[node.type];
+      let matchedPlugin = plugins.filter((plug) => plug.name === node.name && !plug.pluginTemplate);
+      if (matchedPlugin.length) {
+        item = matchedPlugin[0].allArtifacts.filter((plug) => _isEqual(plug.artifact, plugin.defaultArtifact));
+      }
+      return item[0];
+    };
 
+    let item;
+    if (node.templateName) {
+      item = node;
+    } else {
+      item = getMatchedPlugin(node);
+      updatePluginDefaultVersion(item);
+    }
+
+    ///////////////////////////////
+    this.hydratorNodeActions.resetSelectedNode();
+    let name = item.name || item.pluginTemplate;
+    const configProperties = {};
+    let configurationGroups;
+    let widgets;
+
+    if (!item.pluginTemplate) {
+      let itemArtifact = item.artifact;
+      let key = `${item.name}-${item.type}-${itemArtifact.name}-${itemArtifact.version}-${itemArtifact.scope}`;
+      widgets = this.myHelpers.objectQuery(this.availablePluginMap, key, 'widgets');
+      const displayName = this.myHelpers.objectQuery(widgets, 'display-name');
+      configurationGroups = this.myHelpers.objectQuery(widgets, 'configuration-groups');
+      if (configurationGroups && configurationGroups.length > 0) {
+        configurationGroups.forEach(cg => {
+          cg.properties.forEach(prop => {
+            configProperties[prop.name] = this.myHelpers.objectQuery(prop, 'widget-attributes', 'default');
+          });
+        });
+      }
+
+      name = displayName || name;
+    }
+
+    let filteredNodes = this.HydratorPlusPlusConfigStore.getNodes()
+        .filter( node => (node.plugin.label ? node.plugin.label.indexOf(name) !== -1 : false) );
+    let config;
+
+    if (item.pluginTemplate) {
+      config = {
+        plugin: {
+          label: (filteredNodes.length > 0 ? item.pluginTemplate + (filteredNodes.length+1) : item.pluginTemplate),
+          name: item.pluginName,
+          artifact: item.artifact,
+          properties: item.properties,
+        },
+        icon: this.DAGPlusPlusFactory.getIcon(item.pluginName), // use getPluginIcon from utils
+        type: item.pluginType,
+        outputSchema: item.outputSchema,
+        inputSchema: item.inputSchema,
+        pluginTemplate: item.pluginTemplate,
+        description: item.description,
+        lock: item.lock,
+        configGroups: configurationGroups,
+        filters: widgets && widgets.filters
+      };
+    } else {
+      config = {
+        plugin: {
+          label: (filteredNodes.length > 0 ? name + (filteredNodes.length+1) : name),
+          artifact: item.artifact,
+          name: item.name,
+          properties: configProperties,
+        },
+        icon: item.icon,
+        description: item.description,
+        type: item.type,
+        warning: true,
+        configGroups: configurationGroups,
+        filters: widgets && widgets.filters
+      };
+    }
+    this.hydratorNodeActions.addNode(config);
   }
+  
 
   return {
     artifacts,

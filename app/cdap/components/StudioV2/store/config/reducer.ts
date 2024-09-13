@@ -17,23 +17,24 @@
 import _get from 'lodash/get';
 import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
+import _assign from 'lodash/assign';
 
 import { IArtifactSummary, IPipelineConfig } from 'components/StudioV2/types';
 import { ConfigActions } from './actions';
 import { HYDRATOR_DEFAULT_VALUES } from 'services/global-constants';
 
 export interface IConfigState {
-  artifact: IArtifactSummary;
-  __ui__: {
-    nodes: any[];
+  artifact?: IArtifactSummary;
+  __ui__?: {
+    nodes?: any[];
   };
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   change?: {
-    description: string;
+    description?: string;
   };
   parentVersion?: string;
-  config: IPipelineConfig;
+  config?: IPipelineConfig;
 
   __defaultState?: IConfigState;
 };
@@ -68,6 +69,9 @@ export const configInitialState: IConfigState = {
 
 export const config = (state: IConfigState = configInitialState, action?): IConfigState => {
   switch (action.type) {
+    case ConfigActions.SET_STATE:
+      return _assign(_cloneDeep(state), action.payload);
+
     default:
       return state;
   }

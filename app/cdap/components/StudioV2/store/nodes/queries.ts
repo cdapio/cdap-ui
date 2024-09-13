@@ -14,17 +14,12 @@
  * the License.
  */
 
-import { HYDRATOR_DEFAULT_VALUES } from "services/global-constants";
-import { IConfigState } from "./reducer";
+import _get from 'lodash/get';
+import _cloneDeep from 'lodash/cloneDeep';
+import _isEqual from 'lodash/isEqual';
+import _assign from 'lodash/assign';
+import { INodesState } from './reducer';
 
-export function getEngine(state: IConfigState) {
-  return state.config.engine || HYDRATOR_DEFAULT_VALUES.engine;
-}
-
-export function getAppType(state: IConfigState) {
-  return state.artifact.name;
-}
-
-export function getName(state: IConfigState) {
-  return state.name;
+export function getSourceCount(state: INodesState) {
+  return state.currentSourceCount;
 }

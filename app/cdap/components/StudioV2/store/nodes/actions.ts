@@ -14,17 +14,16 @@
  * the License.
  */
 
-import { HYDRATOR_DEFAULT_VALUES } from "services/global-constants";
-import { IConfigState } from "./reducer";
+import StudioV2Store from '..';
 
-export function getEngine(state: IConfigState) {
-  return state.config.engine || HYDRATOR_DEFAULT_VALUES.engine;
-}
+const PREFIX = 'NODES_ACTIONS';
 
-export function getAppType(state: IConfigState) {
-  return state.artifact.name;
-}
+export const NodesActions = {
+  RESET: `${PREFIX}/RESET`,
+};
 
-export function getName(state: IConfigState) {
-  return state.name;
+export function resetNodesState() {
+  StudioV2Store.dispatch({
+    type: NodesActions.RESET,
+  });
 }
