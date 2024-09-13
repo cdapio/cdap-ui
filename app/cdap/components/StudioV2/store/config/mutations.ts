@@ -22,10 +22,16 @@ import { IConfigState } from './reducer';
 import { IArtifactSummary } from 'components/StudioV2/types';
 import { GLOBALS, HYDRATOR_DEFAULT_VALUES } from 'services/global-constants';
 import { DEPRECATED_SPARK_MASTER, ENGINE_OPTIONS, SPARK_BACKPRESSURE_ENABLED, SPARK_EXECUTOR_INSTANCES } from 'components/PipelineConfigurations/PipelineConfigConstants';
-import { getAppType, getEngine } from './queries';
+import { getAppType, getEngine, getName } from './queries';
 import { generateNodeConfig } from 'services/HydratorPluginConfigFactory';
 import { formatSchemaToAvro } from 'components/StudioV2/utils/schemaUtils';
 import { fetchBackendProperties } from 'components/StudioV2/utils/nodeUtils';
+import { allConnectionsValid, allNodesConnected, hasAtLeastOneSink, hasAtleastOneSource, hasNoBackendProperties, hasValidClientResources, hasValidDriverResources, hasValidName, hasValidResources, isRequiredFieldsFilled, isUniqueNodeNames } from 'services/PipelineErrorFactory';
+import { addConsoleMessages, resetConsoleMessages } from '../console/actions';
+import { filterByCondition } from 'components/shared/ConfigurationGroup/utilities/DynamicPluginFilters';
+import { setConfigState } from './actions';
+import { MyPipelineApi } from 'api/pipeline';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 export function setComments_mutating(state: IConfigState, comments) {
   state.config.comments = comments;
@@ -71,7 +77,7 @@ export function setProperties_mutating(state: IConfigState, properties?: any) {
         numOfExecutors.substring(6, numOfExecutors.length - 1) 
         : numOfExecutors.toString();
       state.config.properties[numExecutorKey] = numOfExecutors;
-      delete this.state.config.properties[numExecutorOldKey];
+      delete state.config.properties[numExecutorOldKey];
     }
   }
     
@@ -95,6 +101,64 @@ export function setInstrumentation_mutating(state: IConfigState, val: boolean = 
 
 export function setStageLogging_mutating(state: IConfigState, val: boolean = true) {
   state.config.stageLoggingEnabled = val;
+}
+
+export function setClientResources_mutating(state: IConfigState, clientResources?) {
+  state.config.clientResources = clientResources || _cloneDeep(HYDRATOR_DEFAULT_VALUES.resources);
+}
+
+export function setCheckpointing_mutating(state: IConfigState, val: boolean = false) {
+  state.config.disableCheckpoints = val;
+}
+
+export function setCheckpointDir_mutating(state: IConfigState, val?: boolean | string) {
+  if(val !== false) {
+    state.config.checkpointDir = val;
+  } else {
+    state.config.checkpointDir = '';
+  }
+}
+
+export function setGracefulStop_mutating(state: IConfigState, val: boolean = true) {
+  state.config.stopGracefully = val;
+}
+
+export function setBatchInterval_mutating(state: IConfigState, interval?: string) {
+  state.config.batchInterval = interval || HYDRATOR_DEFAULT_VALUES.batchInterval;
+}
+
+export function setServiceAccountPath_mutating(state: IConfigState, path: string = '') {
+  state.config.serviceAccountPath = path;
+}
+
+export function setEngine_mutating(state: IConfigState, engine?: string) {
+  state.config.engine = engine || HYDRATOR_DEFAULT_VALUES.engine;
+}
+
+export function setRangeRecordsPreview_mutating(state: IConfigState, {
+  minRecordsPreview = HYDRATOR_DEFAULT_VALUES.minRecordsPreview,
+  maxRecordsPreview = window.CDAP_CONFIG.cdap.maxRecordsPreview 
+    || HYDRATOR_DEFAULT_VALUES.maxRecordsPreview 
+}: {[key: string]: number}) {
+  if (GLOBALS.etlBatchPipelines.includes(state.artifact.name)) {
+    state.config.rangeRecordsPreview = {
+      min: minRecordsPreview,
+      max: maxRecordsPreview,
+    };
+  }
+}
+
+export function setNumRecordsPreview_mutating(state: IConfigState, val: number = HYDRATOR_DEFAULT_VALUES.numOfRecordsPreview) {
+  if (GLOBALS.etlBatchPipelines.includes(state.artifact.name)) {
+    const { max } = state.config.rangeRecordsPreview;
+    if (max) {
+      state.config.numOfRecordsPreview = Math.min(max, val);
+    }
+  }
+}
+
+export function setMaxConcurrentRuns_mutating(state: IConfigState, num: number = 1) {
+  state.config.maxConcurrentRuns = num;
 }
 
 export function setNodes_mutating(state: IConfigState, nodes = []) {
@@ -139,53 +203,254 @@ export function setNodes_mutating(state: IConfigState, nodes = []) {
 
   if (listOfPromises.length) {
     Promise.all(listOfPromises).then(() => {
-      if (!validateState(state)) {
-        emitChange();
+      if (!validateState_mutating(state)) {
+        setConfigState(state);
       }
 
-          // Once the backend properties are fetched for all nodes, fetch their config jsons.
-          // This will be used for schema propagation where we import/use a predefined app/open a published pipeline
-          // the user should directly click on the last node and see what is the incoming schema
-          // without having to open the subsequent nodes.
-          const reqBody = [];
-          this.state.__ui__.nodes.forEach( n => {
-            // This could happen when the user doesn't provide an artifact information for a plugin & deploys it
-            // using CLI or REST and opens up in UI and clones it. Without this check it will throw a JS error.
-            if (!n.plugin || !n.plugin.artifact) { return; }
-            const pluginInfo = {
-              name: n.plugin.artifact.name,
-              version: n.plugin.artifact.version,
-              scope: n.plugin.artifact.scope,
-              properties: [
-                `widgets.${n.plugin.name}-${n.type}`,
-              ],
-            };
-
-            reqBody.push(pluginInfo);
-          });
-
-          this.myPipelineApi.fetchAllPluginsProperties({ namespace: this.$stateParams.namespace }, reqBody)
-            .$promise
-            .then((resInfo) => {
-              resInfo.forEach((pluginInfo, index) => {
-                const pluginProperties = Object.keys(pluginInfo.properties);
-                if (pluginProperties.length === 0) { return; }
-
-                try {
-                  const config = JSON.parse(pluginInfo.properties[pluginProperties[0]]);
-                  parseNodeConfig(this.state.__ui__.nodes[index], config);
-                } catch (e) {
-                  // no-op
-                }
-              });
-              this.validateState();
-            });
-        },
-        (err) => {
-          console.log('ERROR fetching backend properties for nodes', err);
-          this.validateState();
+      // Once the backend properties are fetched for all nodes, fetch their config jsons.
+      // This will be used for schema propagation where we import/use a predefined app/open a published pipeline
+      // the user should directly click on the last node and see what is the incoming schema
+      // without having to open the subsequent nodes.
+      const reqBody = [];
+      state.__ui__.nodes.forEach((n) => {
+        // This could happen when the user doesn't provide an artifact information for a plugin & deploys it
+        // using CLI or REST and opens up in UI and clones it. Without this check it will throw a JS error.
+        if (!n.plugin || !n.plugin.artifact) { 
+          return; 
         }
-      );
+        const pluginInfo = {
+          name: n.plugin.artifact.name,
+          version: n.plugin.artifact.version,
+          scope: n.plugin.artifact.scope,
+          properties: [
+            `widgets.${n.plugin.name}-${n.type}`,
+          ],
+        };
+
+        reqBody.push(pluginInfo);
+      });
+
+      MyPipelineApi.fetchAllPluginsProperties({ namespace: getCurrentNamespace() }, reqBody)
+        .subscribe((resInfo) => {
+          resInfo.forEach((pluginInfo, index) => {
+            const pluginProperties = Object.keys(pluginInfo.properties);
+            if (pluginProperties.length === 0) { 
+              return; 
+            }
+
+            try {
+              const config = JSON.parse(pluginInfo.properties[pluginProperties[0]]);
+              parseNodeConfig(state.__ui__.nodes[index], config);
+            } catch (e) {
+                  // no-op
+            }
+          });
+          validateState_mutating(state);
+        });
+    },
+    (err) => {
+      console.log('ERROR fetching backend properties for nodes', err);
+      validateState_mutating(state);
+    });
   }
 }
 
+function validateState_mutating(state, validationConfig: any = {
+  showConsoleMessage: false,
+  validateBeforePreview: false
+}) {
+  let isStateValid = true;
+  const name = getName(state);
+  
+  const daglevelvalidation = [
+    hasAtleastOneSource,
+    hasAtLeastOneSink
+  ];
+
+  const nodes = state.__ui__.nodes;
+  const connections = _cloneDeep(state.config.connections);
+
+  //resetting any existing errors or warnings
+  nodes.forEach(node => {
+    node.errorCount = 0;
+    delete node.warning;
+    delete node.error;
+  });
+
+  const errors = [];
+  resetConsoleMessages();
+
+  const setErrorWarningFlagOnNode = (node) => {
+    if (node.error) {
+      delete node.warning;
+    } else {
+      node.warning = true;
+    }
+    if (validationConfig.showConsoleMessage) {
+      node.error = true;
+      delete node.warning;
+    }
+  };
+
+  /**
+   * A pipeline consisting of only custom actions is a valid pipeline,
+   * so we are skipping the at least 1 source and sink check
+   **/
+
+  const countActions = nodes.filter( (node) => {
+    return GLOBALS.pluginConvert[node.type] === 'action';
+  }).length;
+
+  if (countActions !== nodes.length || nodes.length === 0) {
+    daglevelvalidation.forEach((validationFn) => {
+      validationFn(nodes, (err, node) => {
+        if (err) {
+          isStateValid = false;
+          if (node) {
+            node.errorCount += 1;
+            setErrorWarningFlagOnNode(node);
+          }
+          errors.push({
+            type: err
+          });
+        }
+      });
+    });
+  }
+
+  if (!validationConfig.validateBeforePreview) {
+    hasValidName(name, (err) => {
+      if (err) {
+        isStateValid = false;
+        errors.push({
+          type: err
+        });
+      }
+    });
+  }
+
+  hasNoBackendProperties(nodes, errorNodes => {
+    if (errorNodes) {
+      isStateValid = false;
+      errorNodes.forEach(node => {
+        node.error = true;
+        node.errorCount += 1;
+        setErrorWarningFlagOnNode(node);
+      });
+      errors.push({
+        type: 'NO-BACKEND-PROPS',
+        payload: {
+          nodes: errorNodes.map(node => node.name || node.plugin.name)
+        }
+      });
+    }
+  });
+
+  // compute field visibility so that required field validation will be done accordingly.
+  nodes.forEach((node) => {
+    let visibilityMap = {};
+    if (node.configGroups && node._backendProperties && node.plugin.properties) {
+      try {
+        const filteredConfigGroups = filterByCondition(
+          node.configGroups,
+          node,
+          node._backendProperties,
+          node.plugin.properties
+        );
+        visibilityMap = filteredConfigGroups.reduce((fieldsMap, group) => {
+          group.properties.forEach((property) => {
+            fieldsMap[property.name] = property.show;
+          });
+          return fieldsMap;
+        }, {});
+        if (node._backendProperties.connection) {
+          node._backendProperties.connection.required = node.plugin.properties.useConnection === 'true';
+        }
+      } catch (e) {}
+    }
+    node.visibilityMap = visibilityMap;
+  });
+
+  isRequiredFieldsFilled(nodes, (err, node, unFilledRequiredFields) => {
+    if (err) {
+      isStateValid = false;
+      node.warning = true;
+      node.errorCount += unFilledRequiredFields;
+      setErrorWarningFlagOnNode(node);
+    }
+  });
+
+  isUniqueNodeNames(nodes, (err, node) => {
+    if (err) {
+      isStateValid = false;
+      node.errorCount += 1;
+      setErrorWarningFlagOnNode(node);
+    }
+  });
+
+  const strayNodes = [];
+  allNodesConnected(nodes, connections, (errorNode) => {
+    if (errorNode) {
+      isStateValid = false;
+      strayNodes.push(errorNode);
+    }
+  });
+  if (strayNodes.length) {
+    errors.push({
+      type: 'STRAY-NODES',
+      payload: {nodes: strayNodes}
+    });
+  }
+
+  const invalidConnections = [];
+  allConnectionsValid(nodes, connections, (errorConnection) => {
+    if (errorConnection) {
+      isStateValid = false;
+      invalidConnections.push(errorConnection);
+    }
+  });
+  if (invalidConnections.length) {
+    errors.push({
+      type: 'INVALID-CONNECTIONS',
+      payload: { connections: invalidConnections }
+    });
+  }
+
+  hasValidResources(state.config, (err) => {
+    if (err) {
+      isStateValid = false;
+      errors.push({
+        type: 'error',
+        content: GLOBALS.en.hydrator.studio.error[err]
+      });
+    }
+  });
+
+  hasValidDriverResources(state.config, (err) => {
+    if (err) {
+      isStateValid = false;
+      errors.push({
+        type: 'error',
+        content: GLOBALS.en.hydrator.studio.error[err]
+      });
+    }
+  });
+
+  if (state.artifact.name === GLOBALS.etlDataStreams) {
+    hasValidClientResources(state.config, (err) => {
+      if (err) {
+        isStateValid = false;
+        errors.push({
+          type: 'error',
+          content: GLOBALS.en.hydrator.studio.error[err]
+        });
+      }
+    });
+  }
+
+  if (errors.length && validationConfig.showConsoleMessage) {
+    addConsoleMessages(errors);
+  }
+
+  return isStateValid;
+}

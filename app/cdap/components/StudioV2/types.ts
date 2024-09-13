@@ -27,12 +27,12 @@ export interface ILabeledArtifactSummary extends IArtifactSummary {
 }
 
 export interface IPipelineConfig {
-  resources: any;
-  driverResources: any;
-  connections: any[];
-  comments: any[];
-  postActions: any[];
-  properties: any;
+  resources?: any;
+  driverResources?: any;
+  connections?: any[];
+  comments?: any[];
+  postActions?: any[];
+  properties?: any;
 
   processTimingEnabled?: boolean;
   stageLoggingEnabled?: boolean;
@@ -40,4 +40,18 @@ export interface IPipelineConfig {
   schedule?: string;
   instances?: number;
   engine?: string;
+
+  clientResources?: any;
+  disableCheckpoints?: boolean;
+  checkpointDir?: string | boolean;
+  stopGracefully?: boolean;
+  batchInterval?: string;
+
+  serviceAccountPath?: string;
+  rangeRecordsPreview?: {
+    min?: number;
+    max?: number;
+  };
+  numOfRecordsPreview?: number;
+  maxConcurrentRuns?: number;
 };
