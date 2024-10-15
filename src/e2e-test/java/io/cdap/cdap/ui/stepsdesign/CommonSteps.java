@@ -32,7 +32,12 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.UnhandledAlertException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
+import org.openqa.selenium.support.ui.Select;
+
+import java.io.IOException;
+import java.util.UUID;
 
 public class CommonSteps {
 
@@ -79,6 +84,12 @@ public class CommonSteps {
   @When("Open Configuration Page")
   public void openConfigurationPage() {
     SeleniumDriver.openPage(Constants.CONFIGURATION_URL);
+    WaitHelper.waitForPageToLoad();
+  }
+
+  @When("Open HttpExecutor Page")
+  public void openHttpExecutorPage() {
+    SeleniumDriver.openPage(Constants.HTTP_EXECUTOR_URL);
     WaitHelper.waitForPageToLoad();
   }
 
@@ -288,6 +299,11 @@ public class CommonSteps {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("deployed-" + pipelineName));
   }
 
+  @Then("Go to pipeline {string} draft")
+  public void openPipelineDraft(String pipelineName) {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("draft-" + pipelineName));
+  }
+
   @Then("Add Projection node to canvas")
   public void addProjectionNodeToCanvas() {
     NodeInfo projectionNode = new NodeInfo("Projection", "transform", "0");
@@ -303,5 +319,57 @@ public class CommonSteps {
   @Then("Close Projection node properties")
   public void closeProjectionNodeProperties() {
     Commands.closeConfigPopover();
+  }
+
+  @Then("Create an orphan pipeline draft")
+  public void createOrphanPipelineDraft() throws IOException {
+    WebElement requestMethodDropdown = Helper.locateElementByTestId("request-method-selector");
+    Select requestMethodSelect = new Select(requestMethodDropdown);
+    requestMethodSelect.selectByValue("PUT");
+
+    WebElement requestPathInput = Helper.locateElementByTestId("request-path-input");
+    String saveDraftPath = "namespaces/system/apps/pipeline/services/studio/methods/v1/contexts/default/drafts/"
+        + UUID.randomUUID();
+    ElementHelper.sendKeys(requestPathInput, saveDraftPath);
+
+    WebElement requestBodyInput = Helper.locateElementByTestId("request-body");
+    String requestBody = Helper.readPipelineFixtureFile("test-orphan-pipeline-6-10-1.json");
+    ElementHelper.sendKeys(requestBodyInput, requestBody);
+
+    WebElement callApiButton = Helper.locateElementByTestId("send-btn");
+    ElementHelper.clickOnElement(callApiButton);
+
+    String callHistoryEntryXpath = "//*[@data-testid=\"request-path\"][text()=\"" + saveDraftPath + "\"]";
+    WaitHelper.waitForElementToBePresent(By.xpath(callHistoryEntryXpath));
+  }
+
+  @Then("Click on FixAll Button")
+  public void clickOnFixAllButton() {
+    String fixAllBtnXpath = "//*[@data-testid=\"fix-all-btn\"]";
+    WaitHelper.waitForElementToBePresent(
+        By.xpath(fixAllBtnXpath));
+    ElementHelper.clickOnElement(Helper.locateElementByXPath(fixAllBtnXpath));
+  }
+
+  @Then("Verify Studio TopPanel is visible")
+  public void verifyStudioTopPanelVisible() {
+    String orphanedPipelineXpath = "//*[@data-testid=\"pipeline-edit-status\"]";
+    WaitHelper.waitForElementToBePresent(
+        By.xpath(orphanedPipelineXpath));
+    Assert.assertTrue(Helper.isElementExists(By.xpath(orphanedPipelineXpath)));
+  }
+
+  @Then("Delete Draft Pipeline {string}")
+  public void deletePipelineDraft(String pipelineName) {
+    String actionsPopoverXpath =
+        "//*[@data-testid=\"draft-" + pipelineName + "\"]//*[@data-testid=\"actions-popover\"]";
+    WebElement actionsPopover = Helper.locateElementByXPath(actionsPopoverXpath);
+    ElementHelper.clickOnElement(actionsPopover);
+    String deleteActionXpath =
+        "//*[@data-testid=\"draft-" + pipelineName + "\"]//*[@data-testid=\"Delete-on-popover\"]";
+    ElementHelper.clickOnElement(Helper.locateElementByXPath(deleteActionXpath));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("Delete"));
+    Helper.waitSeconds();
+    Assert.assertFalse(Helper.isElementExists(Helper.getCssSelectorByDataTestId("draft-" + pipelineName)));
   }
 }
