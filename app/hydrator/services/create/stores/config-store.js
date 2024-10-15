@@ -1355,29 +1355,34 @@ class HydratorPlusPlusConfigStore {
     var config = this.getConfigForExport();
     config['app.deploy.update.schedules'] = false;
 
+    if (isEdit) {
+      publish(config.name);
+      return;
+    }
+
+    let displayPipelineNameExistsError = () => {
+      this.HydratorPlusPlusConsoleActions.addMessage([{
+        type: 'error',
+        content: this.GLOBALS.en.hydrator.studio.error['NAME-ALREADY-EXISTS']
+      }]);
+      this.EventPipe.emit('hideLoadingIcon.immediate');
+    };
+
     // Checking if Pipeline name already exist
-    this.myAppsApi
-      .list({ namespace: this.$state.params.namespace })
-      .$promise
-      .then( (apps) => {
-        if (isEdit) {
-          publish(config.name);
-        } else {
-          var appNames = apps.map( (app) => { return app.name; } );
-          if (appNames.indexOf(config.name) !== -1) {
-            this.HydratorPlusPlusConsoleActions.addMessage([{
-              type: 'error',
-              content: this.GLOBALS.en.hydrator.studio.error['NAME-ALREADY-EXISTS']
-            }]);
-            this.EventPipe.emit('hideLoadingIcon.immediate');
-          } else {
-            // normal deployment does not need these fields
-            delete config.change;
-            delete config.parentVersion;
-            publish(config.name);
-          }
-        }
-      });
+    this.myAppsApi.get({ 
+      namespace: this.$state.params.namespace,
+      appId: config.name,
+    }).$promise.then((app) => {
+      displayPipelineNameExistsError();
+    }).catch((err) => {
+      if (err.status !== 404) {
+        displayPipelineNameExistsError();
+      } else {
+        delete config.change;
+        delete config.parentVersion;
+        publish(config.name);
+      }
+    });
   }
 }
 
