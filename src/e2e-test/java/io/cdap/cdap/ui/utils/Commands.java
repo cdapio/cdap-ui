@@ -30,6 +30,8 @@ import io.cdap.e2e.utils.WaitHelper;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -354,10 +356,12 @@ public class Commands implements CdfHelper {
 
   public static void dismissTopBanner() {
     try {
-      ElementHelper.clickOnElement(Helper.locateElementByXPath(
-          "//div[@data-testid='valium-banner-hydrator']//button[@class='close ng-scope']"));
-    } catch (NoSuchElementException e) {
-      // pass
+      WebElement bannerCloseButton = Helper.locateElementByXPath(
+          "//div[@data-testid='valium-banner-hydrator']//button[@class='close ng-scope']");
+      WaitHelper.waitForElementToBeClickable(bannerCloseButton, 180L);
+      ElementHelper.clickOnElement(bannerCloseButton);
+    } catch (NoSuchElementException | ElementClickInterceptedException e) {
+      // pass and just wait for the banner to disappear
     }
     WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("valium-banner-hydrator"));
   }
