@@ -61,9 +61,9 @@ export const LeftPanel = ({
 }: ILeftPanelProps) => {
   // angular has this saved in local storage - is this necessary?
   const AvlPluginStore = isV2 ? StudioV2Store : AvailablePluginsStore;
-  let initialAvlPluginsState = AvlPluginStore.getState(); 
-  initialAvlPluginsState = isV2 ? 
-    { plugins: initialAvlPluginsState.availablePlugins } 
+  let initialAvlPluginsState = AvlPluginStore.getState();
+  initialAvlPluginsState = isV2
+    ? { plugins: initialAvlPluginsState.availablePlugins }
     : initialAvlPluginsState;
 
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
@@ -83,8 +83,6 @@ export const LeftPanel = ({
   useOnUnmount(() => {
     unsub();
   });
-
-
 
   return (
     <div className={`left-panel-wrapper ${isExpanded ? 'expanded' : ''}`}>

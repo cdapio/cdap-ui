@@ -19,12 +19,30 @@ import _cloneDeep from 'lodash/cloneDeep';
 import _isEqual from 'lodash/isEqual';
 import _assign from 'lodash/assign';
 
-import { NodesActions } from './actions';
+import {
+  addConnection_mutating,
+  addNode_mutating,
+  resetActiveNodeId_mutating,
+  undoActions_mutating,
+  updateNode_mutating,
+} from './mutations';
+import { cloneAndApply } from 'components/StudioV2/utils/objectUtils';
+
+const PREFIX = 'NODES_ACTIONS';
+export const NodesActions = {
+  RESET: `${PREFIX}/RESET`,
+  SET_STATE: `${PREFIX}/SET_STATE`,
+  UNDO_ACTIONS: `${PREFIX}/UNDO_ACTIONS`,
+  RESET_ACTIVE_NODE: `${PREFIX}/RESET_ACTIVE_NODE`,
+  ADD_NODE: `${PREFIX}/ADD_NODE`,
+  UPDATE_NODE: `${PREFIX}/UPDATE_NODE`,
+  ADD_CONNECTION: `${PREFIX}/ADD_CONNECTION`,
+};
 
 export interface INodesState {
   nodes: any[];
   connections: any[];
-  activeNodeId?: any;
+  activeNodeId?: string | null;
   currentSourceCount: number;
   currentTransformCount: number;
   currentSinkCount: number;
@@ -32,9 +50,9 @@ export interface INodesState {
     top: number;
     left: number;
   };
-  stateHistory: {
-    past: any[];
-    future: any[];
+  stateHistory?: {
+    past: INodesState[];
+    future: INodesState[];
   };
   adjacencyMap: any;
 }
@@ -61,6 +79,33 @@ export const nodes = (state: INodesState = nodesInitialState, action?): INodesSt
   switch (action.type) {
     case NodesActions.RESET:
       return _cloneDeep(nodesInitialState);
+
+    case NodesActions.SET_STATE: {
+      const patchCurrent = action?.meta?.patchCurrent;
+      if (!patchCurrent) {
+        return _cloneDeep(action.payload);
+      }
+
+      return _assign(_cloneDeep(state), action.payload);
+    }
+
+    case NodesActions.UNDO_ACTIONS:
+      return cloneAndApply(state, undoActions_mutating);
+
+    case NodesActions.RESET_ACTIVE_NODE:
+      return cloneAndApply(state, resetActiveNodeId_mutating);
+
+    case NodesActions.ADD_NODE:
+      return cloneAndApply(state, (draft) => addNode_mutating(draft, action.payload));
+
+    case NodesActions.UPDATE_NODE:
+      return cloneAndApply(state, (draft) =>
+        updateNode_mutating(draft, action.payload.nodeId, action.payload.nodeConfig)
+      );
+
+    case NodesActions.ADD_CONNECTION:
+      return cloneAndApply(state, (draft) => addConnection_mutating(state, action.payload));
+
     default:
       return state;
   }

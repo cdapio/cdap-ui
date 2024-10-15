@@ -52,26 +52,39 @@ const keepUiSupportedExtensions = (pipelineType) => (extension) => {
 };
 
 export async function fetchPluginsDefaultVersions() {
-  const pluginDefalutVersion = await MySettingsService.getInstance().get('plugin-default-version');
-  if (!pluginDefalutVersion) return;
+  try {
+    const pluginDefalutVersion = await MySettingsService.getInstance().get(
+      'plugin-default-version'
+    );
+    if (!pluginDefalutVersion) {
+      return;
+    }
 
-  StudioV2Store.dispatch({
-    type: PluginsActions.FETCH_PLUGINS_DEFAULT_VERSIONS,
-    payload: pluginDefalutVersion,
-  });
+    StudioV2Store.dispatch({
+      type: PluginsActions.FETCH_PLUGINS_DEFAULT_VERSIONS,
+      payload: pluginDefalutVersion,
+    });
+  } catch (err) {
+    return;
+  }
 }
 
 export async function updatePluginDefaultVersion(plugin) {
-  let pluginDefalutVersion = await MySettingsService.getInstance().get('plugin-default-version') || {};
-  let key = `${plugin.name}-${plugin.type}-${plugin.artifact.name}`;
-  pluginDefalutVersion[key] = plugin.artifact;
-  await MySettingsService.getInstance().set('plugin-default-version', pluginDefalutVersion);
-  pluginDefalutVersion = await MySettingsService.getInstance().get('plugin-default-version');
-  if (!pluginDefalutVersion) {
+  try {
+    let pluginDefalutVersion =
+      (await MySettingsService.getInstance().get('plugin-default-version')) || {};
+    const key = `${plugin.name}-${plugin.type}-${plugin.artifact.name}`;
+    pluginDefalutVersion[key] = plugin.artifact;
+    await MySettingsService.getInstance().set('plugin-default-version', pluginDefalutVersion);
+    pluginDefalutVersion = await MySettingsService.getInstance().get('plugin-default-version');
+    if (!pluginDefalutVersion) {
+      return;
+    }
+    StudioV2Store.dispatch({
+      type: PluginsActions.FETCH_PLUGINS_DEFAULT_VERSIONS,
+      payload: pluginDefalutVersion,
+    });
+  } catch (err) {
     return;
   }
-  StudioV2Store.dispatch({
-    type: PluginsActions.FETCH_PLUGINS_DEFAULT_VERSIONS,
-    payload: pluginDefalutVersion,
-  });
 }

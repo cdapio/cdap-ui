@@ -15,15 +15,61 @@
  */
 
 import StudioV2Store from '..';
-
-const PREFIX = 'NODES_ACTIONS';
-
-export const NodesActions = {
-  RESET: `${PREFIX}/RESET`,
-};
+import { INodesState, NodesActions } from './reducer';
 
 export function resetNodesState() {
   StudioV2Store.dispatch({
     type: NodesActions.RESET,
   });
+}
+
+export function setState(payload: INodesState, patchCurrent: boolean = true) {
+  StudioV2Store.dispatch({
+    type: NodesActions.SET_STATE,
+    payload,
+    meta: {
+      patchCurrent,
+    },
+  });
+}
+
+export function undoActions() {
+  StudioV2Store.dispatch({
+    type: NodesActions.UNDO_ACTIONS,
+  });
+}
+
+export function resetSelectedNode() {
+  StudioV2Store.dispatch({
+    type: NodesActions.RESET_ACTIVE_NODE,
+  });
+}
+
+export function addNode(nodeConfig) {
+  StudioV2Store.dispatch({
+    type: NodesActions.ADD_NODE,
+    payload: nodeConfig,
+  });
+}
+
+export function updateNode(nodeId, nodeConfig) {
+  StudioV2Store.dispatch({
+    type: NodesActions.UPDATE_NODE,
+    payload: {
+      nodeId,
+      nodeConfig,
+    },
+  });
+}
+
+export function updateNodePosition(nodeId, position) {
+  const nodeConfig = {
+    _uiPosition: position,
+  };
+  console.log(nodeId, nodeConfig);
+  updateNode(nodeId, nodeConfig);
+}
+
+export function logNodePos(nodeId, pos) {
+  console.log(nodeId, pos);
 }

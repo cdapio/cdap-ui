@@ -14,8 +14,8 @@
  * the License.
  */
 
-import { HYDRATOR_DEFAULT_VALUES } from "services/global-constants";
-import { IConfigState } from "./reducer";
+import { HYDRATOR_DEFAULT_VALUES } from 'services/global-constants';
+import { IConfigState } from './reducer';
 
 export function getEngine(state: IConfigState) {
   return state.config.engine || HYDRATOR_DEFAULT_VALUES.engine;
@@ -27,4 +27,8 @@ export function getAppType(state: IConfigState) {
 
 export function getName(state: IConfigState) {
   return state.name;
+}
+
+export function getNodes(state: IConfigState) {
+  return state?.__ui__?.nodes || [];
 }

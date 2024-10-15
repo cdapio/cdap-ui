@@ -22,7 +22,7 @@ export function formatSchemaToAvro(schema) {
   const mapObj = {
     type: 'map',
     keys: 'string',
-    values: 'string'
+    values: 'string',
   };
   let fields = [];
   let outputSchema;
@@ -34,7 +34,7 @@ export function formatSchemaToAvro(schema) {
       console.log('ERROR: Parsing schema JSON ', e);
       return schema;
     }
-  } else if (schema === null || typeof schema === 'undefined' ) {
+  } else if (schema === null || typeof schema === 'undefined') {
     return '';
   } else {
     outputSchema = _cloneDeep(schema);
@@ -44,22 +44,22 @@ export function formatSchemaToAvro(schema) {
     return JSON.stringify(outputSchema);
   }
 
-  fields = Object.keys(outputSchema).map(field => {
+  fields = Object.keys(outputSchema).map((field) => {
     if (outputSchema[field] === typeMap) {
       return {
         name: field,
-        type: mapObj
+        type: mapObj,
       };
     }
     return {
       name: field,
-      type: outputSchema[field]
+      type: outputSchema[field],
     };
   });
 
   return JSON.stringify({
     name: outputSchema.name || GLOBALS.defaultSchemaName,
     type: outputSchema.type || 'record',
-    fields: outputSchema.fields || fields
+    fields: outputSchema.fields || fields,
   });
 }

@@ -47,11 +47,10 @@ export const plugins = (state: IPluginsState = pluginsInitialState, action?): IP
         // If this is fetched after the all the plugins have been fetched from the backend then we will update them.
         pluginTypes.forEach((pluginType) => {
           const _plugins = state.pluginTypes[pluginType];
-          pluginTypesCopy[pluginType] = _plugins
-            .map((plugin) => {
-              plugin.defaultArtifact = getDefaultVersionForPlugin(plugin, defaultPluginVersionsMap);
-              return plugin;
-            });
+          pluginTypesCopy[pluginType] = _plugins.map((plugin) => {
+            plugin.defaultArtifact = getDefaultVersionForPlugin(plugin, defaultPluginVersionsMap);
+            return plugin;
+          });
         });
 
         return {
@@ -74,10 +73,12 @@ export const plugins = (state: IPluginsState = pluginsInitialState, action?): IP
       console.log({ pluginTypesKeys });
       pluginTypesKeys.forEach((pluginType) => {
         state.pluginTypes[pluginType].forEach((plugin) => {
-          if (plugin.pluginTemplate) return;
+          if (plugin.pluginTemplate) {
+            return;
+          }
           const key = `${plugin.name}-${plugin.type}-${plugin.artifact.name}`;
-          const isArtifactExistsInBackend = plugin.allArtifacts.filter(
-            (plug) => _isEqual(plug.artifact, pluginToVersionMap[key])
+          const isArtifactExistsInBackend = plugin.allArtifacts.filter((plug) =>
+            _isEqual(plug.artifact, pluginToVersionMap[key])
           );
           if (!isArtifactExistsInBackend.length) {
             delete pluginToVersionMap[key];
@@ -89,24 +90,28 @@ export const plugins = (state: IPluginsState = pluginsInitialState, action?): IP
 
     case PluginsActions.FETCH_PLUGIN_TEMPLATE: {
       const { pipelineType, namespace, templates } = action.payload;
-      const templatesList = _get(templates, `${namespace}.${pipelineType}`);                                               
-      if (!templatesList) { 
-        return state; 
+      const templatesList = _get(templates, `${namespace}.${pipelineType}`);
+      if (!templatesList) {
+        return state;
       }
 
-      const stateCopy =  _cloneDeep(state);
+      const stateCopy = _cloneDeep(state);
       Object.entries(templatesList).forEach(([key, plugins]) => {
         const _templates = Object.values(plugins);
-        const _pluginWithoutTemplates = (state.pluginTypes[key] || []).filter( plug => !plug.pluginTemplate);
-        stateCopy.pluginTypes[key] = getTemplatesWithAddedInfo(_templates, key).concat(_pluginWithoutTemplates);
+        const _pluginWithoutTemplates = (state.pluginTypes[key] || []).filter(
+          (plug) => !plug.pluginTemplate
+        );
+        stateCopy.pluginTypes[key] = getTemplatesWithAddedInfo(_templates, key).concat(
+          _pluginWithoutTemplates
+        );
       });
 
       return stateCopy;
     }
 
     case PluginsActions.FETCH_ALL_PLUGINS:
-      return { 
-        ...state, 
+      return {
+        ...state,
         pluginTypes: _cloneDeep(action.payload.pluginTypes),
         extensions: _cloneDeep(action.payload.extensions),
       };

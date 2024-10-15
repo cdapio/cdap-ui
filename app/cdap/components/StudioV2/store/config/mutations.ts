@@ -21,12 +21,29 @@ import _assign from 'lodash/assign';
 import { IConfigState } from './reducer';
 import { IArtifactSummary } from 'components/StudioV2/types';
 import { GLOBALS, HYDRATOR_DEFAULT_VALUES } from 'services/global-constants';
-import { DEPRECATED_SPARK_MASTER, ENGINE_OPTIONS, SPARK_BACKPRESSURE_ENABLED, SPARK_EXECUTOR_INSTANCES } from 'components/PipelineConfigurations/PipelineConfigConstants';
+import {
+  DEPRECATED_SPARK_MASTER,
+  ENGINE_OPTIONS,
+  SPARK_BACKPRESSURE_ENABLED,
+  SPARK_EXECUTOR_INSTANCES,
+} from 'components/PipelineConfigurations/PipelineConfigConstants';
 import { getAppType, getEngine, getName } from './queries';
 import { generateNodeConfig } from 'services/HydratorPluginConfigFactory';
 import { formatSchemaToAvro } from 'components/StudioV2/utils/schemaUtils';
 import { fetchBackendProperties } from 'components/StudioV2/utils/nodeUtils';
-import { allConnectionsValid, allNodesConnected, hasAtLeastOneSink, hasAtleastOneSource, hasNoBackendProperties, hasValidClientResources, hasValidDriverResources, hasValidName, hasValidResources, isRequiredFieldsFilled, isUniqueNodeNames } from 'services/PipelineErrorFactory';
+import {
+  allConnectionsValid,
+  allNodesConnected,
+  hasAtLeastOneSink,
+  hasAtleastOneSource,
+  hasNoBackendProperties,
+  hasValidClientResources,
+  hasValidDriverResources,
+  hasValidName,
+  hasValidResources,
+  isRequiredFieldsFilled,
+  isUniqueNodeNames,
+} from 'services/PipelineErrorFactory';
 import { addConsoleMessages, resetConsoleMessages } from '../console/actions';
 import { filterByCondition } from 'components/shared/ConfigurationGroup/utilities/DynamicPluginFilters';
 import { setConfigState } from './actions';
@@ -42,7 +59,10 @@ export function setArtifact_mutating(state: IConfigState, artifact: IArtifactSum
   state.artifact.version = artifact.version;
   state.artifact.scope = artifact.scope;
 
-  if (GLOBALS.etlBatchPipelines.includes(artifact.name) || artifact.name === GLOBALS.eltSqlPipeline) {
+  if (
+    GLOBALS.etlBatchPipelines.includes(artifact.name) ||
+    artifact.name === GLOBALS.eltSqlPipeline
+  ) {
     state.config.schedule = state.config.schedule || HYDRATOR_DEFAULT_VALUES.schedule;
   } else if (artifact.name === GLOBALS.etlRealtime) {
     state.config.instances = state.config.instances || HYDRATOR_DEFAULT_VALUES.instance;
@@ -55,9 +75,9 @@ export function setProperties_mutating(state: IConfigState, properties?: any) {
   const backPressureKey = SPARK_BACKPRESSURE_ENABLED;
 
   if (typeof properties !== 'undefined' && Object.keys(properties).length > 0) {
-      state.config.properties = properties;
+    state.config.properties = properties;
   } else {
-      state.config.properties = {};
+    state.config.properties = {};
   }
 
   if (state.artifact.name === GLOBALS.etlDataStreams) {
@@ -65,24 +85,23 @@ export function setProperties_mutating(state: IConfigState, properties?: any) {
       state.config.properties[backPressureKey] = true;
     }
   }
-    
-  if (getEngine(state) === ENGINE_OPTIONS.SPARK 
-    ||state.artifact.name === GLOBALS.etlDataStreams
-  ) {
+
+  if (getEngine(state) === ENGINE_OPTIONS.SPARK || state.artifact.name === GLOBALS.etlDataStreams) {
     if (state.config.properties.hasOwnProperty(numExecutorOldKey)) {
       // format on standalone is 'local[{number}] === local[2]'
       // So the magic number 6 here is for skipping 'local[' and get the number
       let numOfExecutors = state.config.properties[numExecutorOldKey];
-      numOfExecutors = typeof numOfExecutors === 'string' ? 
-        numOfExecutors.substring(6, numOfExecutors.length - 1) 
-        : numOfExecutors.toString();
+      numOfExecutors =
+        typeof numOfExecutors === 'string'
+          ? numOfExecutors.substring(6, numOfExecutors.length - 1)
+          : numOfExecutors.toString();
       state.config.properties[numExecutorKey] = numOfExecutors;
       delete state.config.properties[numExecutorOldKey];
     }
   }
-    
-  state.config.properties = Object.keys(state.config.properties).reduce((obj, key) => 
-    (obj[key] = state.config.properties[key].toString(), obj),
+
+  state.config.properties = Object.keys(state.config.properties).reduce(
+    (obj, key) => ((obj[key] = state.config.properties[key].toString()), obj),
     {}
   );
 }
@@ -112,7 +131,7 @@ export function setCheckpointing_mutating(state: IConfigState, val: boolean = fa
 }
 
 export function setCheckpointDir_mutating(state: IConfigState, val?: boolean | string) {
-  if(val !== false) {
+  if (val !== false) {
     state.config.checkpointDir = val;
   } else {
     state.config.checkpointDir = '';
@@ -135,11 +154,14 @@ export function setEngine_mutating(state: IConfigState, engine?: string) {
   state.config.engine = engine || HYDRATOR_DEFAULT_VALUES.engine;
 }
 
-export function setRangeRecordsPreview_mutating(state: IConfigState, {
-  minRecordsPreview = HYDRATOR_DEFAULT_VALUES.minRecordsPreview,
-  maxRecordsPreview = window.CDAP_CONFIG.cdap.maxRecordsPreview 
-    || HYDRATOR_DEFAULT_VALUES.maxRecordsPreview 
-}: {[key: string]: number}) {
+export function setRangeRecordsPreview_mutating(
+  state: IConfigState,
+  {
+    minRecordsPreview = HYDRATOR_DEFAULT_VALUES.minRecordsPreview,
+    maxRecordsPreview = window.CDAP_CONFIG.cdap.maxRecordsPreview ||
+      HYDRATOR_DEFAULT_VALUES.maxRecordsPreview,
+  }: { [key: string]: number }
+) {
   if (GLOBALS.etlBatchPipelines.includes(state.artifact.name)) {
     state.config.rangeRecordsPreview = {
       min: minRecordsPreview,
@@ -148,7 +170,10 @@ export function setRangeRecordsPreview_mutating(state: IConfigState, {
   }
 }
 
-export function setNumRecordsPreview_mutating(state: IConfigState, val: number = HYDRATOR_DEFAULT_VALUES.numOfRecordsPreview) {
+export function setNumRecordsPreview_mutating(
+  state: IConfigState,
+  val: number = HYDRATOR_DEFAULT_VALUES.numOfRecordsPreview
+) {
   if (GLOBALS.etlBatchPipelines.includes(state.artifact.name)) {
     const { max } = state.config.rangeRecordsPreview;
     if (max) {
@@ -165,7 +190,7 @@ export function setNodes_mutating(state: IConfigState, nodes = []) {
   state.__ui__.nodes = nodes;
   const listOfPromises = [];
   const parseNodeConfig = (node, res) => {
-    let nodeConfig = generateNodeConfig(node._backendProperties, res);
+    const nodeConfig = generateNodeConfig(node._backendProperties, res);
     node.implicitSchema = nodeConfig.outputSchema.implicitSchema;
     node.outputSchemaProperty = nodeConfig.outputSchema.outputSchemaProperty;
 
@@ -184,94 +209,100 @@ export function setNodes_mutating(state: IConfigState, nodes = []) {
     }
 
     if (!node.outputSchema && nodeConfig.outputSchema.schemaProperties['default-schema']) {
-      node.outputSchema = JSON.stringify(nodeConfig.outputSchema.schemaProperties['default-schema']);
+      node.outputSchema = JSON.stringify(
+        nodeConfig.outputSchema.schemaProperties['default-schema']
+      );
       node.plugin.properties[node.outputSchemaProperty] = node.outputSchema;
     }
 
     node.configGroups = res['configuration-groups'];
-    node.outputs = res['outputs'];
-    node.filters = res['filters'];
+    node.outputs = res.outputs;
+    node.filters = res.filters;
   };
 
   if (state.__ui__.nodes && state.__ui__.nodes.length) {
-    state.__ui__.nodes.filter(n => !n._backendProperties).forEach( n => {
-      listOfPromises.push(fetchBackendProperties(n, getAppType(state)));
-    });
+    state.__ui__.nodes
+      .filter((n) => !n._backendProperties)
+      .forEach((n) => {
+        listOfPromises.push(fetchBackendProperties(n, getAppType(state)));
+      });
   } else {
     listOfPromises.push(Promise.resolve(true));
   }
 
   if (listOfPromises.length) {
-    Promise.all(listOfPromises).then(() => {
-      if (!validateState_mutating(state)) {
-        setConfigState(state);
-      }
-
-      // Once the backend properties are fetched for all nodes, fetch their config jsons.
-      // This will be used for schema propagation where we import/use a predefined app/open a published pipeline
-      // the user should directly click on the last node and see what is the incoming schema
-      // without having to open the subsequent nodes.
-      const reqBody = [];
-      state.__ui__.nodes.forEach((n) => {
-        // This could happen when the user doesn't provide an artifact information for a plugin & deploys it
-        // using CLI or REST and opens up in UI and clones it. Without this check it will throw a JS error.
-        if (!n.plugin || !n.plugin.artifact) { 
-          return; 
+    Promise.all(listOfPromises).then(
+      () => {
+        if (!validateState_mutating(state)) {
+          setConfigState(state);
         }
-        const pluginInfo = {
-          name: n.plugin.artifact.name,
-          version: n.plugin.artifact.version,
-          scope: n.plugin.artifact.scope,
-          properties: [
-            `widgets.${n.plugin.name}-${n.type}`,
-          ],
-        };
 
-        reqBody.push(pluginInfo);
-      });
+        // Once the backend properties are fetched for all nodes, fetch their config jsons.
+        // This will be used for schema propagation where we import/use a predefined app/open a published pipeline
+        // the user should directly click on the last node and see what is the incoming schema
+        // without having to open the subsequent nodes.
+        const reqBody = [];
+        state.__ui__.nodes.forEach((n) => {
+          // This could happen when the user doesn't provide an artifact information for a plugin & deploys it
+          // using CLI or REST and opens up in UI and clones it. Without this check it will throw a JS error.
+          if (!n.plugin || !n.plugin.artifact) {
+            return;
+          }
+          const pluginInfo = {
+            name: n.plugin.artifact.name,
+            version: n.plugin.artifact.version,
+            scope: n.plugin.artifact.scope,
+            properties: [`widgets.${n.plugin.name}-${n.type}`],
+          };
 
-      MyPipelineApi.fetchAllPluginsProperties({ namespace: getCurrentNamespace() }, reqBody)
-        .subscribe((resInfo) => {
+          reqBody.push(pluginInfo);
+        });
+
+        MyPipelineApi.fetchAllPluginsProperties(
+          { namespace: getCurrentNamespace() },
+          reqBody
+        ).subscribe((resInfo) => {
           resInfo.forEach((pluginInfo, index) => {
             const pluginProperties = Object.keys(pluginInfo.properties);
-            if (pluginProperties.length === 0) { 
-              return; 
+            if (pluginProperties.length === 0) {
+              return;
             }
 
             try {
               const config = JSON.parse(pluginInfo.properties[pluginProperties[0]]);
               parseNodeConfig(state.__ui__.nodes[index], config);
             } catch (e) {
-                  // no-op
+              // no-op
             }
           });
           validateState_mutating(state);
         });
-    },
-    (err) => {
-      console.log('ERROR fetching backend properties for nodes', err);
-      validateState_mutating(state);
-    });
+      },
+      (err) => {
+        console.log('ERROR fetching backend properties for nodes', err);
+        validateState_mutating(state);
+      }
+    );
   }
 }
 
-function validateState_mutating(state, validationConfig: any = {
-  showConsoleMessage: false,
-  validateBeforePreview: false
-}) {
+function validateState_mutating(
+  state,
+  validationConfig: any = {
+    showConsoleMessage: false,
+    validateBeforePreview: false,
+  }
+) {
   let isStateValid = true;
   const name = getName(state);
-  
-  const daglevelvalidation = [
-    hasAtleastOneSource,
-    hasAtLeastOneSink
-  ];
+
+  const daglevelvalidation = [hasAtleastOneSource, hasAtLeastOneSink];
 
   const nodes = state.__ui__.nodes;
   const connections = _cloneDeep(state.config.connections);
 
-  //resetting any existing errors or warnings
-  nodes.forEach(node => {
+  // resetting any existing errors or warnings
+  nodes.forEach((node) => {
     node.errorCount = 0;
     delete node.warning;
     delete node.error;
@@ -297,7 +328,7 @@ function validateState_mutating(state, validationConfig: any = {
    * so we are skipping the at least 1 source and sink check
    **/
 
-  const countActions = nodes.filter( (node) => {
+  const countActions = nodes.filter((node) => {
     return GLOBALS.pluginConvert[node.type] === 'action';
   }).length;
 
@@ -311,7 +342,7 @@ function validateState_mutating(state, validationConfig: any = {
             setErrorWarningFlagOnNode(node);
           }
           errors.push({
-            type: err
+            type: err,
           });
         }
       });
@@ -323,16 +354,16 @@ function validateState_mutating(state, validationConfig: any = {
       if (err) {
         isStateValid = false;
         errors.push({
-          type: err
+          type: err,
         });
       }
     });
   }
 
-  hasNoBackendProperties(nodes, errorNodes => {
+  hasNoBackendProperties(nodes, (errorNodes) => {
     if (errorNodes) {
       isStateValid = false;
-      errorNodes.forEach(node => {
+      errorNodes.forEach((node) => {
         node.error = true;
         node.errorCount += 1;
         setErrorWarningFlagOnNode(node);
@@ -340,8 +371,8 @@ function validateState_mutating(state, validationConfig: any = {
       errors.push({
         type: 'NO-BACKEND-PROPS',
         payload: {
-          nodes: errorNodes.map(node => node.name || node.plugin.name)
-        }
+          nodes: errorNodes.map((node) => node.name || node.plugin.name),
+        },
       });
     }
   });
@@ -364,7 +395,8 @@ function validateState_mutating(state, validationConfig: any = {
           return fieldsMap;
         }, {});
         if (node._backendProperties.connection) {
-          node._backendProperties.connection.required = node.plugin.properties.useConnection === 'true';
+          node._backendProperties.connection.required =
+            node.plugin.properties.useConnection === 'true';
         }
       } catch (e) {}
     }
@@ -398,7 +430,7 @@ function validateState_mutating(state, validationConfig: any = {
   if (strayNodes.length) {
     errors.push({
       type: 'STRAY-NODES',
-      payload: {nodes: strayNodes}
+      payload: { nodes: strayNodes },
     });
   }
 
@@ -412,7 +444,7 @@ function validateState_mutating(state, validationConfig: any = {
   if (invalidConnections.length) {
     errors.push({
       type: 'INVALID-CONNECTIONS',
-      payload: { connections: invalidConnections }
+      payload: { connections: invalidConnections },
     });
   }
 
@@ -421,7 +453,7 @@ function validateState_mutating(state, validationConfig: any = {
       isStateValid = false;
       errors.push({
         type: 'error',
-        content: GLOBALS.en.hydrator.studio.error[err]
+        content: GLOBALS.en.hydrator.studio.error[err],
       });
     }
   });
@@ -431,7 +463,7 @@ function validateState_mutating(state, validationConfig: any = {
       isStateValid = false;
       errors.push({
         type: 'error',
-        content: GLOBALS.en.hydrator.studio.error[err]
+        content: GLOBALS.en.hydrator.studio.error[err],
       });
     }
   });
@@ -442,7 +474,7 @@ function validateState_mutating(state, validationConfig: any = {
         isStateValid = false;
         errors.push({
           type: 'error',
-          content: GLOBALS.en.hydrator.studio.error[err]
+          content: GLOBALS.en.hydrator.studio.error[err],
         });
       }
     });

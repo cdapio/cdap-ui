@@ -14,7 +14,8 @@
  * the License.
  */
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import {
   ReactFlow,
   useNodesState,
@@ -24,34 +25,44 @@ import {
   Background,
   BackgroundVariant,
   addEdge,
+  useReactFlow,
+  ConnectionLineType,
 } from 'reactflow';
 
 import 'reactflow/dist/style.css';
+import './DAGOverrides.css';
+import { useDAGController } from './useDAG';
+import { NODE_TYPES } from './DAGNodes';
+import { EDGE_TYPES, EdgeInProgress } from './DAGEdges';
 
-const initialNodes = [
-  { id: '1', position: { x: 200, y: 200 }, data: { label: '1' } },
-  { id: '2', position: { x: 380, y: 400 }, data: { label: '2' } },
-];
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
+const noop = () => 1;
+
 const proOptions = { hideAttribution: true };
 
 export default function DagComponent() {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const reactflow = useReactFlow();
+  const { nodes, edges, onNodesChange, onConnect, onEdgesChange } = useDAGController();
 
-  const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
+  useEffect(() => {
+    console.log('zoom = ', reactflow.getZoom());
+    // reactflow.zoomTo(0.5);
+  });
 
   return (
     <ReactFlow
       nodes={nodes}
       edges={edges}
+      nodeTypes={NODE_TYPES}
+      edgeTypes={EDGE_TYPES}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       proOptions={proOptions}
-      fitView
+      connectionRadius={55}
+      connectionLineType={ConnectionLineType.SmoothStep}
+      connectionLineComponent={EdgeInProgress}
     >
-      <Controls />
+      <Controls position="top-right" style={{ top: 60 }} />
       <MiniMap zoomable pannable />
       <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
     </ReactFlow>

@@ -20,7 +20,11 @@ import StudioV2Store from '..';
 import { GLOBALS } from 'services/global-constants';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { PluginsActions } from '../plugins/actions';
-import { getDefaultVersionForPlugin, getPluginIcon, getPluginToArtifactMap } from 'components/StudioV2/utils/pluginUtils';
+import {
+  getDefaultVersionForPlugin,
+  getPluginIcon,
+  getPluginToArtifactMap,
+} from 'components/StudioV2/utils/pluginUtils';
 import { camelToTitle } from 'components/StudioV2/utils/stringUtils';
 import { findHighestVersion } from 'services/VersionRange/VersionUtilities';
 import MySettingsService from 'components/StudioV2/utils/settings';
@@ -49,7 +53,7 @@ export interface IFetchExtensionsParams {
   namespace: string;
   pipelineType: string;
   version: string;
-};
+}
 
 export interface IFetchPluginsParams extends IFetchExtensionsParams {
   extensionType: string;
@@ -57,55 +61,59 @@ export interface IFetchPluginsParams extends IFetchExtensionsParams {
 
 // TODO: Determine correct type for res.
 export function fetchPlugins(extensionsParams: IFetchExtensionsParams) {
-  MyPipelineApi.fetchExtensions(extensionsParams).subscribe((res) => {
-    const extensionsList = GLOBALS.pluginTypes[extensionsParams.pipelineType];
-    const extensionsMap = Object.values(extensionsList);
-    const supportedExtensions = res.filter((ext) => extensionsMap.includes(ext));
-    fetchPluginsInternal(extensionsParams, supportedExtensions);
-  },
-  (err) => {
-    // TODO: Handle this error properly. In legacy code, it was passed to a defered promise
-  });
+  MyPipelineApi.fetchExtensions(extensionsParams).subscribe(
+    (res) => {
+      const extensionsList = GLOBALS.pluginTypes[extensionsParams.pipelineType];
+      const extensionsMap = Object.values(extensionsList);
+      const supportedExtensions = res.filter((ext) => extensionsMap.includes(ext));
+      fetchPluginsInternal(extensionsParams, supportedExtensions);
+    },
+    (err) => {
+      // TODO: Handle this error properly. In legacy code, it was passed to a defered promise
+    }
+  );
 }
 
 // TODO: Add correct type for supportedExtensions
-function fetchPluginsInternal (params: IFetchExtensionsParams, extensions: any[]) {
-  const fetchList = extensions.map((ext) => MyPipelineApi.fetchPlugins({ 
-    ...params, 
-    extensionType: ext,
-  }));
+function fetchPluginsInternal(params: IFetchExtensionsParams, extensions: any[]) {
+  const fetchList = extensions.map((ext) =>
+    MyPipelineApi.fetchPlugins({
+      ...params,
+      extensionType: ext,
+    })
+  );
 
-  forkJoin(fetchList).subscribe((res) => {
-    const pluginTypes = formatPluginsResponse(res, extensions);
-    StudioV2Store.dispatch({
-      type: PluginsActions.FETCH_ALL_PLUGINS,
-      payload: {
-        pluginTypes,
-        extensions,
-      },
-    });
+  forkJoin(fetchList).subscribe(
+    (res) => {
+      const pluginTypes = formatPluginsResponse(res, extensions);
+      StudioV2Store.dispatch({
+        type: PluginsActions.FETCH_ALL_PLUGINS,
+        payload: {
+          pluginTypes,
+          extensions,
+        },
+      });
 
-    StudioV2Store.dispatch({
-      type: PluginsActions.CHECK_AND_UPDATE_PLUGIN_DEFAULT_VERSION
-    });
+      StudioV2Store.dispatch({
+        type: PluginsActions.CHECK_AND_UPDATE_PLUGIN_DEFAULT_VERSION,
+      });
 
-    prepareInfoRequest(params.namespace, res);
-    fetchTemplates(params.namespace, params.pipelineType);
-  }, 
-  (err) => {
-
-  });
+      prepareInfoRequest(params.namespace, res);
+      fetchTemplates(params.namespace, params.pipelineType);
+    },
+    (err) => {}
+  );
 }
 
 // TODO: Add types
-function formatPluginsResponse (pluginsList, extensions) {
+function formatPluginsResponse(pluginsList, extensions) {
   return extensions.reduce((acc, ext, i) => {
     const plugins = pluginsList[i];
     const pluginToArtifactArrayMap = getPluginToArtifactMap(plugins);
     const pluginsWithAddedInfo = getPluginsWithAddedInfo(plugins, pluginToArtifactArrayMap, ext);
     const versionMap = StudioV2Store.getState().plugins.pluginToVersionMap;
 
-    acc[ext] =  pluginsWithAddedInfo.map((plugin) => ({
+    acc[ext] = pluginsWithAddedInfo.map((plugin) => ({
       ...plugin,
       defaultArtifact: getDefaultVersionForPlugin(plugin, versionMap),
     }));
@@ -128,29 +136,33 @@ function getPluginsWithAddedInfo(plugins = [], pluginToArtifactArrayMap = {}, ex
   });
 
   // TODO: Add types
-  const getAllArtifacts = (_pluginToArtifactArrayMap: any = {}, plugin: any = {}, extension: string = '') => {
+  const getAllArtifacts = (
+    _pluginToArtifactArrayMap: any = {},
+    plugin: any = {},
+    extension: string = ''
+  ) => {
     if (Object.keys(_pluginToArtifactArrayMap).length === 0 || Object.keys(plugin).length === 0) {
       return [];
     }
 
-    let _pluginArtifacts = _pluginToArtifactArrayMap[(plugin.name || plugin.pluginName)];
+    const _pluginArtifacts = _pluginToArtifactArrayMap[plugin.name || plugin.pluginName];
     if (!Array.isArray(_pluginArtifacts)) {
       return [];
     }
-    return _pluginArtifacts.map((plug) => ({ 
-      ...plug, 
-      ...getExtraProperties(plug, extension) 
+    return _pluginArtifacts.map((plug) => ({
+      ...plug,
+      ...getExtraProperties(plug, extension),
     }));
   };
 
   // TODO: Add types
   const getArtifact = (_pluginToArtifactArrayMap: any = {}, plugin: any = {}) => {
-    if(!Object.keys(plugin).length) { 
-      return {}; 
+    if (!Object.keys(plugin).length) {
+      return {};
     }
     const allPluginVersions = _pluginToArtifactArrayMap[plugin.name];
     const highestVersion = findHighestVersion(
-      allPluginVersions.map((plugin) => _get(plugin, 'artifact.version')), 
+      allPluginVersions.map((plugin) => _get(plugin, 'artifact.version')),
       true
     );
     const latestPluginVersion = allPluginVersions.find(
@@ -161,9 +173,9 @@ function getPluginsWithAddedInfo(plugins = [], pluginToArtifactArrayMap = {}, ex
 
   return Object.keys(pluginToArtifactArrayMap).map((pluginName) => {
     const [plugin] = pluginToArtifactArrayMap[pluginName];
-    return { 
-      ...plugin, 
-      ...getExtraProperties(plugin, extension), 
+    return {
+      ...plugin,
+      ...getExtraProperties(plugin, extension),
       artifact: getArtifact(pluginToArtifactArrayMap, plugin),
       allArtifacts: getAllArtifacts(pluginToArtifactArrayMap, plugin, extension),
     };
@@ -179,7 +191,7 @@ function prepareInfoRequest(namespace, pluginsList) {
     extension.forEach((plugin) => {
       const pluginInfo = createPluginInfo(plugin);
       availablePluginsMap[pluginInfo.key] = {
-        pluginInfo: plugin
+        pluginInfo: plugin,
       };
 
       plugins.push(pluginInfo);
@@ -195,19 +207,16 @@ function createPluginInfo(plugin) {
 
   const info = {
     ...plugin.artifact,
-    properties: [
-      `widgets.${pluginKey}`,
-      `doc.${pluginKey}`
-    ]
+    properties: [`widgets.${pluginKey}`, `doc.${pluginKey}`],
   };
 
   return {
     info,
-    key: availablePluginKey
+    key: availablePluginKey,
   };
 }
 
-function  getArtifactKey(artifact) {
+function getArtifactKey(artifact) {
   return `${artifact.name}-${artifact.version}-${artifact.scope}`;
 }
 
@@ -219,40 +228,43 @@ function fetchInfo(availablePluginsMap, namespace, plugins) {
     return key ? key.split('.')[1] : '';
   };
 
-  MyPipelineApi.fetchAllPluginsProperties({ namespace }, reqBody).subscribe(
-    (res) => {
-      res.forEach((plugin) => {
-        const pluginProperties = Object.keys(plugin.properties);
-        if (pluginProperties.length === 0) return;
+  MyPipelineApi.fetchAllPluginsProperties({ namespace }, reqBody).subscribe((res) => {
+    res.forEach((plugin) => {
+      const pluginProperties = Object.keys(plugin.properties);
+      if (pluginProperties.length === 0) {
+        return;
+      }
 
-        const pluginKey = getKeyFromPluginProps(pluginProperties);
-        const key = `${pluginKey}-${getArtifactKey(plugin)}`;
+      const pluginKey = getKeyFromPluginProps(pluginProperties);
+      const key = `${pluginKey}-${getArtifactKey(plugin)}`;
 
-        availablePluginsMap[key].doc = plugin.properties[`doc.${pluginKey}`];
+      availablePluginsMap[key].doc = plugin.properties[`doc.${pluginKey}`];
 
-        let parsedWidgets;
-        const widgets = plugin.properties[`widgets.${pluginKey}`];
+      let parsedWidgets;
+      const widgets = plugin.properties[`widgets.${pluginKey}`];
 
-        if (widgets) {
-          try {
-            parsedWidgets = JSON.parse(widgets);
-          } catch (e) {
-            console.log('failed to parse widgets', e, pluginKey);
-          }
+      if (widgets) {
+        try {
+          parsedWidgets = JSON.parse(widgets);
+        } catch (e) {
+          console.log('failed to parse widgets', e, pluginKey);
         }
-        availablePluginsMap[key].widgets = parsedWidgets;
-      });
-
-      StudioV2Store.dispatch({
-        type: AvailablePluginsActions.SET_PLUGINS_MAP,
-        payload: availablePluginsMap,
-      });
+      }
+      availablePluginsMap[key].widgets = parsedWidgets;
     });
+
+    StudioV2Store.dispatch({
+      type: AvailablePluginsActions.SET_PLUGINS_MAP,
+      payload: availablePluginsMap,
+    });
+  });
 }
 
 async function fetchTemplates(namespace, pipelineType) {
   const templates = await MySettingsService.getInstance().get('pluginTemplates');
-  if (!templates) return;
+  if (!templates) {
+    return;
+  }
 
   StudioV2Store.dispatch({
     type: PluginsActions.FETCH_PLUGIN_TEMPLATE,
@@ -260,6 +272,6 @@ async function fetchTemplates(namespace, pipelineType) {
       templates,
       pipelineType,
       namespace,
-    }
+    },
   });
 }

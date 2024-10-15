@@ -21,9 +21,7 @@ import { useDispatch } from 'react-redux';
 
 const PREFIX = 'features.Studio.modals.unsavedPipelineConfirmation';
 
-export default function DirtyStateConfirmationModal({
-  onClose,
-}) {
+export default function DirtyStateConfirmationModal({ onClose }) {
   const dispatch = useDispatch();
 
   function handleSave() {
@@ -44,7 +42,7 @@ export default function DirtyStateConfirmationModal({
       <DialogTitle id="alert-dialog-title">{T.translate(`${PREFIX}.text`)}</DialogTitle>
       <DialogActions>
         <Button onClick={handleCloseNoSave} color="primary">
-        {T.translate(`${PREFIX}.dontSaveButton`)}
+          {T.translate(`${PREFIX}.dontSaveButton`)}
         </Button>
         <Button onClick={handleCancel} color="primary" autoFocus>
           {T.translate(`${PREFIX}.cancelButton`)}

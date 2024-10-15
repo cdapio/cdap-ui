@@ -158,20 +158,20 @@ export function getPluginIcon(pluginName: string): string {
 
 export function getPluginTypeDisplayName(pluginType: string): string {
   return GLOBALS.pluginTypeToLabel[pluginType] || pluginType;
-};
+}
 
-export function orderPluginTypes (pluginsMap) {
+export function orderPluginTypes(pluginsMap) {
   if (!pluginsMap.length) {
     return pluginsMap;
   }
 
   const orderedTypes = [];
-  const action = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels['action']);
-  const source = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels['source']);
-  const transform = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels['transform']);
-  const sink = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels['sink']);
-  const analytics = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels['analytics']);
-  const errorHandlers = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels['erroralert']);
+  const action = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels.action);
+  const source = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels.source);
+  const transform = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels.transform);
+  const sink = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels.sink);
+  const analytics = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels.analytics);
+  const errorHandlers = pluginsMap.filter((p) => p.name === GLOBALS.pluginLabels.erroralert);
 
   if (source.length) {
     orderedTypes.push(source[0]);
@@ -204,7 +204,7 @@ export function orderPluginTypes (pluginsMap) {
 
 export function getPluginToArtifactMap(plugins = []) {
   const typeMap = {};
-  plugins.forEach( plugin => {
+  plugins.forEach((plugin) => {
     typeMap[plugin.name] = typeMap[plugin.name] || [];
     typeMap[plugin.name].push(plugin);
   });
@@ -220,13 +220,13 @@ export function getDefaultVersionForPlugin(plugin: any = {}, defaultVersionMap: 
   const defaultVersionsList = Object.keys(defaultVersionMap);
   const key = `${plugin.name}-${plugin.type}-${plugin.artifact.name}`;
   const isDefaultVersionExists = defaultVersionsList.includes(key);
-  const isArtifactExistsInBackend = (plugin.allArtifacts || []).filter(
-    plug => _isEqual(plug.artifact, defaultVersionMap[key])
+  const isArtifactExistsInBackend = (plugin.allArtifacts || []).filter((plug) =>
+    _isEqual(plug.artifact, defaultVersionMap[key])
   );
-  
+
   if (!isDefaultVersionExists || isArtifactExistsInBackend.length === 0) {
     const highestVersion = findHighestVersion(
-      plugin.allArtifacts.map((plugin) => plugin.artifact.version), 
+      plugin.allArtifacts.map((plugin) => plugin.artifact.version),
       true
     );
     const latestPluginVersion = plugin.allArtifacts.find(
