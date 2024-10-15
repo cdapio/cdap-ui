@@ -72,6 +72,7 @@ class HydratorPlusPlusPluginConfigFactory {
   }
 
   generateNodeConfig(backendProperties, nodeConfig) {
+    console.log(nodeConfig);
     var specVersion = this.myHelpers.objectQuery(nodeConfig, 'metadata', 'spec-version') || '0.0';
     switch (specVersion) {
       case '0.0':

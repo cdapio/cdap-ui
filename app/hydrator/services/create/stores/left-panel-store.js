@@ -58,6 +58,7 @@ const getTemplatesWithAddedInfo = (templates = [], extension = '') => {
 };
 
 const getPluginsWithAddedInfo = (plugins = [], pluginToArtifactArrayMap = {}, extension = '') => {
+  // if plugins.length === 0 or extension.length == 0 return plugins
   if ([plugins.length, extension.length].indexOf(0) !== -1) {
     return plugins;
   }
