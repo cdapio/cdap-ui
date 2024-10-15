@@ -78,5 +78,14 @@ Feature: Pipeline Edit
     Then Click Continue draft
     Then Verify changes were saved
 
+  @PIPELINE_EDIT_TEST
+  Scenario: Editing an orphaned pipeline draft should not break top panel
+    When Open HttpExecutor Page
+    Then Create an orphan pipeline draft
+    When Open pipeline draft list page
+    Then Go to pipeline "test-orphan-pipeline-6-10-1" draft
+    Then Click on FixAll Button
+    Then Verify Studio TopPanel is visible
+    When Open pipeline draft list page
+    Then Delete Draft Pipeline "test-orphan-pipeline-6-10-1"
     
-

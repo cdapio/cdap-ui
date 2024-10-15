@@ -303,7 +303,14 @@ class HydratorUpgradeService {
         });
         return;
       }
-      jsonData.name = this.$state.params.cloneId;
+
+      // a pipeline can be duplicated (cloned), carried over to a next version as draft and
+      // become an orphaned draft. When such a pipeline is opened in edit mode, we get 
+      // a draftId instead of a cloneId. This results in CDAP-21073 (top panel disappears) 
+      // as the pipeline name is set to undefined.
+      // Fix: if cloneId is not present, use the original pipeline_name + '_copy'. 
+      // (same behavior as generating the cloneId)
+      jsonData.name = this.$state.params.cloneId || (jsonData.name || '') + '_copy' ;
       jsonData.parentVersion = parentVersion;
     }
 
