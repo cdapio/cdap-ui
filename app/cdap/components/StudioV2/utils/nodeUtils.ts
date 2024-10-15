@@ -14,10 +14,10 @@
  * the License.
  */
 
-import { getCurrentNamespace } from "services/NamespaceStore";
-import Defer from "./defer";
-import VersionStore from "services/VersionStore";
-import { MyPipelineApi } from "api/pipeline";
+import { getCurrentNamespace } from 'services/NamespaceStore';
+import Defer from './defer';
+import VersionStore from 'services/VersionStore';
+import { MyPipelineApi } from 'api/pipeline';
 
 // TODO add types
 export function fetchBackendProperties(node, appType, artifactVersion?) {
@@ -35,7 +35,7 @@ export function fetchBackendProperties(node, appType, artifactVersion?) {
     artifactName: node.plugin.artifact.name,
     artifactScope: node.plugin.artifact.scope,
     limit: 1,
-    order: 'DESC'
+    order: 'DESC',
   };
 
   MyPipelineApi.fetchPluginProperties(params).subscribe(
@@ -43,7 +43,7 @@ export function fetchBackendProperties(node, appType, artifactVersion?) {
       // Since now we have added plugin artifact information to be passed in query params
       // We don't get a list (or list of different versions of the plugin) anymore. Its always a list of 1 item.
       // Overwriting artifact as UI could have artifact ranges while importing draft.
-      let lastElementIndex = res.length - 1;
+      const lastElementIndex = res.length - 1;
       node._backendProperties = res[lastElementIndex].properties || {};
       node.description = res[lastElementIndex].description;
       node.plugin.artifact = res[lastElementIndex].artifact;

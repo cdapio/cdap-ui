@@ -21,28 +21,30 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import Defer from './defer';
 
 export default class MySettingsService {
-  static instance: MySettingsService = null;
+  public static instance: MySettingsService = null;
 
-  static getInstance() {
+  public static getInstance() {
     if (!MySettingsService.instance) {
       MySettingsService.instance = new MySettingsService();
     }
-    
+
     return MySettingsService.instance;
   }
 
-  data: any;
-  pending: Promise<any>;
+  public data: any;
+  public pending: Promise<any>;
 
-  constructor () {
-    if (MySettingsService.instance) return MySettingsService.instance;
+  constructor() {
+    if (MySettingsService.instance) {
+      return MySettingsService.instance;
+    }
     this.data = {};
     this.pending = null;
     MySettingsService.instance = this;
   }
 
-  set = (key: string, value) => {
-    const defefred =  new Defer();
+  public set = (key: string, value) => {
+    const defefred = new Defer();
     this.data = _set(this.data, key, value);
     SettingsApi.updateUserSettings({ namespace: getCurrentNamespace() }, this.data).subscribe(
       (res) => {
@@ -54,9 +56,9 @@ export default class MySettingsService {
     );
 
     return defefred.promise;
-  }
+  };
 
-  get = async (key: string, force?: boolean) => {
+  public get = async (key: string, force?: boolean) => {
     const val = _get(this.data, key);
     if (!force && val) {
       return val;
@@ -76,7 +78,7 @@ export default class MySettingsService {
       },
       (err) => {
         deferred.reject(err);
-      },
+      }
     );
 
     try {
@@ -87,5 +89,5 @@ export default class MySettingsService {
       this.pending = null;
       return undefined;
     }
-  }
+  };
 }

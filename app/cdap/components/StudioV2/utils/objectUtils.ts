@@ -14,38 +14,9 @@
  * the License.
  */
 
-import styled from 'styled-components';
+import _cloneDeep from 'lodash/cloneDeep';
 
-export const CanvasWrapper = styled.div`
-  display: flex;
-  top: 50px;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  position: fixed;
-  background: #fafafa;
-`;
-
-export const LeftPanelWrapper = styled.div`
-  display: flex;
-  width: 270px;
-  overflow: auto;
-  z-index: 1;
-`;
-
-export const RightWrapper = styled.div`
-  position: absolute;
-  z-index: 0;
-  left: 270px;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-`;
-
-export const DagWrapper = styled.div`
-  flex-grow: 1;
-`;
+export function cloneAndApply<T>(object: T, mutation: (draft: T) => T): T {
+  const draft: T = _cloneDeep(object);
+  return mutation(draft);
+}

@@ -19,6 +19,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router';
 import qs from 'query-string';
 import _isEqual from 'lodash/isEqual';
+import _get from 'lodash/get';
 
 import { getPluginIcon, getPluginTypeDisplayName, orderPluginTypes } from '../utils/pluginUtils';
 import { ILabeledArtifactSummary } from '../types';
@@ -32,12 +33,9 @@ import { fetchPlugins } from '../store/availablePlugins/actions';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import VersionStore from 'services/VersionStore';
 import { fetchPluginsDefaultVersions, updatePluginDefaultVersion } from '../store/plugins/actions';
-
-
-interface IStudioV2PageParams {
-  namespace: string;
-  isEdit?: boolean;
-}
+import { addNode, resetSelectedNode } from '../store/nodes/actions';
+import { getNodes } from '../store/config/queries';
+import { getNodeInitialPosition } from '../store/nodes/queries';
 
 export type TStudioUiMode = 'create' | 'edit';
 
@@ -52,17 +50,6 @@ interface ILeftPanelController {
 }
 
 export function useLeftPanelController(): ILeftPanelController {
-/*
-  stores: ILeftPanelStores,
-  stateParams: IStudioV2PageParams,
-  cdapVersion: string,
-  hydratorConfigStore: IHydratorConfigStore,
-  leftPanelActions: IPluginActions,
-  hydratorNodeActions: IHydratorNodeActions,
-  uiModalActions: IHydratorUiModalActions,
-  artifacts: ILabeledArtifactSummary[],
-  settingsProvider: IHydratorSettings,
-  */
   const dispatch = useDispatch();
 
   const cdapVersion = VersionStore.getState().version;
@@ -71,6 +58,8 @@ export function useLeftPanelController(): ILeftPanelController {
 
   const extensions = useSelector((state) => state.plugins.extensions);
   const pluginTypes = useSelector((state) => state.plugins.pluginTypes);
+  const configState = useSelector((state) => state.config);
+  const nodesState = useSelector((state) => state.nodes);
   const availablePluginsMap = useSelector((state) => state.availablePlugins.pluginsMap);
 
   const location = useLocation();
@@ -95,7 +84,7 @@ export function useLeftPanelController(): ILeftPanelController {
     if (!fetchedPluginsMap.length) {
       pluginsMap.push({
         name: getPluginTypeDisplayName(ext),
-        plugins: plugins,
+        plugins,
         pluginTypes: [ext],
       });
     } else {
@@ -127,11 +116,7 @@ export function useLeftPanelController(): ILeftPanelController {
     dispatch({
       type: UiActions.OPEN_MODAL,
       payload: {
-        render: (
-          <DirtyStateConfirmationModal 
-            onClose={closeModal}
-          />
-        ),
+        render: <DirtyStateConfirmationModal onClose={closeModal} />,
         onClose: closeModal,
       },
     });
@@ -151,7 +136,7 @@ export function useLeftPanelController(): ILeftPanelController {
   }
 
   // TODO: Add correct type for node
-  function onItemClicked (event: React.MouseEvent<HTMLElement>, node: any) {
+  function onItemClicked(event: React.MouseEvent<HTMLElement>, node: any) {
     if (event) {
       event.stopPropagation();
     }
@@ -168,14 +153,10 @@ export function useLeftPanelController(): ILeftPanelController {
   }
 
   // TODO: add correct types for node
-  async function createPluginTemplate(node: any, mode: TStudioUiMode) {
-
-  }
+  async function createPluginTemplate(node: any, mode: TStudioUiMode) {}
 
   // TODO: add correct types for node
-  async function deletePluginTemplate(node: any) {
-
-  }
+  async function deletePluginTemplate(node: any) {}
 
   // TODO: add correct types for node
   async function addPluginToCanvas(event: React.MouseEvent<HTMLElement>, node: any) {
@@ -185,9 +166,13 @@ export function useLeftPanelController(): ILeftPanelController {
       }
       let item = [plugin];
       const plugins = pluginTypes[node.type];
-      let matchedPlugin = plugins.filter((plug) => plug.name === node.name && !plug.pluginTemplate);
+      const matchedPlugin = plugins.filter(
+        (plug) => plug.name === node.name && !plug.pluginTemplate
+      );
       if (matchedPlugin.length) {
-        item = matchedPlugin[0].allArtifacts.filter((plug) => _isEqual(plug.artifact, plugin.defaultArtifact));
+        item = matchedPlugin[0].allArtifacts.filter((plug) =>
+          _isEqual(plug.artifact, plugin.defaultArtifact)
+        );
       }
       return item[0];
     };
@@ -200,23 +185,22 @@ export function useLeftPanelController(): ILeftPanelController {
       updatePluginDefaultVersion(item);
     }
 
-    ///////////////////////////////
-    this.hydratorNodeActions.resetSelectedNode();
+    resetSelectedNode();
     let name = item.name || item.pluginTemplate;
     const configProperties = {};
     let configurationGroups;
     let widgets;
 
     if (!item.pluginTemplate) {
-      let itemArtifact = item.artifact;
-      let key = `${item.name}-${item.type}-${itemArtifact.name}-${itemArtifact.version}-${itemArtifact.scope}`;
-      widgets = this.myHelpers.objectQuery(this.availablePluginMap, key, 'widgets');
-      const displayName = this.myHelpers.objectQuery(widgets, 'display-name');
-      configurationGroups = this.myHelpers.objectQuery(widgets, 'configuration-groups');
+      const itemArtifact = item.artifact;
+      const key = `${item.name}-${item.type}-${itemArtifact.name}-${itemArtifact.version}-${itemArtifact.scope}`;
+      widgets = _get(availablePluginsMap, `${key}.widgets`);
+      const displayName = _get(widgets, 'display-name');
+      configurationGroups = _get(widgets, 'configuration-groups');
       if (configurationGroups && configurationGroups.length > 0) {
-        configurationGroups.forEach(cg => {
-          cg.properties.forEach(prop => {
-            configProperties[prop.name] = this.myHelpers.objectQuery(prop, 'widget-attributes', 'default');
+        configurationGroups.forEach((cg) => {
+          cg.properties.forEach((prop) => {
+            configProperties[prop.name] = _get(prop, 'widget-attributes.default');
           });
         });
       }
@@ -224,19 +208,24 @@ export function useLeftPanelController(): ILeftPanelController {
       name = displayName || name;
     }
 
-    let filteredNodes = this.HydratorPlusPlusConfigStore.getNodes()
-        .filter( node => (node.plugin.label ? node.plugin.label.indexOf(name) !== -1 : false) );
+    const filteredNodes = getNodes(configState).filter((node) =>
+      node.plugin.label ? node.plugin.label.includes(name) : false
+    );
     let config;
 
     if (item.pluginTemplate) {
       config = {
         plugin: {
-          label: (filteredNodes.length > 0 ? item.pluginTemplate + (filteredNodes.length+1) : item.pluginTemplate),
+          label:
+            filteredNodes.length > 0
+              ? item.pluginTemplate + (filteredNodes.length + 1)
+              : item.pluginTemplate,
           name: item.pluginName,
           artifact: item.artifact,
           properties: item.properties,
+          type: item.pluginType,
         },
-        icon: this.DAGPlusPlusFactory.getIcon(item.pluginName), // use getPluginIcon from utils
+        icon: getPluginIcon(item.pluginName),
         type: item.pluginType,
         outputSchema: item.outputSchema,
         inputSchema: item.inputSchema,
@@ -244,27 +233,29 @@ export function useLeftPanelController(): ILeftPanelController {
         description: item.description,
         lock: item.lock,
         configGroups: configurationGroups,
-        filters: widgets && widgets.filters
+        filters: widgets && widgets.filters,
       };
     } else {
       config = {
         plugin: {
-          label: (filteredNodes.length > 0 ? name + (filteredNodes.length+1) : name),
+          label: filteredNodes.length > 0 ? name + (filteredNodes.length + 1) : name,
           artifact: item.artifact,
           name: item.name,
           properties: configProperties,
+          type: item.type,
         },
         icon: item.icon,
         description: item.description,
         type: item.type,
         warning: true,
         configGroups: configurationGroups,
-        filters: widgets && widgets.filters
+        filters: widgets && widgets.filters,
       };
     }
-    this.hydratorNodeActions.addNode(config);
+
+    config._uiPosition = getNodeInitialPosition(nodesState, config.type);
+    addNode(config);
   }
-  
 
   return {
     artifacts,

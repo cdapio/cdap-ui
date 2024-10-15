@@ -54,4 +54,4 @@ export interface IPipelineConfig {
   };
   numOfRecordsPreview?: number;
   maxConcurrentRuns?: number;
-};
+}

@@ -14,9 +14,8 @@
  * the License.
  */
 
-
-// TODO: Much hardcoding in this formatter, 
-//find a better way to handle these exceptaional cases
+// TODO: Much hardcoding in this formatter,
+// find a better way to handle these exceptaional cases
 export function camelToTitle(input: string): string {
   // Handle "HBase" or "OCaml" case with no change to input.
   const result = input.match(/^[A-Z][A-Z][a-z]+/);
@@ -38,7 +37,9 @@ export function camelToTitle(input: string): string {
     return 'Change Tracking SQLServer';
   }
 
-  return input.replace(/([a-z])([A-Z])/g, '$1 $2')
-  .replace(/([A-Z])([a-z])/g, ' $1$2')
-  .replace(/\ +/g, ' ').trim();
-};
+  return input
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/([A-Z])([a-z])/g, ' $1$2')
+    .replace(/\ +/g, ' ')
+    .trim();
+}

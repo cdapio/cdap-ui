@@ -37,14 +37,13 @@ export interface IConfigState {
   config?: IPipelineConfig;
 
   __defaultState?: IConfigState;
-};
-
+}
 
 export const configInitialState: IConfigState = {
   artifact: {
     name: '',
     scope: 'SYSTEM',
-    version: ''
+    version: '',
   },
   __ui__: {
     nodes: [],
@@ -65,7 +64,7 @@ export const configInitialState: IConfigState = {
     processTimingEnabled: true,
     stageLoggingEnabled: HYDRATOR_DEFAULT_VALUES.stageLoggingEnabled,
   },
-}
+};
 
 export const config = (state: IConfigState = configInitialState, action?): IConfigState => {
   switch (action.type) {

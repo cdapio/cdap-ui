@@ -24,6 +24,7 @@ import AuthRefresher from 'components/AuthRefresher';
 import LeftPanelV2 from './LeftPanelV2';
 import StudioV2Store from '../store';
 import StudioModalsManager from '../modals/StudioModalsManager';
+import { ReactFlowProvider } from 'reactflow';
 
 // @ts-ignore
 function noop() {}
@@ -31,12 +32,12 @@ function noop() {}
 export default function CreatePipelineView() {
   useHideFooterInPage();
   useEffect(() => {
-    document.body.classList.add("theme-cdap");
-    document.body.classList.add("state-hydrator-create");
+    document.body.classList.add('theme-cdap');
+    document.body.classList.add('state-hydrator-create');
 
     return () => {
-      document.body.classList.remove("theme-cdap");
-      document.body.classList.remove("state-hydrator-create");
+      document.body.classList.remove('theme-cdap');
+      document.body.classList.remove('state-hydrator-create');
     };
   }, []);
 
@@ -62,7 +63,7 @@ export default function CreatePipelineView() {
     <Provider store={StudioV2Store}>
       <CanvasWrapper className="react-version">
         <LeftPanelWrapper>
-        <LeftPanelV2 />
+          <LeftPanelV2 />
         </LeftPanelWrapper>
         <RightWrapper>
           <TopPanel
@@ -126,9 +127,9 @@ export default function CreatePipelineView() {
             stateParams={{}}
           />
           <DagWrapper id="dag-wrapper">
-            {/* <ReactFlowProvider> */}
-            <DagComponent />
-            {/* </ReactFlowProvider> */}
+            <ReactFlowProvider>
+              <DagComponent />
+            </ReactFlowProvider>
           </DagWrapper>
         </RightWrapper>
         <AuthRefresher />

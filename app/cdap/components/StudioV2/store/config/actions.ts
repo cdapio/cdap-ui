@@ -22,7 +22,26 @@ import _assign from 'lodash/assign';
 import { IPipelineConfig } from 'components/StudioV2/types';
 import StudioV2Store from '..';
 import { IConfigState, configInitialState } from './reducer';
-import { setArtifact_mutating, setBatchInterval_mutating, setCheckpointDir_mutating, setCheckpointing_mutating, setClientResources_mutating, setComments_mutating, setDriverResources_mutating, setEngine_mutating, setGracefulStop_mutating, setInstrumentation_mutating, setMaxConcurrentRuns_mutating, setNodes_mutating, setNumRecordsPreview_mutating, setProperties_mutating, setRangeRecordsPreview_mutating, setResources_mutating, setServiceAccountPath_mutating, setStageLogging_mutating } from './mutations';
+import {
+  setArtifact_mutating,
+  setBatchInterval_mutating,
+  setCheckpointDir_mutating,
+  setCheckpointing_mutating,
+  setClientResources_mutating,
+  setComments_mutating,
+  setDriverResources_mutating,
+  setEngine_mutating,
+  setGracefulStop_mutating,
+  setInstrumentation_mutating,
+  setMaxConcurrentRuns_mutating,
+  setNodes_mutating,
+  setNumRecordsPreview_mutating,
+  setProperties_mutating,
+  setRangeRecordsPreview_mutating,
+  setResources_mutating,
+  setServiceAccountPath_mutating,
+  setStageLogging_mutating,
+} from './mutations';
 import { GLOBALS } from 'services/global-constants';
 
 const PREFIX = 'CONFIG_ACTIONS';
@@ -55,8 +74,10 @@ export function initCofigStore(config?: any) {
     if (stateCopy.artifact.name === GLOBALS.etlDataStreams) {
       setClientResources_mutating(stateCopy, stateCopy.config.clientResources);
       setCheckpointing_mutating(stateCopy, stateCopy.config.disableCheckpoints);
-      setCheckpointDir_mutating(stateCopy, stateCopy.config.checkpointDir 
-        || window.CDAP_CONFIG.hydrator.defaultCheckpointDir);
+      setCheckpointDir_mutating(
+        stateCopy,
+        stateCopy.config.checkpointDir || window.CDAP_CONFIG.hydrator.defaultCheckpointDir
+      );
       setGracefulStop_mutating(stateCopy, stateCopy.config.stopGracefully);
       setBatchInterval_mutating(stateCopy, stateCopy.config.batchInterval);
     } else if (stateCopy.artifact.name === GLOBALS.eltSqlPipeline) {
@@ -73,6 +94,4 @@ export function initCofigStore(config?: any) {
   setConfigState(stateCopy);
 }
 
-export function onEngineChange() {
-
-}
+export function onEngineChange() {}
