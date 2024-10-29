@@ -361,7 +361,7 @@ public class Commands implements CdfHelper {
     try {
       WebElement bannerCloseButton = Helper.locateElementByXPath(
           "//div[@data-testid='valium-banner-hydrator']//button[@class='close ng-scope']");
-      WaitHelper.waitForElementToBeClickable(bannerCloseButton, 10);
+      WaitHelper.waitForElementToBeClickable(bannerCloseButton, 180L);
       ElementHelper.clickOnElement(bannerCloseButton);
     } catch (NoSuchElementException e) {
       // pass
