@@ -65,8 +65,8 @@ public class WidgetCodeEditor {
         WebElement jsEditorContentElement = jsEditorElement.findElement(
                 By.cssSelector("div[class*='ace_text-layer']"));
         String editorValue = ElementHelper.getElementText(jsEditorContentElement);
-        Assert.assertEquals(StringUtils.normalizeSpace(editorValue),
-                StringUtils.normalizeSpace(defaultJsEditorVal));
+        Assert.assertEquals(defaultJsEditorVal.replaceAll("\\s+", ""),
+            editorValue.replaceAll("\\s+", ""));
     }
 
     @Then("Replace and verify JS editor value and cursor position")

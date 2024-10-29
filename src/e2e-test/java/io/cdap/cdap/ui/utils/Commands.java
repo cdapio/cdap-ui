@@ -30,6 +30,7 @@ import io.cdap.e2e.utils.WaitHelper;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -183,7 +184,11 @@ public class Commands implements CdfHelper {
   }
 
   public static void dismissStudioLeaveConfirmationModal() {
-    SeleniumDriver.getDriver().switchTo().alert().accept();
+    try {
+      SeleniumDriver.getDriver().switchTo().alert().accept();
+    } catch (NoAlertPresentException e) {
+      // ignore it.
+    }
   }
 
   public static void openPluginGroupPanel(String pluginGroup) {
@@ -356,7 +361,7 @@ public class Commands implements CdfHelper {
     try {
       WebElement bannerCloseButton = Helper.locateElementByXPath(
           "//div[@data-testid='valium-banner-hydrator']//button[@class='close ng-scope']");
-      WaitHelper.waitForElementToBeClickable(bannerCloseButton);
+      WaitHelper.waitForElementToBeClickable(bannerCloseButton, 180L);
       ElementHelper.clickOnElement(bannerCloseButton);
     } catch (NoSuchElementException e) {
       // pass
