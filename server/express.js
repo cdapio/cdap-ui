@@ -246,6 +246,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         hstsMaxAge: cdapConfig['hsts.max.age'],
         hstsIncludeSubDomains: cdapConfig['hsts.include.sub.domains'],
         hstsPreload: cdapConfig['hsts.preload'],
+        runRecordsTtl: cdapConfig['app.run.records.ttl.days'],
       },
       hydrator: {
         previewEnabled: cdapConfig['enable.preview'] === 'true',
