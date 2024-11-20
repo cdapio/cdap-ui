@@ -78,6 +78,10 @@ const EnabledTriggerRowView = ({
   workflowName,
 }: IEnabledTriggerRowViewProps) => {
   const currentTrigger = schedule.trigger as IProgramStatusTrigger;
+  const concurrencyConstraint = schedule.constraints.find(
+    (constraint) => constraint.type === 'CONCURRENCY'
+  );
+  const maxConcurrentRuns = concurrencyConstraint ? concurrencyConstraint.maxConcurrency : '_';
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedNamespace, setSelectedNamesapce] = useState(null);
   const [payloadModalOpen, setPayloadModalOpen] = useState(false);
@@ -138,6 +142,10 @@ const EnabledTriggerRowView = ({
 
     return (
       <div>
+        <StyledNameSpace>
+          {T.translate(`${TRIGGER_PREFIX}.pipelineTriggerConcurrencyHeader`, { maxConcurrentRuns })}
+        </StyledNameSpace>
+        <br />
         <PipelineDescription>
           <strong>{T.translate(`${TRIGGER_PREFIX}.description`)}: </strong>
           {info ? <span>{info && info.description}</span> : renderLoading()}
