@@ -38,6 +38,7 @@ interface ILeftPanelProps {
   isEdit: boolean;
   isV2?: boolean;
   createPluginTemplate: (node: any, mode: 'edit' | 'create') => void;
+  toggleExpanded?(): void;
 }
 
 const StyledSelect = styled(Select)`
@@ -58,6 +59,7 @@ export const LeftPanel = ({
   isEdit,
   createPluginTemplate,
   isV2,
+  toggleExpanded,
 }: ILeftPanelProps) => {
   // angular has this saved in local storage - is this necessary?
   const AvlPluginStore = isV2 ? StudioV2Store : AvailablePluginsStore;
@@ -83,6 +85,13 @@ export const LeftPanel = ({
   useOnUnmount(() => {
     unsub();
   });
+
+  function handleWidthToggle() {
+    setIsExpanded((x) => !x);
+    if (typeof toggleExpanded === 'function') {
+      toggleExpanded();
+    }
+  }
 
   return (
     <div className={`left-panel-wrapper ${isExpanded ? 'expanded' : ''}`}>
@@ -110,7 +119,7 @@ export const LeftPanel = ({
             })}
           </StyledSelect>
           <Button
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={handleWidthToggle}
             color="primary"
             component="button"
             className="btn-sm pull-right"
