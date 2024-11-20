@@ -21,12 +21,18 @@ interface IUiState {
   modalShown: boolean;
   modalToRender?: React.ReactNode;
   modalOnClose?: () => void;
+
+  rightPanelShown: boolean;
+  rightPanelToRender?: React.ReactNode;
+  rightPanelOnClose?: () => void;
   // fill in
 }
 
 export const uiInitialState: IUiState = {
   modalShown: false,
   modalToRender: null,
+  rightPanelShown: false,
+  rightPanelToRender: null,
   // fill in
 };
 
@@ -46,6 +52,22 @@ export const uiState = (state: IUiState = uiInitialState, action?): IUiState => 
         modalShown: false,
         modalToRender: null,
         modalOnClose: null,
+      };
+
+    case UiActions.OPEN_RIGHT_PANEL:
+      return {
+        ...state,
+        rightPanelShown: true,
+        rightPanelToRender: action.payload.render,
+        rightPanelOnClose: action.payload.onClose,
+      };
+
+    case UiActions.CLOSE_RIGHT_PANEL:
+      return {
+        ...state,
+        rightPanelShown: false,
+        rightPanelToRender: null,
+        rightPanelOnClose: null,
       };
 
     default:

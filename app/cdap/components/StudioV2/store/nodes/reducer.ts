@@ -23,6 +23,7 @@ import {
   addConnection_mutating,
   addNode_mutating,
   resetActiveNodeId_mutating,
+  setActiveNodeId_mutating,
   undoActions_mutating,
   updateNode_mutating,
 } from './mutations';
@@ -37,6 +38,7 @@ export const NodesActions = {
   ADD_NODE: `${PREFIX}/ADD_NODE`,
   UPDATE_NODE: `${PREFIX}/UPDATE_NODE`,
   ADD_CONNECTION: `${PREFIX}/ADD_CONNECTION`,
+  SET_ACTIVE_NODE: `${PREFIX}/SET_ACTIVE_NODE`,
 };
 
 export interface INodesState {
@@ -94,6 +96,9 @@ export const nodes = (state: INodesState = nodesInitialState, action?): INodesSt
 
     case NodesActions.RESET_ACTIVE_NODE:
       return cloneAndApply(state, resetActiveNodeId_mutating);
+
+    case NodesActions.SET_ACTIVE_NODE:
+      return cloneAndApply(state, (draft) => setActiveNodeId_mutating(draft, action.payload));
 
     case NodesActions.ADD_NODE:
       return cloneAndApply(state, (draft) => addNode_mutating(draft, action.payload));

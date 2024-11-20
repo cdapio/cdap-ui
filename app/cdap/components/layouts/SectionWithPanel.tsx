@@ -390,7 +390,12 @@ export default function SectionWithPanel({
 
   function renderPanel() {
     return (
-      <PanelWrapper ref={panelWrapperRef} disablePointer={isResizing} opensFrom={opensFrom}>
+      <PanelWrapper
+        ref={panelWrapperRef}
+        disablePointer={isResizing}
+        opensFrom={opensFrom}
+        defaultSize={collapsed ? collapsedSize : defaultSize}
+      >
         {panel}
       </PanelWrapper>
     );
@@ -401,11 +406,11 @@ export default function SectionWithPanel({
       <PanelDivider
         onMouseDown={setResizingState}
         isResizable={canResize()}
-        defaultCollapsedWidth={collapsedSize}
-        defaultWidth={defaultSize}
+        defaultCollapsedSize={collapsedSize}
+        defaultSize={collapsed ? collapsedSize : defaultSize}
         opensFrom={opensFrom}
         ref={dividerRef}
-        aria-orientation={isHorizontal(opensFrom) ? 'horizontal' : 'vertical' }
+        aria-orientation={isHorizontal(opensFrom) ? 'horizontal' : 'vertical'}
         aria-valuenow={currentDividerPositionRef.current}
         aria-valuemin={collapsedSize}
       >

@@ -62,6 +62,13 @@ export function updateNode(nodeId, nodeConfig) {
   });
 }
 
+export function setActiveNodeId(nodeId) {
+  StudioV2Store.dispatch({
+    type: NodesActions.SET_ACTIVE_NODE,
+    payload: nodeId,
+  });
+}
+
 export function updateNodePosition(nodeId, position) {
   const nodeConfig = {
     _uiPosition: position,

@@ -14,6 +14,7 @@
  * the License.
  */
 
+import React from 'react';
 import {
   Connection,
   Edge,
@@ -27,8 +28,11 @@ import {
 } from 'reactflow';
 import { useSelector, useDispatch } from 'react-redux';
 import { getConnections, getNodes } from '../store/nodes/queries';
-import { useCallback, useEffect, useLayoutEffect } from 'react';
+import { getNodes as getConfigNodes } from '../store/config/queries';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { NodesActions } from '../store/nodes/reducer';
+import { usePanelCollapseController } from 'components/layouts/SectionWithPanel';
+import { UiActions } from '../store/uistate/actions';
 
 interface IDAGController {
   nodes: Node[];
@@ -48,6 +52,9 @@ function getNodesComparisonKey(nodes) {
 export function useDAGController(): IDAGController {
   const dispatch = useDispatch();
   const nodesState = useSelector((state) => state.nodes);
+  const configState = useSelector((state) => state.config);
+  const uiState = useSelector((state) => state.uiState);
+  const { isCollapsed, collapse, expand } = usePanelCollapseController();
 
   const pluginNodes = getNodes(nodesState);
   const connections = getConnections(nodesState);
@@ -81,6 +88,55 @@ export function useDAGController(): IDAGController {
     setNodes(uiNodes);
     setEdges(uiEdges);
   }, [getNodesComparisonKey(uiNodes), JSON.stringify(uiEdges)]);
+
+  useEffect(() => {
+    setActiveNode(nodesState.activeNodeId);
+  }, [nodesState.activeNodeId]);
+
+  useEffect(() => {
+    setStateAndUpdateConfigStore();
+  }, [nodesState]);
+
+  function setStateAndUpdateConfigStore() {
+    // TODO: add logic here
+  }
+
+  function setActiveNode(nodeId) {
+    console.log('***********************');
+    console.log(uiState.rightPanelShown, nodeId);
+    if (!nodeId || uiState.rightPanelShown) {
+      return;
+    }
+
+    let pluginNode;
+    let nodeFromNodesStore;
+    const nodeFromConfigStore = getConfigNodes(configState).filter((node) => node.name === nodeId);
+    if (nodeFromConfigStore.length) {
+      pluginNode = nodeFromConfigStore[0];
+    } else {
+      nodeFromNodesStore = getNodes(nodesState).filter((node) => node.name === nodeId);
+      pluginNode = nodeFromNodesStore[0];
+    }
+
+    const closeRightPanel = () => {
+      collapse();
+      dispatch({
+        type: UiActions.CLOSE_RIGHT_PANEL,
+      });
+      dispatch({
+        type: NodesActions.RESET_ACTIVE_NODE,
+      });
+    };
+
+    dispatch({
+      type: UiActions.OPEN_RIGHT_PANEL,
+      payload: {
+        render: <h4>Plugin properties</h4>,
+        onClose: closeRightPanel,
+      },
+    });
+    expand();
+  }
 
   const getNodeById = useCallback(
     (nodeid) => {

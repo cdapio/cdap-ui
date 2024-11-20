@@ -25,6 +25,11 @@ import {
 } from 'components/hydrator/components/SidePanel/helpers';
 import { Button, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import { setActiveNodeId } from '../store/nodes/actions';
+import {
+  setMetricsTabActive,
+  setSelectedPlugin,
+} from 'services/PipelineMetricsStore/ActionCreator';
 
 const targetHandleStyle = {};
 const sourceHandleStyle = {
@@ -176,7 +181,22 @@ export function PipelineNode({ id, data, selected }: NodeProps) {
   const node = data.pluginNode;
   const hasCustomIcon = shouldShowCustomIcon(node.plugin, pluginsMap);
 
-  console.log(data, hasCustomIcon, pluginsMap);
+  // console.log(data, hasCustomIcon, pluginsMap);
+  function resetActiveNodeForComment() {
+    // TODO: Add logic here
+  }
+
+  function closeMetricsPopover(node) {
+    // TODO: Add logic here
+  }
+
+  function onPropertiesClick() {
+    resetActiveNodeForComment();
+    closeMetricsPopover(node);
+    setMetricsTabActive(false);
+    setSelectedPlugin(node.type, node.plugin.name);
+    setActiveNodeId(node.name);
+  }
 
   return (
     <>
@@ -208,7 +228,7 @@ export function PipelineNode({ id, data, selected }: NodeProps) {
             </PluginMetaContainer>
           </NodeInfoContainer>
           <NodeButtonsContainer>
-            <Button variant="text" color="primary" size="medium">
+            <Button variant="text" color="primary" size="medium" onClick={onPropertiesClick}>
               PROPERTIES
             </Button>
             <IconButton size="small">

@@ -15,10 +15,24 @@
  */
 
 import React, { useEffect } from 'react';
+import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { LeftPanel } from 'components/hydrator/components/LeftPanel/LeftPanel';
 import { fetchSystemArtifacts, setSelectedArtifact } from '../store/common/actions';
 import { useLeftPanelController } from './useLeftPanel';
+import { usePanelCollapseController } from 'components/layouts/SectionWithPanel';
+
+const ScrollableDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 // @ts-ignore
 function noop() {}
@@ -37,19 +51,31 @@ export default function LeftPanelV2() {
   // console.log(artifacts || 'hello');
   // console.log({ pluginsMap });
 
+  const { isCollapsed, collapse, expand } = usePanelCollapseController();
+  function handleToggleExpanded() {
+    if (isCollapsed()) {
+      expand();
+    } else {
+      collapse();
+    }
+  }
+
   return (
-    <LeftPanel
-      onArtifactChange={onArtifactChange}
-      pluginsMap={pluginsMap}
-      selectedArtifact={selectedArtifact}
-      artifacts={artifacts}
-      itemGenericName="plugins"
-      groups={pluginsMap}
-      groupGenericName="artifacts"
-      onPanelItemClick={onItemClicked}
-      isEdit={false}
-      createPluginTemplate={createPluginTemplate}
-      isV2={true}
-    />
+    <ScrollableDiv>
+      <LeftPanel
+        onArtifactChange={onArtifactChange}
+        pluginsMap={pluginsMap}
+        selectedArtifact={selectedArtifact}
+        artifacts={artifacts}
+        itemGenericName="plugins"
+        groups={pluginsMap}
+        groupGenericName="artifacts"
+        onPanelItemClick={onItemClicked}
+        isEdit={false}
+        createPluginTemplate={createPluginTemplate}
+        isV2={true}
+        toggleExpanded={handleToggleExpanded}
+      />
+    </ScrollableDiv>
   );
 }
