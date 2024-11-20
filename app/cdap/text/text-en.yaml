@@ -2815,6 +2815,7 @@ features:
     groupTriggers: Composite Triggers
     pipelineTriggerType: "Trigger Type: {type}"
     pipelineTriggerTypeHeader: "Type"
+    pipelineTriggerConcurrencyHeader: "Max concurrent runs: {maxConcurrentRuns}"
     ScheduleRuntimeArgs:
       configure_enable_btn: Configure and Enable Trigger
       configure_select_btn: Select
@@ -2856,6 +2857,7 @@ features:
     SetTriggers:
       addNewTrigger: Enable the trigger
       configComputeProfie: Compute Profile
+      maxConcurrentRuns: Max concurrent runs
       compositeTriggersTitle: "Add a new trigger for \"{pipelineName}\""
       buttonLabel: Enable Trigger
       pipelineCount: "{count} pipelines available"

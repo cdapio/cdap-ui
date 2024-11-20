@@ -31,6 +31,7 @@ const PipelineTriggersActions = {
   setPayloadModalState: 'TRIGGERS_SET_PAYLOAD_MODAL_STATE',
   setTriggerType: 'TRIGGERS_SET_TYPE',
   reset: 'TRIGGERS_RESET',
+  setMaxConcurrentRuns: 'TRIGGERS_SET_MAX_CONCURRENT_RUNS',
 };
 
 export default PipelineTriggersActions;
