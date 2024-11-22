@@ -69,7 +69,7 @@ const getWebpackDllPlugins = (mode) => {
 var plugins = [
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),
-  ...getWebpackDllPlugins(mode),
+  //...getWebpackDllPlugins(mode),
   new LodashModuleReplacementPlugin({
     shorthands: true,
     collections: true,

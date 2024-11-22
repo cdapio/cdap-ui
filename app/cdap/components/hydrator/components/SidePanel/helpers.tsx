@@ -54,6 +54,7 @@ export const filterPlugins = (searchTerm: string, unfilteredPlugins: any) => {
 
 export const shouldShowCustomIcon = (plugin, pluginsMap) => {
   const key = generatePluginMapKey(plugin);
+  // console.log({ key });
   const iconSourceType = objectQuery(pluginsMap, key, 'widgets', 'icon', 'type');
   return ['inline', 'link'].indexOf(iconSourceType) !== -1;
 };

@@ -15,16 +15,47 @@
  */
 
 class HydratorPlusPlusLeftPanelCtrl {
-  constructor($rootScope, HydratorPlusPlusLeftPanelStore, $scope, $stateParams, rVersion, HydratorPlusPlusConfigStore, HydratorPlusPlusPluginActions, DAGPlusPlusFactory, DAGPlusPlusNodesActionsFactory, NonStorePipelineErrorFactory, $uibModal, myAlertOnValium, $state, $q, rArtifacts, PluginTemplatesDirActions, HydratorPlusPlusOrderingFactory, LEFTPANELSTORE_ACTIONS, myHelpers, $timeout, mySettings, PipelineAvailablePluginsActions, AvailablePluginsStore, AVAILABLE_PLUGINS_ACTIONS) {
-    this.$state = $state;
+  constructor(
+    $state,
+    $rootScope,
+    $scope,
+    $stateParams,
+    $uibModal,
+    $q,
+    $timeout,
+
+    rArtifacts,
+    rVersion,
+
+    HydratorPlusPlusLeftPanelStore,
+    LEFTPANELSTORE_ACTIONS,
+    PluginTemplatesDirActions,
+    //////////////
+    HydratorPlusPlusConfigStore,
+    HydratorPlusPlusPluginActions,
+    //////////////
+    AvailablePluginsStore,
+    PipelineAvailablePluginsActions,
+    AVAILABLE_PLUGINS_ACTIONS,
+
+    DAGPlusPlusFactory,
+    DAGPlusPlusNodesActionsFactory,
+    NonStorePipelineErrorFactory,
+    HydratorPlusPlusOrderingFactory,
+
+    myAlertOnValium,
+    myHelpers,
+    mySettings,
+  ){
+    this.$state = $state; // equivalent of react-router history
     this.$scope = $scope;
     this.$stateParams = $stateParams;
     this.HydratorPlusPlusConfigStore = HydratorPlusPlusConfigStore;
     this.DAGPlusPlusFactory = DAGPlusPlusFactory;
-    this.DAGPlusPlusNodesActionsFactory = DAGPlusPlusNodesActionsFactory;
-    this.NonStorePipelineErrorFactory = NonStorePipelineErrorFactory;
+    this.hydratorNodeActions = DAGPlusPlusNodesActionsFactory;
+    this.NonStorePipelineErrorFactory = NonStorePipelineErrorFactory; // ignore: unused
     this.PluginTemplatesDirActions = PluginTemplatesDirActions;
-    this.rVersion = rVersion;
+    this.cdapVersion = rVersion.version;
     this.useRootScopeStore = false;
     if ($rootScope.stores) {
       this.leftpanelStore = $rootScope.stores;
@@ -33,16 +64,18 @@ class HydratorPlusPlusLeftPanelCtrl {
       this.leftpanelStore = HydratorPlusPlusLeftPanelStore;
     }
 
-    this.myAlertOnValium = myAlertOnValium;
-    this.$q = $q;
-    this.HydratorPlusPlusOrderingFactory = HydratorPlusPlusOrderingFactory;
+    console.log("useRootScoprStore = ", this.useRootScopeStore);
+
+    this.myAlertOnValium = myAlertOnValium; // ignore: unused
+    this.$q = $q; // use rx-js instead
+    this.HydratorPlusPlusOrderingFactory = HydratorPlusPlusOrderingFactory; // import individual functions from utils
     this.leftpanelActions = HydratorPlusPlusPluginActions;
     this.LEFTPANELSTORE_ACTIONS = LEFTPANELSTORE_ACTIONS;
-    this.myHelpers = myHelpers;
+    this.myHelpers = myHelpers; // only uses ObjectQuery, use _get instead
     this.mySettings = mySettings;
-    this.PipelineAvailablePluginsActions = PipelineAvailablePluginsActions;
-    this.AvailablePluginsStore = AvailablePluginsStore;
-    this.AVAILABLE_PLUGINS_ACTIONS = AVAILABLE_PLUGINS_ACTIONS;
+    this.PipelineAvailablePluginsActions = PipelineAvailablePluginsActions; // consolidate with left panel actions
+    this.AvailablePluginsStore = AvailablePluginsStore; // consolidate with left panel store
+    this.AVAILABLE_PLUGINS_ACTIONS = AVAILABLE_PLUGINS_ACTIONS; // consolidate with left panel actions
 
     this.pluginsMap = [];
     this.sourcesToVersionMap = {};
@@ -106,11 +139,11 @@ class HydratorPlusPlusLeftPanelCtrl {
       const defaultVersionMap = this.leftpanelStore.getState().plugins.pluginToVersionMap;
       this.mySettings.get('CURRENT_CDAP_VERSION')
       .then((defaultCDAPVersion) => {
-        if (this.rVersion.version !== defaultCDAPVersion) {
+        if (this.cdapVersion !== defaultCDAPVersion) {
           return this.mySettings
             .set('plugin-default-version', {})
             .then(() => {
-              this.mySettings.set('CURRENT_CDAP_VERSION', this.rVersion.version);
+              this.mySettings.set('CURRENT_CDAP_VERSION', this.cdapVersion);
             });
         }
         this.mySettings.set('plugin-default-version', defaultVersionMap);
@@ -125,7 +158,7 @@ class HydratorPlusPlusLeftPanelCtrl {
 
     eventEmitter.on(globalEvents.ARTIFACTUPLOAD, this.leftPanelStoreFetchExtension);
 
-    this.$uibModal = $uibModal;
+    this.uiModalActions = $uibModal;
     this.$scope.$on('$destroy', () => {
       this.leftpanelStore.dispatch({ type: this.LEFTPANELSTORE_ACTIONS.RESET});
       sub();
@@ -143,12 +176,12 @@ class HydratorPlusPlusLeftPanelCtrl {
       {
         namespace: this.$stateParams.namespace,
         pipelineType: this.selectedArtifact.name,
-        version: this.rVersion.version,
+        version: this.cdapVersion,
         scope: this.$scope
       }
     );
-    
-    if (this.useRootScopeStore) {
+
+    if (this.useRootScopeStore /* This is FALSE . IGNORE*/) {
       this.leftpanelActions.fetchDefaultVersion();
     } else {
       this.leftpanelStore.dispatch(
@@ -203,7 +236,7 @@ class HydratorPlusPlusLeftPanelCtrl {
     let goTonextStep = true;
     let isStoreDirty = this.HydratorPlusPlusConfigStore.getIsStateDirty();
     if (isStoreDirty) {
-      return this.$uibModal.open({
+      return this.uiModalActions.open({
         templateUrl: '/assets/features/hydrator/templates/create/popovers/canvas-overwrite-confirmation.html',
         size: 'lg',
         backdrop: 'static',
@@ -276,6 +309,7 @@ class HydratorPlusPlusLeftPanelCtrl {
     }
   }
 
+  // Ignore: NOT IN USE, use the above v2 instead
   onLeftSidePanelItemClicked(event, node) {
     event.stopPropagation();
     if (node.action === 'createTemplate') {
@@ -291,7 +325,7 @@ class HydratorPlusPlusLeftPanelCtrl {
 
   deletePluginTemplate(node) {
     let templateType = this.HydratorPlusPlusConfigStore.getArtifact().name;
-    this.$uibModal
+    this.uiModalActions
       .open({
         templateUrl: '/assets/features/hydrator/templates/partial/plugin-delete-confirmation.html',
         size: 'lg',
@@ -308,7 +342,7 @@ class HydratorPlusPlusLeftPanelCtrl {
 
   createPluginTemplate(node, mode) {
     let templateType = this.HydratorPlusPlusConfigStore.getArtifact().name;
-    this.$uibModal
+    this.uiModalActions
       .open({
         templateUrl: '/assets/features/hydrator/templates/create/popovers/plugin-templates.html',
         size: 'lg',
@@ -355,7 +389,7 @@ class HydratorPlusPlusLeftPanelCtrl {
       );
     }
 
-    this.DAGPlusPlusNodesActionsFactory.resetSelectedNode();
+    this.hydratorNodeActions.resetSelectedNode();
     let name = item.name || item.pluginTemplate;
     const configProperties = {};
     let configurationGroups;
@@ -390,7 +424,7 @@ class HydratorPlusPlusLeftPanelCtrl {
           artifact: item.artifact,
           properties: item.properties,
         },
-        icon: this.DAGPlusPlusFactory.getIcon(item.pluginName),
+        icon: this.DAGPlusPlusFactory.getIcon(item.pluginName), // use getPluginIcon from utils
         type: item.pluginType,
         outputSchema: item.outputSchema,
         inputSchema: item.inputSchema,
@@ -416,7 +450,7 @@ class HydratorPlusPlusLeftPanelCtrl {
         filters: widgets && widgets.filters
       };
     }
-    this.DAGPlusPlusNodesActionsFactory.addNode(config);
+    this.hydratorNodeActions.addNode(config);
   }
 }
 

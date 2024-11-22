@@ -25,7 +25,7 @@ const log = log4js.getLogger('default');
 const uiThemePropertyName = 'ui.theme.file';
 
 export function extractUIThemeWrapper(cdapConfig) {
-  const uiThemePath = cdapConfig[uiThemePropertyName];
+  const uiThemePath = 'server/config/themes/light.json'; // cdapConfig[uiThemePropertyName];
   return extractUITheme(cdapConfig, uiThemePath);
 }
 

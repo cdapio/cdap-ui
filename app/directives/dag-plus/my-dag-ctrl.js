@@ -1343,6 +1343,7 @@ angular.module(PKG.name + '.commons')
     };
 
     vm.onNodeClick = function(event, node) {
+      console.log("PROPERTIES CLICKED");
       vm.resetActivePluginForComment();
       closeMetricsPopover(node);
 
@@ -1810,7 +1811,7 @@ angular.module(PKG.name + '.commons')
     vm.initPipelineComments();
 
     $scope.$watch('runId', function() {
-      // Watch for runId change to update pipeline graph with 
+      // Watch for runId change to update pipeline graph with
       // corresponding version
       if ($scope.runId) {
         // prevent duplicated rendering on first time page landing
