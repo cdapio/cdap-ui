@@ -401,7 +401,7 @@ export default function SectionWithPanel({
         defaultWidth={defaultSize}
         opensFrom={opensFrom}
         ref={dividerRef}
-        aria-orientation={isHorizontal(opensFrom) ? 'horizontal' : 'vertical' }
+        aria-orientation={isHorizontal(opensFrom) ? 'horizontal' : 'vertical'}
         aria-valuenow={currentDividerPositionRef.current}
         aria-valuemin={collapsedSize}
       >
