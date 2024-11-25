@@ -73,7 +73,6 @@ export function updateNodePosition(nodeId, position) {
   const nodeConfig = {
     _uiPosition: position,
   };
-  console.log(nodeId, nodeConfig);
   updateNode(nodeId, nodeConfig);
 }
 

@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHideFooterInPage } from 'components/FooterContext';
 import { Provider } from 'react-redux';
 import { CanvasWrapper, DagWrapper, LeftPanelWrapper, RightWrapper } from '../styles';
@@ -60,23 +60,22 @@ export default function CreatePipelineView() {
     };
   }
 
-  console.log('IN THE PAGE');
   return (
     <Provider store={StudioV2Store}>
       <CanvasWrapper className="react-version">
         <SectionWithPanel
-          opensFrom="left"
-          defaultSize={270}
-          collapsedSize={190}
-          panel={<LeftPanelV2 />}
+          opensFrom="bottom"
+          defaultSize={640}
+          collapsedSize={1}
+          resizable
+          isInitiallyCollapsed={true}
+          panel={<RightPanel />}
         >
           <SectionWithPanel
-            opensFrom="right"
-            defaultSize={640}
-            collapsedSize={1}
-            resizable
-            isInitiallyCollapsed={true}
-            panel={<RightPanel />}
+            opensFrom="left"
+            defaultSize={270}
+            collapsedSize={190}
+            panel={<LeftPanelV2 />}
           >
             <RightWrapper>
               <TopPanel
