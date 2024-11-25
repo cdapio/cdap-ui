@@ -35,6 +35,7 @@ export interface ISectionWithPanelProps {
   collapsedSize?: number;
   isInitiallyCollapsed?: boolean;
   opensFrom: PanelOpeningDirection;
+  panelId: string;
 }
 
 const DEFAULT_PANEL_SIZE = 200;
@@ -230,17 +231,11 @@ interface IPanelCollapseController {
   expand(): void;
 }
 
-const defaultPanelCollapseController: IPanelCollapseController = {
-  isCollapsed() {
-    return false;
-  },
-  collapse() {},
-  expand() {},
-};
+interface IPanelCollapseControllerContext {
+  [panelId: string]: IPanelCollapseController;
+}
 
-const PanelCollapseControllerContext = createContext<IPanelCollapseController>(
-  defaultPanelCollapseController
-);
+const PanelCollapseControllerContext = createContext<IPanelCollapseControllerContext | null>(null);
 
 function getUpdatedPanelSize(
   panelOpensFrom: PanelOpeningDirection,
@@ -295,6 +290,7 @@ export default function SectionWithPanel({
   collapsedSize = DEFAULT_PANEL_COLLAPSED_SIZE,
   isInitiallyCollapsed = false,
   children,
+  panelId,
 }: PropsWithChildren<ISectionWithPanelProps>) {
   const [collapsed, setCollapsed] = useState<boolean>(isInitiallyCollapsed);
   const [isResizing, setIsResizing] = useState<boolean>(false);
@@ -442,8 +438,19 @@ export default function SectionWithPanel({
     );
   }
 
+  const parentContextValue = useContext(PanelCollapseControllerContext);
+  const panelCollapseControllerValue =
+    parentContextValue === null
+      ? {
+          [panelId]: panelCollapseController,
+        }
+      : {
+          ...parentContextValue,
+          [panelId]: panelCollapseController,
+        };
+
   return (
-    <PanelCollapseControllerContext.Provider value={panelCollapseController}>
+    <PanelCollapseControllerContext.Provider value={panelCollapseControllerValue}>
       <SectionWithPanelWrapper
         onMouseUp={isResizing ? unsetResizingState : undefined}
         onMouseMove={isResizing ? handlePanelResize : undefined}
@@ -455,6 +462,17 @@ export default function SectionWithPanel({
   );
 }
 
-export function usePanelCollapseController() {
-  return useContext(PanelCollapseControllerContext);
+export function usePanelCollapseController(panelId: string): IPanelCollapseController {
+  const controllersObject = useContext(PanelCollapseControllerContext);
+  if (controllersObject === null) {
+    throw new Error(
+      'usePanelCollapseController hook can only be used in components rendered within a SectionWithPanel.'
+    );
+  }
+
+  if (!controllersObject[panelId]) {
+    throw new Error(`Panel with panelId = ${panelId} was not found in the current context.`);
+  }
+
+  return controllersObject[panelId];
 }
