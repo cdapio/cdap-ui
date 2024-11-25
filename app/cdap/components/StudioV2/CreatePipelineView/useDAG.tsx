@@ -54,7 +54,7 @@ export function useDAGController(): IDAGController {
   const nodesState = useSelector((state) => state.nodes);
   const configState = useSelector((state) => state.config);
   const uiState = useSelector((state) => state.uiState);
-  const { isCollapsed, collapse, expand } = usePanelCollapseController();
+  const { isCollapsed, collapse, expand } = usePanelCollapseController('properties-panel');
 
   const pluginNodes = getNodes(nodesState);
   const connections = getConnections(nodesState);

@@ -70,12 +70,14 @@ export default function CreatePipelineView() {
           resizable
           isInitiallyCollapsed={true}
           panel={<RightPanel />}
+          panelId="properties-panel"
         >
           <SectionWithPanel
             opensFrom="left"
             defaultSize={270}
             collapsedSize={190}
             panel={<LeftPanelV2 />}
+            panelId="left-sidebar"
           >
             <RightWrapper>
               <TopPanel

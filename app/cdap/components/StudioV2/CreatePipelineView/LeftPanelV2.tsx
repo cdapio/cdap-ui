@@ -51,7 +51,7 @@ export default function LeftPanelV2() {
   // console.log(artifacts || 'hello');
   // console.log({ pluginsMap });
 
-  const { isCollapsed, collapse, expand } = usePanelCollapseController();
+  const { isCollapsed, collapse, expand } = usePanelCollapseController('left-sidebar');
   function handleToggleExpanded() {
     if (isCollapsed()) {
       expand();
