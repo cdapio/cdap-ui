@@ -30,6 +30,7 @@ import io.cdap.e2e.utils.WaitHelper;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
@@ -363,8 +364,8 @@ public class Commands implements CdfHelper {
           "//div[@data-testid='valium-banner-hydrator']//button[@class='close ng-scope']");
       WaitHelper.waitForElementToBeClickable(bannerCloseButton, 180L);
       ElementHelper.clickOnElement(bannerCloseButton);
-    } catch (NoSuchElementException e) {
-      // pass
+    } catch (NoSuchElementException | ElementClickInterceptedException e) {
+      // pass and just wait for the banner to disappear
     }
     WaitHelper.waitForElementToBeHidden(Helper.locateElementByTestId("valium-banner-hydrator"));
   }
