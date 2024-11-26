@@ -83,9 +83,9 @@ Feature: Pipeline Edit
     When Open HttpExecutor Page
     Then Create an orphan pipeline draft
     When Open pipeline draft list page
-    Then Go to pipeline "test-orphan-pipeline-6-10-1" draft
+    Then Go to pipeline "test-orphan-pipeline-6-7-4" draft
     Then Click on FixAll Button
     Then Verify Studio TopPanel is visible
     When Open pipeline draft list page
-    Then Delete Draft Pipeline "test-orphan-pipeline-6-10-1"
-    
+    Then Delete Draft Pipeline "test-orphan-pipeline-6-7-4"
+
