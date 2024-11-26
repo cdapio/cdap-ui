@@ -185,7 +185,11 @@ public class Commands implements CdfHelper {
   }
 
   public static void dismissStudioLeaveConfirmationModal() {
-    SeleniumDriver.getDriver().switchTo().alert().accept();
+    try {
+      SeleniumDriver.getDriver().switchTo().alert().accept();
+    } catch (NoAlertPresentException e) {
+      // ignore it.
+    }
   }
 
   public static void openPluginGroupPanel(String pluginGroup) {
