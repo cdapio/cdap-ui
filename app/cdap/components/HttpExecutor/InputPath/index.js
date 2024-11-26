@@ -57,6 +57,7 @@ function InputPathView({ value, onChange }) {
           value={value}
           onChange={onChange}
           data-cy="request-path-input"
+          data-testid="request-path-input"
         />
       </div>
     </div>

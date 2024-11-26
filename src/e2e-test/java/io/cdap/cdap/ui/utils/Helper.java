@@ -33,6 +33,7 @@ import io.cdap.e2e.utils.PluginPropertyUtils;
 import io.cdap.e2e.utils.SeleniumDriver;
 import io.cdap.e2e.utils.WaitHelper;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.eclipse.jgit.api.Git;
@@ -60,6 +61,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URISyntaxException;
@@ -227,6 +229,14 @@ public class Helper implements CdfHelper {
       SeleniumDriver.getWaitDriver().until(ExpectedConditions.stalenessOf(element));
     } catch (Exception e) {
       // pass
+    }
+  }
+
+  public static String readPipelineFixtureFile(String filename) throws IOException {
+    File pipelineJSONFile = new File(Constants.FIXTURES_DIR + filename);
+    try (FileInputStream inputStream = new FileInputStream(pipelineJSONFile)) {
+      String contents = IOUtils.toString(inputStream);
+      return contents;
     }
   }
 

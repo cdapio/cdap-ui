@@ -195,6 +195,7 @@ const RequestRowView: React.FC<IRequestRowProps> = ({
           className={classnames(classes.requestPath, {
             [classes.selectedRequestPath]: isSelectedRequest,
           })}
+          data-testid="request-path"
         >
           {request.path}
         </div>
