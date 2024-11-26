@@ -1,12 +1,12 @@
 {
     "artifact": {
         "name": "cdap-data-pipeline",
-        "version": "6.10.1",
+        "version": "6.7.4",
         "scope": "SYSTEM",
         "label": "Data Pipeline - Batch"
     },
     "description": "",
-    "name": "test-orphan-pipeline-6-10-1",
+    "name": "test-orphan-pipeline-6-7-4",
     "change": {
         "description": ""
     },
@@ -35,7 +35,7 @@
                     "label": "File",
                     "artifact": {
                         "name": "core-plugins",
-                        "version": "2.12.1",
+                        "version": "2.9.3",
                         "scope": "SYSTEM"
                     },
                     "properties": {

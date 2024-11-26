@@ -333,7 +333,7 @@ public class CommonSteps {
     ElementHelper.sendKeys(requestPathInput, saveDraftPath);
 
     WebElement requestBodyInput = Helper.locateElementByTestId("request-body");
-    String requestBody = Helper.readPipelineFixtureFile("test-orphan-pipeline-6-10-1.json");
+    String requestBody = Helper.readPipelineFixtureFile("test-orphan-pipeline-6-7-4.json");
     ElementHelper.sendKeys(requestBodyInput, requestBody);
 
     WebElement callApiButton = Helper.locateElementByTestId("send-btn");
