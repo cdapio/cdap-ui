@@ -14,6 +14,6 @@
  * the License.
  */
 
-export function sleep(durationInMs: number): Promise<void> {
+export function delay(durationInMs: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, durationInMs));
 }

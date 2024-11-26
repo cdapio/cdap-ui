@@ -50,6 +50,8 @@ export const MyPipelineApi = {
   getStatistics: apiCreator(dataSrc, 'GET', 'REQUEST', statsPath),
   getMetadataEndpoints: apiCreator(dataSrc, 'GET', 'REQUEST', metadataPath),
   getRunDetails: apiCreator(dataSrc, 'GET', 'REQUEST', `${programPath}/runs/:runid`),
+  getRunErrorDetails: apiCreator(dataSrc, 'POST', 'REQUEST', `${programPath}/runs/:runid/classify`),
+
   getRuns: apiCreator(dataSrc, 'GET', 'REQUEST', `${programPath}/runs`),
   getVersionedRuns: apiCreator(dataSrc, 'GET', 'REQUEST', `${versionedProgramPath}/runs`),
   pollRuns: apiCreator(dataSrc, 'GET', 'POLL', `${programPath}/runs`),

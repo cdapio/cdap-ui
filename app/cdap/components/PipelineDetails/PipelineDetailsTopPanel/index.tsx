@@ -15,6 +15,7 @@
  */
 
 import React, { useEffect } from 'react';
+import styled from 'styled-components';
 import { Provider, connect } from 'react-redux';
 import PipelineDetailsMetadata from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsMetadata';
 import PipelineDetailsButtons from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineDetailsButtons';
@@ -27,6 +28,7 @@ import PlusButton from 'components/shared/PlusButton';
 import { fetchAndUpdateRuntimeArgs } from 'components/PipelineConfigurations/Store/ActionCreator';
 import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 import { setEditDraftId } from '../store/ActionCreator';
+import PipelineRunErrorDetails from './PipelineRunErrorDetails';
 
 require('./PipelineDetailsTopPanel.scss');
 
@@ -51,6 +53,12 @@ const mapStateToButtonsProps = (state) => {
 
 const ConnectedPipelineDetailsButtons = connect(mapStateToButtonsProps)(PipelineDetailsButtons);
 
+const PipelineDetailsWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+`;
+
 export const PipelineDetailsTopPanel = () => {
   useEffect(() => {
     const pipelineDetailStore = PipelineDetailStore.getState();
@@ -73,15 +81,19 @@ export const PipelineDetailsTopPanel = () => {
       window.localStorage.removeItem('editDraftId');
     }
   }, []);
+
   return (
     <FeatureProvider>
       <Provider store={PipelineDetailStore}>
-        <div className="pipeline-details-top-panel">
-          <PipelineDetailsMetadata />
-          <ConnectedPipelineDetailsButtons />
-          <PipelineDetailsDetailsActions />
-          <PlusButton mode={PlusButton.MODE.resourcecenter} />
-        </div>
+        <PipelineDetailsWrapper>
+          <PipelineRunErrorDetails />
+          <div className="pipeline-details-top-panel">
+            <PipelineDetailsMetadata />
+            <ConnectedPipelineDetailsButtons />
+            <PipelineDetailsDetailsActions />
+            <PlusButton mode={PlusButton.MODE.resourcecenter} />
+          </div>
+        </PipelineDetailsWrapper>
       </Provider>
     </FeatureProvider>
   );

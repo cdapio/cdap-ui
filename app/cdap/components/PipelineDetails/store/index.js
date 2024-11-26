@@ -36,6 +36,8 @@ const ACTIONS = {
   SET_USER_RUNTIME_ARGUMENTS: 'SET_USER_RUNTIME_ARGUMENTS',
   SET_MACROS_AND_USER_RUNTIME_ARGUMENTS: 'SET_MACROS_AND_USER_RUNTIME_ARGUMENTS',
   SET_RUNTIME_ARGUMENTS_FOR_DISPLAY: 'SET_RUNTIME_ARGUMENTS_FOR_DISPLAY',
+  SET_RUN_ERROR_DETAILS: 'SET_RUN_ERROR_DETAILS',
+  SET_RUN_ERROR_DETAILS_LOADING: 'SET_RUN_ERROR_DETAILS_LOADING',
 
   // Loading and error states Actions
   SET_RUN_BUTTON_LOADING: 'SET_RUN_BUTTON_LOADING',
@@ -84,6 +86,8 @@ const DEFAULT_PIPELINE_DETAILS = {
   // `runtimeArgsForDisplay` combines `macrosMap` and `userRuntimeArgumentsMap` objects
   // to create an object that can be used as a prop to the KeyValuePairs component
   runtimeArgsForDisplay: {},
+  runErrorDetails: {},
+  runErrorDetailsLoading: {},
 
   // loading and error states
   runButtonLoading: false,
@@ -228,6 +232,22 @@ const pipelineDetails = (state = DEFAULT_PIPELINE_DETAILS, action = defaultActio
       return {
         ...state,
         runtimeArgsForDisplay: action.payload.args,
+      };
+    case ACTIONS.SET_RUN_ERROR_DETAILS:
+      return {
+        ...state,
+        runErrorDetails: {
+          ...state.runErrorDetails,
+          [action.payload.runid]: action.payload.errors,
+        },
+      };
+    case ACTIONS.SET_RUN_ERROR_DETAILS_LOADING:
+      return {
+        ...state,
+        runErrorDetailsLoading: {
+          ...state.runErrorDetailsLoading,
+          [action.payload.runid]: action.payload.value,
+        },
       };
     case ACTIONS.SET_RUN_BUTTON_LOADING:
       return {

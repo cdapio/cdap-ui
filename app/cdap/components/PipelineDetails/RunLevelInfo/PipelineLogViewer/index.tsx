@@ -15,7 +15,11 @@
  */
 
 import * as React from 'react';
-import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
+import withStyles, {
+  WithStyles,
+  StyleRules,
+  CreateCSSProperties,
+} from '@material-ui/core/styles/withStyles';
 import { connect } from 'react-redux';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { GLOBALS } from 'services/global-constants';
@@ -26,23 +30,39 @@ import { PIPELINE_LOGS_FILTER } from 'services/global-constants';
 const PIPELINE_TOP_PANEL_OFFSET = '160px';
 const FOOTER_HEIGHT = '54px';
 
+const ERROR_BANNER_OFFSET = '20px'; // to align the top of the logs viewer when the error banner is present
+const LOGS_PORTAL_OFFSET = '50px'; // to remove the unnecessary page scroll
+
 const styles = (theme): StyleRules => {
+  const portalContainerBase = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: '100vh',
+    width: '100vw',
+    zIndex: 1301,
+  };
+
+  const logsContainerBase = {
+    position: 'absolute',
+    top: PIPELINE_TOP_PANEL_OFFSET,
+    height: `calc(100% - ${PIPELINE_TOP_PANEL_OFFSET} - ${FOOTER_HEIGHT})`,
+    width: '100%',
+    backgroundColor: theme.palette.white[50],
+  };
+
   return {
-    portalContainer: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      height: '100vh',
-      width: '100vw',
-      zIndex: 1301,
-    },
-    logsContainer: {
-      position: 'absolute',
-      top: PIPELINE_TOP_PANEL_OFFSET,
-      height: `calc(100% - ${PIPELINE_TOP_PANEL_OFFSET} - ${FOOTER_HEIGHT})`,
-      width: '100%',
-      backgroundColor: theme.palette.white[50],
-    },
+    portalContainer: portalContainerBase as CreateCSSProperties<{}>,
+    logsContainer: logsContainerBase as CreateCSSProperties<{}>,
+    portalContainerWithErrorBanner: {
+      ...portalContainerBase,
+      height: `calc(100vh - ${LOGS_PORTAL_OFFSET})`,
+    } as CreateCSSProperties<{}>,
+    logsContainerWithErrorBanner: {
+      ...logsContainerBase,
+      height: `calc(100% - ${PIPELINE_TOP_PANEL_OFFSET} - ${FOOTER_HEIGHT} - ${ERROR_BANNER_OFFSET})`,
+      top: `calc(${PIPELINE_TOP_PANEL_OFFSET} - ${ERROR_BANNER_OFFSET})`,
+    } as CreateCSSProperties<{}>,
   };
 };
 
@@ -53,6 +73,7 @@ interface ILogViewerProps extends WithStyles<typeof styles> {
   appId: string;
   artifactName: string;
   toggleLogViewer: () => void;
+  withErrorBanner?: boolean;
 }
 
 const LogViewerContainer: React.FC<ILogViewerProps> = ({
@@ -61,6 +82,7 @@ const LogViewerContainer: React.FC<ILogViewerProps> = ({
   appId,
   artifactName,
   toggleLogViewer,
+  withErrorBanner = false,
 }) => {
   const backgroundElem = React.useRef(null);
   const [dataFetcher] = React.useState(
@@ -85,8 +107,14 @@ const LogViewerContainer: React.FC<ILogViewerProps> = ({
   }
 
   return (
-    <div className={classes.portalContainer} ref={backgroundElem} onClick={handleBackgroundClick}>
-      <div className={classes.logsContainer}>
+    <div
+      className={withErrorBanner ? classes.portalContainerWithErrorBanner : classes.portalContainer}
+      ref={backgroundElem}
+      onClick={handleBackgroundClick}
+    >
+      <div
+        className={withErrorBanner ? classes.logsContainerWithErrorBanner : classes.logsContainer}
+      >
         <LogViewer dataFetcher={dataFetcher} onClose={toggleLogViewer} />
       </div>
     </div>

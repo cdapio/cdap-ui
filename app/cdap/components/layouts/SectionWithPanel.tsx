@@ -16,7 +16,7 @@
 
 import React, { PropsWithChildren, createContext, useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { sleep } from '../../utils/time';
+import { delay } from '../../utils/time';
 
 export type PanelOpeningDirection = 'left' | 'top' | 'right' | 'bottom';
 
@@ -342,7 +342,7 @@ export default function SectionWithPanel({
     dividerRef.current.style[panelOpensFrom] = `${newSize - DIVIDER_SIZE}px`;
 
     if (durationInMs) {
-      await sleep(durationInMs);
+      await delay(durationInMs);
       panelWrapperRef.current.style.transition = oldPanelWrapperTransition;
       dividerRef.current.style.transition = oldDividerTransition;
     }

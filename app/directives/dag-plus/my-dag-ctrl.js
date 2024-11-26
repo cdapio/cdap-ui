@@ -36,6 +36,7 @@ angular.module(PKG.name + '.commons')
 
     vm.isDisabled = $scope.isDisabled;
     vm.disableNodeClick = $scope.disableNodeClick;
+    vm.errorStages = $scope.errorStages || [];
 
     var metricsPopovers = {};
     var selectedConnections = [];
@@ -1806,6 +1807,10 @@ angular.module(PKG.name + '.commons')
       vm.pipelineComments = comments;
     };
 
+    vm.isErrorStage = (node) => {
+      return vm.errorStages.indexOf(node.name) !== -1;
+    }
+
     $scope.$on('$destroy', cleanupOnDestroy);
     vm.initPipelineComments();
 
@@ -1821,5 +1826,9 @@ angular.module(PKG.name + '.commons')
         init();
         vm.initPipelineComments();
       }
+    }, true);
+
+    $scope.$watch('errorStages', function() {
+      vm.errorStages = $scope.errorStages;
     }, true);
   });

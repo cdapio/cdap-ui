@@ -43,6 +43,10 @@ const ConnectedRunNumWarnings = connect(mapStateToProps)(RunNumWarnings);
 const ConnectedRunNumErrors = connect(mapStateToProps)(RunNumErrors);
 
 export default function RunLevelInfo() {
+  // error and warning counts are disabled when error classification is available,
+  // i.e. post v6.11.0
+  const shouldShowErrorAndWarningCounts = false;
+
   return (
     <Provider store={PipelineDetailStore}>
       <div className="pipeline-details-run-level-info">
@@ -54,8 +58,12 @@ export default function RunLevelInfo() {
             <RunStatus />
             <RunStartTime />
             <RunDuration />
-            <ConnectedRunNumWarnings />
-            <ConnectedRunNumErrors />
+            {shouldShowErrorAndWarningCounts && (
+              <React.Fragment>
+                <ConnectedRunNumWarnings />
+                <ConnectedRunNumErrors />
+              </React.Fragment>
+            )}
           </div>
           <RunComputeProfile />
         </div>

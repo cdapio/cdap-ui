@@ -25,6 +25,8 @@ import ArrowDropDown from '@material-ui/icons/ArrowDropDown';
 import Popover from 'components/shared/Popover';
 import IconSVG from 'components/shared/IconSVG';
 import LoadingSVG from 'components/shared/LoadingSVG';
+import { getDownloadLogsUrl, getRawLogsUrl } from './LogsUrlUtils';
+import RunLogsStatsChips from 'components/PipelineDetails/RunLevelInfo/RunLogsStatsChips';
 
 export const TOP_PANEL_HEIGHT = '50px';
 
@@ -33,7 +35,7 @@ const styles = (theme): StyleRules => {
     root: {
       backgroundColor: theme.palette.grey[900],
       display: 'flex',
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
       alignItems: 'center',
       height: TOP_PANEL_HEIGHT,
       paddingLeft: '20px',
@@ -41,7 +43,19 @@ const styles = (theme): StyleRules => {
       position: 'relative',
     },
     loadingContainer: {
-      marginRight: 'auto',
+      margin: '0 auto',
+    },
+    leftContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      height: TOP_PANEL_HEIGHT,
+    },
+    rightContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      height: TOP_PANEL_HEIGHT,
     },
     actionButton: {
       margin: theme.spacing(1),
@@ -144,100 +158,97 @@ const TopPanelView: React.FC<ITopPanelProps> = ({
     dataFetcher.getIncludeSystemLogs()
   );
 
-  function getRawLogsBasePath() {
-    const backendUrl = dataFetcher.getRawLogsUrl();
-    const encodedBackendUrl = encodeURIComponent(backendUrl);
-
-    const url = `/downloadLogs?backendPath=${encodedBackendUrl}`;
-    return url;
-  }
-
-  function getRawLogsUrl() {
-    return `${getRawLogsBasePath()}&type=raw`;
-  }
-
-  function getDownloadLogsUrl() {
-    const fileName = dataFetcher.getDownloadFileName();
-    return `${getRawLogsBasePath()}&type=download&filename=${fileName}.log`;
-  }
-
   function handleToggleSystemLogs() {
     const newState = !includeSystemLogs;
     setLocalIncludeSystemLogs(newState);
     setSystemLogs(newState);
   }
 
-  return (
-    <div className={classes.root} data-cy="log-viewer-top-panel" data-testid="log-viewer-top-panel">
-      <If condition={loading}>
+  if (loading) {
+    return (
+      <div
+        className={classes.root}
+        data-cy="log-viewer-top-panel"
+        data-testid="log-viewer-top-panel"
+      >
         <div className={classes.loadingContainer}>
           <LoadingSVG />
         </div>
-      </If>
-      <Button
-        variant="contained"
-        className={classnames(classes.actionButton, { [classes.disabled]: isPolling })}
-        disabled={isPolling}
-        onClick={getLatestLogs}
-        data-testid="scroll-to-latest"
-      >
-        Scroll to Latest Logs
-        <ArrowDownward className={classes.downArrow} />
-      </Button>
-      <Button
-        variant="contained"
-        className={classes.actionButton}
-        onClick={handleToggleSystemLogs}
-        data-testid="view-advanced-logs"
-      >
-        {includeSystemLogs ? 'Hide' : 'View'} Advanced Logs
-      </Button>
-      <div className={classes.btnGroup}>
+      </div>
+    );
+  }
+
+  return (
+    <div className={classes.root} data-cy="log-viewer-top-panel" data-testid="log-viewer-top-panel">
+      <div className={classes.leftContainer}>
+        <RunLogsStatsChips />
+      </div>
+      <div className={classes.rightContainer}>
         <Button
           variant="contained"
-          className={`${classes.actionButton} ${classes.downloadBtn}`}
-          href={getDownloadLogsUrl()}
-          target="_blank"
-          data-testid="download-all"
+          className={classnames(classes.actionButton, { [classes.disabled]: isPolling })}
+          disabled={isPolling}
+          onClick={getLatestLogs}
+          data-testid="scroll-to-latest"
         >
-          Download All
+          Scroll to Latest Logs
+          <ArrowDownward className={classes.downArrow} />
         </Button>
-        <Popover
-          target={({ className }) => {
-            return (
-              <Button
-                variant="contained"
-                className={`${className} ${classes.actionButton} ${classes.dropdownBtn}`}
-              >
-                <ArrowDropDown />
-              </Button>
-            );
-          }}
-          modifiers={{
-            preventOverflow: {
-              enabled: true,
-              boundariesElement: 'viewport',
-            },
-          }}
-          className={classes.popover}
-          placement="bottom"
-          showOn="Click"
+        <Button
+          variant="contained"
+          className={classes.actionButton}
+          onClick={handleToggleSystemLogs}
+          data-testid="view-advanced-logs"
         >
-          <a href={getRawLogsUrl()} target="_blank">
-            View Raw Logs
-          </a>
-        </Popover>
+          {includeSystemLogs ? 'Hide' : 'View'} Advanced Logs
+        </Button>
+        <div className={classes.btnGroup}>
+          <Button
+            variant="contained"
+            className={`${classes.actionButton} ${classes.downloadBtn}`}
+            href={getDownloadLogsUrl(dataFetcher)}
+            target="_blank"
+            data-testid="download-all"
+          >
+            Download All
+          </Button>
+          <Popover
+            target={({ className }) => {
+              return (
+                <Button
+                  variant="contained"
+                  className={`${className} ${classes.actionButton} ${classes.dropdownBtn}`}
+                >
+                  <ArrowDropDown />
+                </Button>
+              );
+            }}
+            modifiers={{
+              preventOverflow: {
+                enabled: true,
+                boundariesElement: 'viewport',
+              },
+            }}
+            className={classes.popover}
+            placement="bottom"
+            showOn="Click"
+          >
+            <a href={getRawLogsUrl(dataFetcher)} target="_blank">
+              View Raw Logs
+            </a>
+          </Popover>
+        </div>
+        <If condition={typeof onClose === 'function'}>
+          <span
+            onClick={onClose}
+            className={classes.closeButton}
+            data-cy="log-viewer-close-btn"
+            data-testid="log-viewer-close-btn"
+          >
+            <IconSVG name="icon-close" />
+          </span>
+        </If>
       </div>
-      <If condition={typeof onClose === 'function'}>
-        <span
-          onClick={onClose}
-          className={classes.closeButton}
-          data-cy="log-viewer-close-btn"
-          data-testid="log-viewer-close-btn"
-        >
-          <IconSVG name="icon-close" />
-        </span>
-      </If>
     </div>
   );
 };

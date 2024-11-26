@@ -334,5 +334,11 @@ features:
     wrangler:
       pageLink: ~
   pipelineDetails:
+    errorDetails:
+      closeButton: ~
+      downloadLogsButton: ~
+      errorCountMessage: ~
+      viewDetailsButton: ~
+      viewLogsButton: ~
     runLevel:
       currentRunIndex: ~
