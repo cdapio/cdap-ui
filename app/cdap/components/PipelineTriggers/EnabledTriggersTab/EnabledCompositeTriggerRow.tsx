@@ -75,6 +75,11 @@ const EnabledCompositeTriggerRowView = ({
     ? (compositeTrigger.trigger as ICompositeTrigger).triggers[0].programId.application
     : compositeTrigger.name;
 
+  const concurrencyConstraint = compositeTrigger.constraints.find(
+    (constraint) => constraint.type === 'CONCURRENCY'
+  );
+  const maxConcurrentRuns = concurrencyConstraint ? concurrencyConstraint.maxConcurrency : '_';
+
   const handleConfirmModalOpen = (e) => {
     e.stopPropagation();
     setShowDeleteModal(true);
@@ -139,6 +144,10 @@ const EnabledCompositeTriggerRowView = ({
           isLoading={loading}
           closeable={true}
         />
+        <PipelineName>
+          {T.translate(`${TRIGGER_PREFIX}.pipelineTriggerConcurrencyHeader`, { maxConcurrentRuns })}
+        </PipelineName>
+        <br />
         {(compositeTrigger.trigger as ICompositeTrigger).triggers.map((trigger) => {
           return (
             <StyledEnabledInlineTriggerRow>
