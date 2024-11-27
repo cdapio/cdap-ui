@@ -226,6 +226,7 @@ const GLOBALS = {
           'ARTIFACT-UPLOAD-ERROR-JSON': 'Error in parsing config json for the artifact.',
         },
         error: {
+          'GENERIC-BACKEND-ERROR': 'Something went wrong ! Please try again.',
           'SYNTAX-CONFIG-JSON':
             'Error parsing widgets JSON for the plugin. Please check the documentation to fix.',
           'SEMANTIC-CONFIG-JSON': 'Semantic error in the configuration JSON for the plugin.',
