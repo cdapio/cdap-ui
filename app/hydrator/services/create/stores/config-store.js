@@ -1368,19 +1368,27 @@ class HydratorPlusPlusConfigStore {
       this.EventPipe.emit('hideLoadingIcon.immediate');
     };
 
+    let displayGenericBackendError = () => {
+      this.HydratorPlusPlusConsoleActions.addMessage([{
+        type: 'error',
+        content: this.GLOBALS.en.hydrator.studio.error['GENERIC-BACKEND-ERROR']
+      }]);
+      this.EventPipe.emit('hideLoadingIcon.immediate');
+    };
+
     // Checking if Pipeline name already exist
-    this.myAppsApi.get({ 
+    this.myAppsApi.get({
       namespace: this.$state.params.namespace,
       appId: config.name,
     }).$promise.then((app) => {
       displayPipelineNameExistsError();
     }).catch((err) => {
-      if (err.status !== 404) {
-        displayPipelineNameExistsError();
-      } else {
+      if (err.status === 404) {
         delete config.change;
         delete config.parentVersion;
         publish(config.name);
+      } else {
+        displayGenericBackendError();
       }
     });
   }
