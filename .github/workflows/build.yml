@@ -36,11 +36,11 @@ jobs:
         ref: ${{ github.event.workflow_run.head_sha }}
         submodules: recursive
 
-    # installing node 16.16
-    - name: Use Node.js 16.16
-      uses: actions/setup-node@v1
+    # installing node 22.12
+    - name: Use Node.js 22.12
+      uses: actions/setup-node@v3.6.0
       with:
-        node-version: 16.16
+        node-version: 22.12
 
     - uses: actions/cache@v2
       with:
