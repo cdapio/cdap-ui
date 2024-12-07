@@ -23,7 +23,7 @@
     "build-dev-common-w": "NODE_OPTIONS=\"--openssl-legacy-provider\" NODE_ENV=development parallel-webpack --config=webpack.config.common.js -d --watch",
     "build-prod-dlls": "NODE_OPTIONS=\"--openssl-legacy-provider\" NODE_ENV=production parallel-webpack --config=webpack.config.dlls.js",
     "build-dev-dlls": "NODE_OPTIONS=\"--openssl-legacy-provider\" NODE_ENV=development parallel-webpack --config=webpack.config.dlls.js",
-    "build-server": "webpack --config=webpack.config.server.js",
+    "build-server": "NODE_OPTIONS=\"--openssl-legacy-provider\" webpack --config=webpack.config.server.js",
     "jest": "jest --coverage",
     "jest-w": "jest --watch",
     "karma-test": "node ./node_modules/karma/bin/karma start test/karma-conf.js",
