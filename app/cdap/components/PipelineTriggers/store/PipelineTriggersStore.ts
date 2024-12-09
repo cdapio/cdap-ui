@@ -25,6 +25,8 @@ import {
 } from 'components/PipelineTriggers/store/ScheduleTypes';
 import PipelineTriggersTypes from 'components/PipelineTriggers/store/PipelineTriggersTypes';
 
+export const DEFAULT_TRIGGER_MAX_CONCURRENT_RUNS = 3;
+
 interface IPayLoad {
   pipelineName?: string;
   workflowName?: string;
@@ -41,6 +43,7 @@ interface IPayLoad {
   isOpen?: boolean;
   expandedSchedule?: string;
   pipelineInfo?: IPipelineInfo;
+  maxConcurrentRuns?: number;
 }
 
 interface IAction {
@@ -71,6 +74,7 @@ const defaultInitialState = {
   configureError: null,
   pipelineCompositeTriggersEnabled: false,
   lifecycleManagementEditEnabled: false,
+  maxConcurrentRuns: DEFAULT_TRIGGER_MAX_CONCURRENT_RUNS,
 };
 
 const defaultInitialEnabledTriggersState = {
@@ -157,6 +161,12 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
       stateCopy = {
         ...state,
         configureError: action.payload.error,
+      };
+      break;
+    case PipelineTriggersActions.setMaxConcurrentRuns:
+      stateCopy = {
+        ...state,
+        maxConcurrentRuns: action.payload.maxConcurrentRuns,
       };
       break;
     case PipelineTriggersActions.reset:

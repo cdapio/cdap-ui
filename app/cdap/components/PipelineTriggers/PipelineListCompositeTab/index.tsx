@@ -17,6 +17,7 @@
 import React, { useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import {
+  changeMaxConcurrentRuns,
   changeNamespace,
   changeTriggersType,
   enableGroupTrigger,
@@ -54,6 +55,7 @@ import {
 } from 'components/PipelineTriggers/reducer';
 import PayloadConfigModal from 'components/PipelineTriggers/PayloadConfigModal';
 import PipelineCompositeTriggerRow from './PipelineCompositeTriggerRow';
+import { DEFAULT_TRIGGER_MAX_CONCURRENT_RUNS } from '../store/PipelineTriggersStore';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PREFIX = `${TRIGGER_PREFIX}.SetTriggers`;
@@ -146,6 +148,7 @@ interface IPipelineListCompositeTabViewProps {
   configureError: string;
   onPayloadToggle: (isOpen: boolean) => void;
   setTab: (tab: number) => void;
+  maxConcurrentRuns?: number;
 }
 
 const PipelineListCompositeTabView = ({
@@ -160,6 +163,7 @@ const PipelineListCompositeTabView = ({
   toggleExpandPipeline,
   configureError,
   setTab,
+  maxConcurrentRuns = DEFAULT_TRIGGER_MAX_CONCURRENT_RUNS,
 }: IPipelineListCompositeTabViewProps) => {
   const [state, dispatch] = useReducer(triggerNameReducer, initialAvailablePipelineListState);
   const emptyTriggerErrorMsg =
@@ -220,6 +224,10 @@ const PipelineListCompositeTabView = ({
     changeTriggersType(e.target.value);
   };
 
+  const handleChangeMaxConcurrentRuns = (e) => {
+    changeMaxConcurrentRuns(e.target.value);
+  };
+
   const addGroupTriggerClick = () => {
     enableGroupTrigger(state.triggerName, setTab, state.computeProfile);
   };
@@ -274,6 +282,24 @@ const PipelineListCompositeTabView = ({
               <option value={PipelineTriggersTypes.andType} key="andTrigger">
                 {T.translate(`${PREFIX}.triggerAndType`)}
               </option>
+            </select>
+          </SelectorDropdown>
+        </div>
+        <div>
+          <TriggerConfigHeader>{T.translate(`${PREFIX}.maxConcurrentRuns`)}</TriggerConfigHeader>
+          <SelectorDropdown data-testid="composite-trigger-max-concurrent-runs">
+            <select
+              className="form-control"
+              value={maxConcurrentRuns}
+              onChange={handleChangeMaxConcurrentRuns}
+            >
+              {Array(10)
+                .fill(0)
+                .map((_, i) => (
+                  <option value={i + 1} key={i + 1}>
+                    {i + 1}
+                  </option>
+                ))}
             </select>
           </SelectorDropdown>
         </div>
@@ -397,6 +423,7 @@ const mapStateToProps = (state) => {
     pipelineName: state.triggers.pipelineName,
     expandedPipeline: state.triggers.expandedPipeline,
     configureError: state.triggers.configureError,
+    maxConcurrentRuns: state.triggers.maxConcurrentRuns,
   };
 };
 

@@ -72,6 +72,15 @@ export function changeTriggersType(selectedTriggersType: string) {
   });
 }
 
+export function changeMaxConcurrentRuns(maxConcurrentRuns: number) {
+  PipelineTriggersStore.dispatch({
+    type: PipelineTriggersActions.setMaxConcurrentRuns,
+    payload: {
+      maxConcurrentRuns,
+    },
+  });
+}
+
 /**
  * Method to remove the selected trigger from the composite AND or OR trigger group.
  */
@@ -174,7 +183,7 @@ export function enableGroupTrigger(
     },
     constraints: [
       {
-        maxConcurrency: 3,
+        maxConcurrency: pipelineTriggers.maxConcurrentRuns,
         type: 'CONCURRENCY',
         waitUntilMet: false,
       },
