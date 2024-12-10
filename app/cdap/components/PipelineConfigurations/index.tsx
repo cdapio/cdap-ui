@@ -177,7 +177,7 @@ export default class PipelineConfigurations extends Component<IPipelineConfigura
       headerLabel = T.translate(`${PREFIX}.titleHistorical`);
     } else {
       headerLabel = T.translate(`${PREFIX}.title`);
-      if (this.props.pipelineName.length) {
+      if (this.props.pipelineName?.length) {
         headerLabel += ` "${this.props.pipelineName}"`;
       }
     }
