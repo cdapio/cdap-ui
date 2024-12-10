@@ -19,7 +19,7 @@ on:
     branches: [ develop, release/** ]
   pull_request:
     branches: [ develop, release/** ]
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, labeled]
   workflow_dispatch:
     inputs:
       branch:
@@ -32,11 +32,21 @@ jobs:
 
     runs-on: k8s-runner-e2e
 
-    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
+    # We allow builds:
+    # 1) When it's a merge into a branch
+    # 2) For PRs that are labeled as build and
+    #  - It's a code change
+    #  - A build label was just added
+    # A bit complex, but prevents builds when other labels are manipulated
+    if: >
+      github.event_name == 'push'
+      || (contains(github.event.pull_request.labels.*.name, 'build')
+         && (github.event.action != 'labeled' || github.event.label.name == 'build')
+         )
 
     steps:
     # Pinned 1.0.0 version
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
 
@@ -46,7 +56,7 @@ jobs:
       with:
         node-version: 22.12
 
-    - uses: actions/cache@v3.3.0
+    - uses: actions/cache@v4
       with:
         path: '**/node_modules'
         key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
@@ -99,7 +109,7 @@ jobs:
         mvn clean verify -P e2e-tests -B -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
 
     - name: Archive build artifacts
-      uses: actions/upload-artifact@v3.1.2
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: Build debug files
