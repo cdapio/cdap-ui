@@ -31,8 +31,10 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 import Popover from 'components/shared/Popover';
 import { GLOBALS } from 'services/global-constants';
+import { getDataTestid } from '@cdap-ui/testids/TestidsProvider';
 
 const PREFIX = 'features.PipelineDetails.RunLevel';
+const TESTID_PREFIX = 'features.pipelineDetails.runLevel';
 
 const StyledNoRunsHeader = styled.div`
   display: flex;
@@ -203,6 +205,7 @@ const CurrentRunIndex = ({
               }).toString()
             : ''
         }
+        data-testid={getDataTestid(`${TESTID_PREFIX}.currentRunIndex`)}
       >
         {T.translate(`${PREFIX}.currentRunIndex`, {
           currentRunIndex: runIndexInTotalRunsCount + 1,

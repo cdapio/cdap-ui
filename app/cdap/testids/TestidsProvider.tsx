@@ -18,6 +18,7 @@ import React, { useContext } from 'react';
 import _get from 'lodash/get';
 import testids from './testids.yaml';
 import { DataTestIdGetter, TestidContext } from './TestidContext';
+import { objectQuery } from 'services/helpers';
 
 interface ITestidProviderProps {
   children: React.ReactNode;
@@ -30,7 +31,7 @@ function getDataTestidInternal(prefixPath: string, siblingKey?: string | number)
   // previously hardcoded testid values), for all newly added data-testids the value at the leaf node
   // should be null.
 
-  const actualTestidPrefix = _get(testids, prefixPath);
+  const actualTestidPrefix = objectQuery(testids, ...prefixPath.split('.'));
 
   // actualTestidPrefix is the value at the node of the prefix tree pointed by the prefixPath provided.
   // We need to ensure that the prefix path provided points to a leaf node. This can be ensured by checking
