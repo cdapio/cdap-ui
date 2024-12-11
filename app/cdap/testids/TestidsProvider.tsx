@@ -15,7 +15,7 @@
  */
 
 import React, { useContext } from 'react';
-import _get from 'lodash/get';
+import _get from 'lodash-es/get';
 import testids from './testids.yaml';
 import { DataTestIdGetter, TestidContext } from './TestidContext';
 

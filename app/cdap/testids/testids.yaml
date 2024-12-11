@@ -333,3 +333,6 @@ features:
   home:
     wrangler:
       pageLink: ~
+  pipelineDetails:
+    runLevel:
+      currentRunIndex: ~
