@@ -14,7 +14,7 @@
  * the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHideFooterInPage } from 'components/FooterContext';
 import { Provider } from 'react-redux';
 import { CanvasWrapper, DagWrapper, LeftPanelWrapper, RightWrapper } from '../styles';
@@ -26,20 +26,30 @@ import StudioV2Store from '../store';
 import StudioModalsManager from '../modals/StudioModalsManager';
 import { ReactFlowProvider } from 'reactflow';
 import SectionWithPanel from 'components/layouts/SectionWithPanel';
-import RightPanel from './RightPanel';
+import PropertiesPanel from './PropertiesPanel';
+import { UiActions } from '../store/uistate/actions';
 
 // @ts-ignore
 function noop() {}
 
+const DEFAULT_VH = 640;
+
 export default function CreatePipelineView() {
+  const viewportHeight = useRef(DEFAULT_VH);
   useHideFooterInPage();
   useEffect(() => {
     document.body.classList.add('theme-cdap');
     document.body.classList.add('state-hydrator-create');
+    viewportHeight.current = Math.max(
+      document.documentElement.clientHeight || 0,
+      window.innerHeight || DEFAULT_VH
+    );
+    StudioV2Store.dispatch({ type: UiActions.SET_STUDIO_MODE });
 
     return () => {
       document.body.classList.remove('theme-cdap');
       document.body.classList.remove('state-hydrator-create');
+      StudioV2Store.dispatch({ type: UiActions.UNSET_STUDIO_MODE });
     };
   }, []);
 
@@ -65,11 +75,10 @@ export default function CreatePipelineView() {
       <CanvasWrapper className="react-version">
         <SectionWithPanel
           opensFrom="bottom"
-          defaultSize={640}
+          defaultSize={viewportHeight.current - 48}
           collapsedSize={1}
-          resizable
           isInitiallyCollapsed={true}
-          panel={<RightPanel />}
+          panel={<PropertiesPanel />}
           panelId="properties-panel"
         >
           <SectionWithPanel

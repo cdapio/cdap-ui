@@ -66,6 +66,8 @@ interface IPanelSectionsProps extends IDirectionalPanelProps {
 
 const PanelWrapper = styled.div<IPanelSectionsProps>`
   overflow: hidden;
+  z-index: 1000;
+  background: white;
   ${({ opensFrom, defaultSize }) =>
     isHorizontal(opensFrom)
       ? `

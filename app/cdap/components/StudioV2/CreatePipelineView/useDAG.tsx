@@ -118,10 +118,10 @@ export function useDAGController(): IDAGController {
       pluginNode = nodeFromNodesStore[0];
     }
 
-    const closeRightPanel = () => {
+    const closePropertiesPanel = () => {
       collapse();
       dispatch({
-        type: UiActions.CLOSE_RIGHT_PANEL,
+        type: UiActions.CLOSE_PROPERTIES_PANEL,
       });
       dispatch({
         type: NodesActions.RESET_ACTIVE_NODE,
@@ -129,10 +129,12 @@ export function useDAGController(): IDAGController {
     };
 
     dispatch({
-      type: UiActions.OPEN_RIGHT_PANEL,
+      type: UiActions.OPEN_PROPERTIES_PANEL,
       payload: {
-        render: <h4>Plugin properties</h4>,
-        onClose: closeRightPanel,
+        props: {
+          pluginNode,
+        },
+        onClose: closePropertiesPanel,
       },
     });
     expand();

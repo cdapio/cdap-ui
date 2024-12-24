@@ -18,26 +18,41 @@ import React from 'react';
 import { UiActions } from './actions';
 
 interface IUiState {
+  isStudioMode: boolean;
+
   modalShown: boolean;
   modalToRender?: React.ReactNode;
   modalOnClose?: () => void;
 
-  rightPanelShown: boolean;
-  rightPanelToRender?: React.ReactNode;
-  rightPanelOnClose?: () => void;
+  propertiesPanelShown: boolean;
+  propertiesPanelProps?: any;
+  propertiesPanelOnClose?: () => void;
   // fill in
 }
 
 export const uiInitialState: IUiState = {
+  isStudioMode: false,
   modalShown: false,
   modalToRender: null,
-  rightPanelShown: false,
-  rightPanelToRender: null,
+  propertiesPanelShown: false,
+  propertiesPanelProps: null,
   // fill in
 };
 
 export const uiState = (state: IUiState = uiInitialState, action?): IUiState => {
   switch (action.type) {
+    case UiActions.SET_STUDIO_MODE:
+      return {
+        ...state,
+        isStudioMode: true,
+      };
+
+    case UiActions.UNSET_STUDIO_MODE:
+      return {
+        ...state,
+        isStudioMode: false,
+      };
+
     case UiActions.OPEN_MODAL:
       return {
         ...state,
@@ -54,20 +69,20 @@ export const uiState = (state: IUiState = uiInitialState, action?): IUiState => 
         modalOnClose: null,
       };
 
-    case UiActions.OPEN_RIGHT_PANEL:
+    case UiActions.OPEN_PROPERTIES_PANEL:
       return {
         ...state,
-        rightPanelShown: true,
-        rightPanelToRender: action.payload.render,
-        rightPanelOnClose: action.payload.onClose,
+        propertiesPanelShown: true,
+        propertiesPanelProps: action.payload.props,
+        propertiesPanelOnClose: action.payload.onClose,
       };
 
-    case UiActions.CLOSE_RIGHT_PANEL:
+    case UiActions.CLOSE_PROPERTIES_PANEL:
       return {
         ...state,
-        rightPanelShown: false,
-        rightPanelToRender: null,
-        rightPanelOnClose: null,
+        propertiesPanelShown: false,
+        propertiesPanelProps: null,
+        propertiesPanelOnClose: null,
       };
 
     default:

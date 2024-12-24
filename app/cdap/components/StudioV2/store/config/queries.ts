@@ -29,6 +29,23 @@ export function getName(state: IConfigState) {
   return state.name;
 }
 
+export function getArtifact(state: IConfigState) {
+  return state?.artifact;
+}
+
 export function getNodes(state: IConfigState) {
   return state?.__ui__?.nodes || [];
+}
+
+export function getSourceConnections(state: IConfigState, nodeId) {
+  return state?.config?.connections?.filter((conn) => conn.to === nodeId);
+}
+
+export function getSourceNodes(state: IConfigState, nodeId) {
+  const nodesMap = state?.__ui__?.nodes?.reduce((acc, node) => {
+    acc[node.name] = node;
+    return acc;
+  }, {});
+
+  return getSourceConnections(state, nodeId).map((conn) => nodesMap[conn.from]);
 }
