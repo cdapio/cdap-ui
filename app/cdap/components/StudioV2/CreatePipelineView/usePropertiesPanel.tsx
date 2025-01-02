@@ -26,6 +26,7 @@ import {
 } from '../store/config/queries';
 import PipelineMetricsStore from 'services/PipelineMetricsStore';
 import { objectQuery } from 'services/helpers';
+import { getPluginInfo } from '../utils/nodeUtils';
 
 export default function usePropertiesPanel(pluginNode: any) {
   const tabs = [
@@ -57,6 +58,49 @@ export default function usePropertiesPanel(pluginNode: any) {
     artifactVersion: getArtifact(configState)?.version,
     isAction: false, // TODO: resolve with actual value
   };
+
+  // TODO: correct the functions from here
+  await fetchPluginInfo(rPlugin);
+
+  async function fetchPluginInfo(rPlugin) {
+    const pluginNode = rPlugin.pluginNode;
+    const appType = rPlugin.appType;
+    const sourceConnections = rPlugin.sourceConnections;
+    const sourceNodes = rPlugin.sourceNodes;
+    const artifactVersion = rPlugin.artifactVersion;
+
+    getPluginInfo();
+
+    return this.HydratorPlusPlusNodeService.getPluginInfo(
+      pluginNode,
+      appType,
+      sourceConnections,
+      sourceNodes,
+      artifactVersion
+    ).then(
+      (nodeWithInfo) => {
+        const pluginType = nodeWithInfo.type || nodeWithInfo.plugin.type;
+        return this.setDefaults({
+          node: nodeWithInfo,
+          isValidPlugin: true,
+          type: appType,
+          isSource: this.GLOBALS.pluginConvert[pluginType] === 'source',
+          isSink: this.GLOBALS.pluginConvert[pluginType] === 'sink',
+          isTransform: this.GLOBALS.pluginConvert[pluginType] === 'transform',
+          isAction: this.GLOBALS.pluginConvert[pluginType] === 'action',
+          isCondition: this.GLOBALS.pluginConvert[pluginType] === 'condition',
+        });
+      },
+      (err) => {
+        if (err && err.statusCode === 404) {
+          // This is when plugin artifact is unavailable. Show appropriate message.
+          this.state.configfetched = true;
+          this.state.noproperty = 0;
+          this.state.isValidPlugin = false;
+        }
+      }
+    );
+  }
 
   function getDefaults(config: any = {}) {
     const initialState: any = {

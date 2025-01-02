@@ -18,6 +18,11 @@ import { getCurrentNamespace } from 'services/NamespaceStore';
 import Defer from './defer';
 import VersionStore from 'services/VersionStore';
 import { MyPipelineApi } from 'api/pipeline';
+import _isObject from 'lodash/isObject';
+import { GLOBALS } from 'services/global-constants';
+import { objectQuery } from 'services/helpers';
+import { IMPLICIT_SCHEMA } from './constants';
+import { formatSchemaToAvro } from './schemaUtils';
 
 // TODO add types
 export function fetchBackendProperties(node, appType, artifactVersion?) {
@@ -55,5 +60,141 @@ export function fetchBackendProperties(node, appType, artifactVersion?) {
     }
   );
 
+  return defer.promise;
+}
+
+export async function getPluginInfo(
+  node,
+  appType,
+  sourceConnections,
+  sourceNodes,
+  artifactVersion
+) {
+  if (!(_isObject(node._backendProperties) && Object.keys(node._backendProperties).length)) {
+    node = await fetchBackendProperties(node, appType, artifactVersion);
+  }
+
+  await configurePluginInfo(node, sourceConnections, sourceNodes);
+}
+
+export function configurePluginInfo(node, sourceConnections, sourceNodes) {
+  const defer = new Defer();
+  if (['action', 'source'].includes(GLOBALS.pluginConvert[node.type])) {
+    defer.resolve(node);
+    return defer.promise;
+  }
+
+  const inputSchemas = [];
+  const allInputSchemas = sourceNodes.map((sourceNode) => {
+    return getInputSchema(sourceNode, node, sourceConnections).then((inputSchema) => {
+      const schemaContainsMacro = typeof inputSchema === 'string' && containsMacro(inputSchema);
+      inputSchemas.push({
+        name: sourceNode.plugin.label,
+        schema: schemaContainsMacro ? inputSchema : formatSchemaToAvro(inputSchema),
+      });
+    });
+  });
+  Promise.all(allInputSchemas).then(() => {
+    node.inputSchema = inputSchemas;
+    return defer.resolve(node);
+  });
+  return defer.promise;
+}
+
+function getOutputSchemaObj(schema, schemaObjName = GLOBALS.defaultSchemaName) {
+  return {
+    name: schemaObjName,
+    schema,
+  };
+}
+
+export function containsMacro(value) {
+  if (!value) {
+    return false;
+  }
+
+  const beginIndex = value.indexOf('${');
+  const endIndex = value.indexOf('}');
+
+  if (beginIndex === -1 || endIndex === -1 || beginIndex > endIndex) {
+    return false;
+  }
+
+  return true;
+}
+
+export function parseSchema(schema) {
+  let rSchema;
+  if (typeof schema === 'string') {
+    if (containsMacro(schema)) {
+      return schema;
+    }
+    try {
+      rSchema = JSON.parse(schema);
+    } catch (e) {
+      rSchema = null;
+    }
+  } else {
+    rSchema = schema;
+  }
+  return rSchema;
+}
+
+export function getInputSchema(sourceNode, currentNode, sourceConnections) {
+  if (!sourceNode.outputSchema || typeof sourceNode.outputSchema === 'string') {
+    sourceNode.outputSchema = [getOutputSchemaObj(sourceNode.outputSchema)];
+  }
+
+  let schema = sourceNode.outputSchema[0].schema;
+  const defer = new Defer();
+
+  // If the current stage is an error collector and the previous stage is a source
+  // Then call validation API to get error schema of previous node and set it as input schema
+  // of the current stage.
+  if (
+    currentNode.type === 'errortransform' &&
+    (sourceNode.type === 'batchsource' || sourceNode.type === 'streamingsource')
+  ) {
+    const body = {
+      stage: {
+        name: sourceNode.name,
+        plugin: sourceNode.plugin,
+      },
+    };
+    const params = {
+      context: getCurrentNamespace(),
+    };
+    MyPipelineApi.validateStage(params, body).subscribe((res) => {
+      const schema =
+        objectQuery(res, 'spec', 'errorSchema') || objectQuery(res, 'spec', 'outputSchema');
+      defer.resolve(parseSchema(schema));
+    });
+
+    return defer.promise;
+  }
+
+  // If for nodes other than source set the input schema of previous stage as input
+  // schema of the current stage.
+  if (currentNode.type === 'errortransform' && sourceNode.type !== 'batchsource') {
+    schema =
+      sourceNode.inputSchema && Array.isArray(sourceNode.inputSchema)
+        ? sourceNode.inputSchema[0].schema
+        : sourceNode.inputSchema;
+  }
+
+  // If current stage connects to a port from previous stage then cycle through connections
+  // and find the stage and its output schema. That is the input schema for current stage.
+  if (sourceNode.outputSchema[0].name !== GLOBALS.defaultSchemaName) {
+    const sourcePort = (sourceConnections.find((sconn) => sconn.port) || {}).port;
+    const sourceSchema = sourceNode.outputSchema.filter(
+      (outputSchema) => outputSchema.name === sourcePort
+    );
+    schema = sourceSchema[0].schema;
+  }
+
+  if (Object.keys(IMPLICIT_SCHEMA).includes(sourceNode.plugin.properties.format)) {
+    schema = IMPLICIT_SCHEMA[sourceNode.plugin.properties.format];
+  }
+  defer.resolve(parseSchema(schema));
   return defer.promise;
 }

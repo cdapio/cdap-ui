@@ -90,4 +90,11 @@ export const MyPipelineApi = {
     'REQUEST',
     `${pluginFetchBase}/plugins/:pluginName?scope=system`
   ),
+
+  validateStage: apiCreator(
+    dataSrc,
+    'POST',
+    'REQUEST',
+    `${pipelineV1AppContextPath}validations/stage`
+  ),
 };
