@@ -292,6 +292,7 @@ features:
         requested: Requested
         status: Status
       appfabric: App Fabric
+      appfabric_processor: App Fabric Processor
       dataset_executor: Dataset Executor
       explore_service: Explore Service
       log_saver: Log Saver
