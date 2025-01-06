@@ -20,9 +20,10 @@ import VersionStore from 'services/VersionStore';
 import { MyPipelineApi } from 'api/pipeline';
 import _isObject from 'lodash/isObject';
 import { GLOBALS } from 'services/global-constants';
-import { objectQuery } from 'services/helpers';
+import { objectQuery, santizeStringForHTMLID } from 'services/helpers';
 import { IMPLICIT_SCHEMA } from './constants';
 import { formatSchemaToAvro } from './schemaUtils';
+import { getPluginIcon } from './pluginUtils';
 
 // TODO add types
 export function fetchBackendProperties(node, appType, artifactVersion?) {
@@ -74,7 +75,8 @@ export async function getPluginInfo(
     node = await fetchBackendProperties(node, appType, artifactVersion);
   }
 
-  await configurePluginInfo(node, sourceConnections, sourceNodes);
+  node = await configurePluginInfo(node, sourceConnections, sourceNodes);
+  return node;
 }
 
 export function configurePluginInfo(node, sourceConnections, sourceNodes) {
@@ -197,4 +199,20 @@ export function getInputSchema(sourceNode, currentNode, sourceConnections) {
   }
   defer.resolve(parseSchema(schema));
   return defer.promise;
+}
+
+export function getNodesFromStages(stages) {
+  const sanitize = santizeStringForHTMLID;
+  const nodes = stages.map((stage) => {
+    stage = {
+      ...stage,
+      type: stage.plugin.type,
+      label: stage.plugin.label,
+      icon: getPluginIcon(stage.plugin.name),
+      id: sanitize(stage.id) || `${sanitize(stage.name)}${this.uuid.v4()}`,
+    };
+    return stage;
+  });
+
+  return nodes;
 }
