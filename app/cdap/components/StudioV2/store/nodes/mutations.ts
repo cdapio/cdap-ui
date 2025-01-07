@@ -109,13 +109,13 @@ export function addStateToHistory_mutating(state: INodesState, resetFuture: bool
 
   state.stateHistory.past.push(currentState);
   if (resetFuture) {
-    return resetFututeStates_mutating(state);
+    return resetFutureStates_mutating(state);
   }
 
   return state;
 }
 
-export function resetFututeStates_mutating(state: INodesState): INodesState {
+export function resetFutureStates_mutating(state: INodesState): INodesState {
   state.stateHistory.future = [];
   return state;
 }

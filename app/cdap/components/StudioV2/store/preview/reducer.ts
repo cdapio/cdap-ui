@@ -21,7 +21,7 @@ interface IPreviewState {
   startTime?: any;
   status?: any;
   previewId?: string;
-  previewData?: boolean;
+  previewData?: any;
   macros?: any;
   userRuntimeArguments?: any;
   // `runtimeArgsForDisplay` combines `macros` map and `userRuntimeArguments` map
@@ -77,7 +77,7 @@ export const preview = (state: IPreviewState = previewInitialState, action?): IP
       return { ...state, timeoutInMinutes };
 
     case PreviewActions.SET_PREVIEW_DATA:
-      return { ...state, previewData: true };
+      return { ...state, previewData: action.payload };
 
     case PreviewActions.RESET_PREVIEW_DATA:
       return { ...state, previewData: false };

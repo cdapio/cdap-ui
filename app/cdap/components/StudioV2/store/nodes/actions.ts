@@ -76,6 +76,18 @@ export function updateNodePosition(nodeId, position) {
   updateNode(nodeId, nodeConfig);
 }
 
+export function removePreviousState() {
+  StudioV2Store.dispatch({
+    type: NodesActions.REMOVE_PREVIOUS_STATE,
+  });
+}
+
+export function resetFutureStates() {
+  StudioV2Store.dispatch({
+    type: NodesActions.RESET_FUTURE_STATES,
+  });
+}
+
 export function logNodePos(nodeId, pos) {
   console.log(nodeId, pos);
 }

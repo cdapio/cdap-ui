@@ -22,7 +22,9 @@ import _assign from 'lodash/assign';
 import {
   addConnection_mutating,
   addNode_mutating,
+  removePreviousState_mutating,
   resetActiveNodeId_mutating,
+  resetFutureStates_mutating,
   setActiveNodeId_mutating,
   undoActions_mutating,
   updateNode_mutating,
@@ -39,6 +41,8 @@ export const NodesActions = {
   UPDATE_NODE: `${PREFIX}/UPDATE_NODE`,
   ADD_CONNECTION: `${PREFIX}/ADD_CONNECTION`,
   SET_ACTIVE_NODE: `${PREFIX}/SET_ACTIVE_NODE`,
+  REMOVE_PREVIOUS_STATE: `${PREFIX}/REMOVE_PREVIOUS_STATE`,
+  RESET_FUTURE_STATES: `${PREFIX}/RESET_FUTURE_STATES`,
 };
 
 export interface INodesState {
@@ -109,7 +113,13 @@ export const nodes = (state: INodesState = nodesInitialState, action?): INodesSt
       );
 
     case NodesActions.ADD_CONNECTION:
-      return cloneAndApply(state, (draft) => addConnection_mutating(state, action.payload));
+      return cloneAndApply(state, (draft) => addConnection_mutating(draft, action.payload));
+
+    case NodesActions.REMOVE_PREVIOUS_STATE:
+      return cloneAndApply(state, removePreviousState_mutating);
+
+    case NodesActions.RESET_FUTURE_STATES:
+      return cloneAndApply(state, resetFutureStates_mutating);
 
     default:
       return state;
