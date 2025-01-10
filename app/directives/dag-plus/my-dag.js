@@ -36,7 +36,8 @@ commonModule.directive('myDagPlus', function() {
       disableNodeClick: '=',
       separation: '=?',
       previewMode: '=?',
-      runId: '='
+      runId: '=',
+      errorStages: '='
     },
     link: function(scope, element) {
       scope.element = element;

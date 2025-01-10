@@ -29,6 +29,8 @@ angular.module(PKG.name + '.feature.hydrator')
     this.metrics = {};
     this.logsMetrics = {};
     this.runId = '';
+    this.errorStages = [];
+
     try {
       rPipelineDetail.config = JSON.parse(rPipelineDetail.configuration);
     } catch (e) {
@@ -188,6 +190,8 @@ angular.module(PKG.name + '.feature.hydrator')
         this.runId = this.currentRun.runid;
         this.currentRunIndex = runNumber + 1;
         this.totalRuns = runs.length;
+        this.errorStages = (this.PipelineDetailStore.getState().runErrorDetails[this.runId] || [])
+          .map((err) => err.stageName);
       }
     });
 

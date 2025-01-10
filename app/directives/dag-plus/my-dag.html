@@ -156,6 +156,7 @@
                  'selected': DAGPlusPlusCtrl.isNodeSelected(node.id) || DAGPlusPlusCtrl.activePluginToComment == node.id,
                }"
         >
+          <div ng-if="DAGPlusPlusCtrl.isErrorStage(node)" class="error-stage-outer-border"></div>
           <div
             class="comments-wrapper"
             ng-if="node.information.comments.list.length > 0 || DAGPlusPlusCtrl.activePluginToComment == node.id"

@@ -2463,6 +2463,18 @@ features:
 
   PipelineDetails:
     duration: Duration
+    ErrorDetails:
+      errorCountMessage:
+        0: Pipeline execution failed.
+        1: Pipeline execution failed with {context} error.
+        _: Pipeline execution failed with {context} errors.
+      closeButton: Close
+      viewDetailsButton: View details
+      viewLogsButton: View logs
+      downloadLogsButton: Download raw logs
+      errorCategoryHeader: Error category
+      errorMessageHeader: Error Message
+      errorReasonHeader: Error reason
     PipelineRuntimeArgsDropdownBtn:
       RuntimeArgsTabContent:
         ProvidedPopover:
@@ -2507,6 +2519,8 @@ features:
       status: Status
       tooltipRunLimit: Pipeline runs for only the last {runLimit} days are displayed
       warnings: Warnings
+      errorsCountChip: 'Errors: {numErrors}'
+      warningsCountChip: 'Warnings: {numWarnings}'
     startTime: Start time
     TopPanel:
       actions: Actions

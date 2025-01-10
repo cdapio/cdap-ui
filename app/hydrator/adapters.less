@@ -491,3 +491,10 @@ body.theme-cdap {
     }
   }
 }
+
+// Overrides for adjusted height with  error classification banner
+body.theme-cdap.with-error-banner.state-hydrator my-dag-plus {
+  height: ~"-moz-calc(100vh - 190px)"; // Header (50) + toppanel in detailed view (55) + footer (53) + error banner (32)
+  height: ~"-webkit-calc(100vh - 190px)";
+  height: ~"calc(100vh - 190px)";
+}
