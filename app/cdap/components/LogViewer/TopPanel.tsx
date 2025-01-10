@@ -15,6 +15,7 @@
  */
 
 import * as React from 'react';
+import { Provider } from 'react-redux';
 import withStyles, { WithStyles, StyleRules } from '@material-ui/core/styles/withStyles';
 import DataFetcher from 'components/LogViewer/DataFetcher';
 import Button from '@material-ui/core/Button';
@@ -27,6 +28,7 @@ import IconSVG from 'components/shared/IconSVG';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import { getDownloadLogsUrl, getRawLogsUrl } from './LogsUrlUtils';
 import RunLogsStatsChips from 'components/PipelineDetails/RunLevelInfo/RunLogsStatsChips';
+import PipelineDetailStore from 'components/PipelineDetails/store';
 
 export const TOP_PANEL_HEIGHT = '50px';
 
@@ -181,7 +183,9 @@ const TopPanelView: React.FC<ITopPanelProps> = ({
   return (
     <div className={classes.root} data-cy="log-viewer-top-panel" data-testid="log-viewer-top-panel">
       <div className={classes.leftContainer}>
-        <RunLogsStatsChips />
+        <Provider store={PipelineDetailStore}>
+          <RunLogsStatsChips />
+        </Provider>
       </div>
       <div className={classes.rightContainer}>
         <Button

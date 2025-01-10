@@ -1829,6 +1829,6 @@ angular.module(PKG.name + '.commons')
     }, true);
 
     $scope.$watch('errorStages', function() {
-      vm.errorStages = $scope.errorStages;
+      vm.errorStages = $scope.errorStages || [];
     }, true);
   });
