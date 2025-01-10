@@ -192,6 +192,9 @@ angular.module(PKG.name + '.feature.hydrator')
         this.totalRuns = runs.length;
         this.errorStages = (this.PipelineDetailStore.getState().runErrorDetails[this.runId] || [])
           .map((err) => err.stageName);
+
+        $scope.errorStages = this.errorStages;
+        $scope.$apply();
       }
     });
 
