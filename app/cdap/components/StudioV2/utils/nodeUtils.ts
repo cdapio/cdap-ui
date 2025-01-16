@@ -103,7 +103,7 @@ export function configurePluginInfo(node, sourceConnections, sourceNodes) {
   return defer.promise;
 }
 
-function getOutputSchemaObj(schema, schemaObjName = GLOBALS.defaultSchemaName) {
+export function getOutputSchemaObj(schema, schemaObjName = GLOBALS.defaultSchemaName) {
   return {
     name: schemaObjName,
     schema,

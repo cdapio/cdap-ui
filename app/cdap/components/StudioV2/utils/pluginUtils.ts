@@ -19,6 +19,9 @@ import _get from 'lodash/get';
 import _cloneDeep from 'lodash/cloneDeep';
 import { findHighestVersion } from 'services/VersionRange/VersionUtilities';
 import { GLOBALS } from 'services/global-constants';
+import Defer from './defer';
+import { MyPipelineApi } from 'api/pipeline';
+import { getCurrentNamespace } from 'services/NamespaceStore';
 
 export function getPluginIcon(pluginName: string): string {
   const iconMap = {
@@ -236,4 +239,42 @@ export function getDefaultVersionForPlugin(plugin: any = {}, defaultVersionMap: 
   }
 
   return _cloneDeep(defaultVersionMap[key]);
+}
+
+const widgetJsonCache = {};
+export function fetchWidgetJson(artifactName, artifactVersion, artifactScope, key) {
+  const cacheKey = `${artifactName}-${artifactVersion}-${artifactScope}-${key}`;
+  const fromCache = widgetJsonCache[cacheKey];
+  if (fromCache) {
+    return Promise.resolve(fromCache);
+  }
+
+  const defer = new Defer();
+  MyPipelineApi.fetchArtifactProperties({
+    namespace: getCurrentNamespace(),
+    artifactName,
+    artifactVersion,
+    scope: artifactScope,
+    keys: key,
+  }).subscribe(
+    (res) => {
+      try {
+        let config = res[key];
+        if (config) {
+          config = JSON.parse(config);
+          widgetJsonCache[cacheKey] = config;
+          defer.resolve(config);
+        } else {
+          defer.reject('NO_JSON_FOUND');
+        }
+      } catch (e) {
+        defer.reject(e && e.name === 'SyntaxError' ? 'CONFIG_SYNTAX_JSON_ERROR' : e);
+      }
+    },
+    (err) => {
+      defer.reject('NO_JSON_FOUND');
+    }
+  );
+
+  return defer.promise;
 }

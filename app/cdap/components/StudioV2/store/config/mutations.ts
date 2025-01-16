@@ -486,3 +486,15 @@ function validateState_mutating(
 
   return isStateValid;
 }
+
+export function editNodeProperties_mutating(state: IConfigState, nodeId, nodeConfig) {
+  const nodes = state.__ui__.nodes;
+  let match = nodes.filter((node) => node.name === nodeId);
+  if (match.length) {
+    match = match[0];
+    Object.entries(nodeConfig).forEach(([pName, pValue]) => {
+      match[pName] = pValue;
+    });
+    validateState_mutating(state);
+  }
+}

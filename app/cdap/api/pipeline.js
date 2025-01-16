@@ -90,6 +90,7 @@ export const MyPipelineApi = {
     'REQUEST',
     `${pluginFetchBase}/plugins/:pluginName?scope=system`
   ),
+  fetchArtifactProperties: apiCreator(dataSrc, 'GET', 'REQUEST', artifactBasePath),
 
   validateStage: apiCreator(
     dataSrc,

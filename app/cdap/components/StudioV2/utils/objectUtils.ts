@@ -16,7 +16,8 @@
 
 import _cloneDeep from 'lodash/cloneDeep';
 
-export function cloneAndApply<T>(object: T, mutation: (draft: T) => T): T {
+export function cloneAndApply<T>(object: T, mutation: (draft: T) => T | void): T {
   const draft: T = _cloneDeep(object);
-  return mutation(draft);
+  mutation(draft);
+  return draft;
 }

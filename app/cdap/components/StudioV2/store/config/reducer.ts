@@ -22,6 +22,8 @@ import _assign from 'lodash/assign';
 import { IArtifactSummary, IPipelineConfig } from 'components/StudioV2/types';
 import { ConfigActions } from './actions';
 import { HYDRATOR_DEFAULT_VALUES } from 'services/global-constants';
+import { cloneAndApply } from 'components/StudioV2/utils/objectUtils';
+import { editNodeProperties_mutating } from './mutations';
 
 export interface IConfigState {
   artifact?: IArtifactSummary;
@@ -70,6 +72,11 @@ export const config = (state: IConfigState = configInitialState, action?): IConf
   switch (action.type) {
     case ConfigActions.SET_STATE:
       return _assign(_cloneDeep(state), action.payload);
+
+    case ConfigActions.EDIT_PLUGIN_PROPERTIES:
+      return cloneAndApply(state, (draft) =>
+        editNodeProperties_mutating(draft, action.payload.nodeId, action.payload.nodeConfig)
+      );
 
     default:
       return state;

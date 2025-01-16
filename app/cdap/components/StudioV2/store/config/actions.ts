@@ -48,6 +48,7 @@ const PREFIX = 'CONFIG_ACTIONS';
 
 export const ConfigActions = {
   SET_STATE: `${PREFIX}/SET_STATE`,
+  EDIT_PLUGIN_PROPERTIES: `${PREFIX}/EDIT_PLUGIN_PROPERTIES`,
 };
 
 export function setConfigState(payload: IConfigState) {
@@ -92,6 +93,16 @@ export function initCofigStore(config?: any) {
 
   stateCopy.__defaultState = _cloneDeep(stateCopy);
   setConfigState(stateCopy);
+}
+
+export function editPlugin(nodeId, nodeConfig) {
+  StudioV2Store.dispatch({
+    type: ConfigActions.EDIT_PLUGIN_PROPERTIES,
+    payload: {
+      nodeId,
+      nodeConfig,
+    },
+  });
 }
 
 export function onEngineChange() {}
