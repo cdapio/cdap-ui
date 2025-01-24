@@ -15,7 +15,17 @@
  */
 
 class HydratorPlusPlusCreateCanvasCtrl {
-  constructor(DAGPlusPlusNodesStore, HydratorPlusPlusConfigStore, HydratorPlusPlusHydratorService, $uibModal, GLOBALS, DAGPlusPlusNodesActionsFactory, HydratorPlusPlusPreviewStore, $scope) {
+  constructor(
+    DAGPlusPlusNodesStore,
+    HydratorPlusPlusConfigStore,
+    HydratorPlusPlusHydratorService,
+    $uibModal,
+    GLOBALS,
+    DAGPlusPlusNodesActionsFactory,
+    HydratorPlusPlusPreviewStore,
+    $scope,
+    $timeout,
+  ) {
     this.DAGPlusPlusNodesStore = DAGPlusPlusNodesStore;
     this.HydratorPlusPlusConfigStore = HydratorPlusPlusConfigStore;
     this.HydratorPlusPlusHydratorService = HydratorPlusPlusHydratorService;
@@ -37,6 +47,11 @@ class HydratorPlusPlusCreateCanvasCtrl {
     let unsub = this.previewStore.subscribe(() => {
       let state = this.previewStore.getState().preview;
       this.previewMode = state.isPreviewModeEnabled;
+      this.errorStages = this.previewMode ? (state.previewErrorDetails || [])
+        .map((err) => err.stageName) : [];
+
+      $scope.errorStages = this.errorStages;
+      $timeout(() => $scope.$apply());
     });
 
     $scope.$on('$destroy', () => {
@@ -119,7 +134,7 @@ class HydratorPlusPlusCreateCanvasCtrl {
     this.setStateAndUpdateConfigStore();
   }
 }
-HydratorPlusPlusCreateCanvasCtrl.$inject = ['DAGPlusPlusNodesStore', 'HydratorPlusPlusConfigStore', 'HydratorPlusPlusHydratorService', '$uibModal', 'GLOBALS', 'DAGPlusPlusNodesActionsFactory', 'HydratorPlusPlusPreviewStore', '$scope'];
+HydratorPlusPlusCreateCanvasCtrl.$inject = ['DAGPlusPlusNodesStore', 'HydratorPlusPlusConfigStore', 'HydratorPlusPlusHydratorService', '$uibModal', 'GLOBALS', 'DAGPlusPlusNodesActionsFactory', 'HydratorPlusPlusPreviewStore', '$scope', '$timeout'];
 
 angular.module(PKG.name + '.feature.hydrator')
   .controller('HydratorPlusPlusCreateCanvasCtrl', HydratorPlusPlusCreateCanvasCtrl);

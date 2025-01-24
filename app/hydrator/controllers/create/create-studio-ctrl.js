@@ -16,7 +16,26 @@
 
 class HydratorPlusPlusStudioCtrl {
   // Holy cow. Much DI. Such angular.
-  constructor(HydratorPlusPlusConfigActions, $stateParams, rConfig, $rootScope, $scope, DAGPlusPlusNodesActionsFactory, HydratorPlusPlusHydratorService, HydratorPlusPlusConsoleActions, rSelectedArtifact, rArtifacts, myLocalStorage, HydratorPlusPlusConfigStore, $window, HydratorPlusPlusConsoleTabService, HydratorUpgradeService) {
+  constructor(
+    HydratorPlusPlusConfigActions,
+    $stateParams,
+    rConfig,
+    $rootScope,
+    $scope,
+    $timeout,
+    DAGPlusPlusNodesActionsFactory,
+    HydratorPlusPlusHydratorService,
+    HydratorPlusPlusConsoleActions,
+    rSelectedArtifact,
+    rArtifacts,
+    myLocalStorage,
+    HydratorPlusPlusConfigStore,
+    $window,
+    HydratorPlusPlusConsoleTabService,
+    HydratorUpgradeService,
+    HydratorPlusPlusPreviewStore,
+    HydratorPlusPlusPreviewActions,
+  ) {
     'ngInject';
     // This is required because before we fireup the actions related to the store, the store has to be initialized to register for any events.
     this.myLocalStorage = myLocalStorage;
@@ -24,9 +43,28 @@ class HydratorPlusPlusStudioCtrl {
         .get('hydrator++-leftpanel-isExpanded')
         .then(isExpanded => this.isExpanded = (isExpanded === false ? false : true))
         .catch( () => this.isExpanded = true);
+
+    this.currentPreviewId = null;
+    this.currentPreviewStatus = null;
+    this.previewErrorDetails = null;
+    this.previewStore = HydratorPlusPlusPreviewStore;
+    this.previewActions = HydratorPlusPlusPreviewActions;
+    const unsubPreview = HydratorPlusPlusPreviewStore.subscribe(() => {
+      const state= HydratorPlusPlusPreviewStore.getState().preview;
+      this.currentPreviewId = state.previewId;
+      this.currentPreviewStatus = state.status;
+      this.previewErrorDetails = state.previewErrorDetails;
+
+      $scope.currentPreviewId = this.currentPreviewId;
+      $scope.currentPreviewStatus = this.currentPreviewStatus;
+      $scope.previewErrorDetails = this.previewErrorDetails;
+      $timeout(() => $scope.$apply());
+    });
+
     // FIXME: This should essentially be moved to a scaffolding service that will do stuff for a state/view
     HydratorPlusPlusConsoleTabService.listen();
     $scope.$on('$destroy', () => {
+      unsubPreview();
       HydratorPlusPlusConsoleTabService.unsubscribe();
       HydratorPlusPlusConsoleActions.resetMessages();
       $window.onbeforeunload = null;
@@ -147,6 +185,10 @@ class HydratorPlusPlusStudioCtrl {
   toggleSidebar() {
     this.isExpanded = !this.isExpanded;
     this.myLocalStorage.set('hydrator++-leftpanel-isExpanded', this.isExpanded);
+  }
+
+  setPreviewErrorDetails = (errors) => {
+    this.previewStore.dispatch(this.previewActions.setPreviewErrorDetails(errors));
   }
 }
 

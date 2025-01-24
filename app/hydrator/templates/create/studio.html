@@ -14,6 +14,15 @@
   the License.
 -->
   <div class="react-version" ng-if="true">
+    <div class="studio-preview-error-classification-container">
+      <preview-error-classification
+        preview-id="HydratorPlusPlusStudioCtrl.currentPreviewId"
+        preview-status="HydratorPlusPlusStudioCtrl.currentPreviewStatus"
+        error-details="HydratorPlusPlusStudioCtrl.previewErrorDetails"
+        set-error-details="HydratorPlusPlusStudioCtrl.setPreviewErrorDetails"
+      >
+      </preview-error-classification>
+    </div>
     <div class="canvas-wrapper">
         <div ui-view="reactleftpanel" class="left-control"></div>
         <div ui-view="reacttoppanel" class="top-panel"></div>
