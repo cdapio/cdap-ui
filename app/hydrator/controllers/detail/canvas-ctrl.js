@@ -15,7 +15,7 @@
  */
 
 angular.module(PKG.name + '.feature.hydrator')
-  .controller('HydratorPlusPlusDetailCanvasCtrl', function(rPipelineDetail, DAGPlusPlusNodesActionsFactory, HydratorPlusPlusHydratorService, DAGPlusPlusNodesStore, $uibModal, MyPipelineStatusMapper, moment, $interval, $scope, myHelpers) {
+  .controller('HydratorPlusPlusDetailCanvasCtrl', function(rPipelineDetail, DAGPlusPlusNodesActionsFactory, HydratorPlusPlusHydratorService, DAGPlusPlusNodesStore, $uibModal, MyPipelineStatusMapper, moment, $interval, $scope, $timeout, myHelpers) {
     this.$uibModal = $uibModal;
     this.DAGPlusPlusNodesStore = DAGPlusPlusNodesStore;
     this.PipelineDetailStore = window.CaskCommon.PipelineDetailStore;
@@ -194,7 +194,7 @@ angular.module(PKG.name + '.feature.hydrator')
           .map((err) => err.stageName);
 
         $scope.errorStages = this.errorStages;
-        $scope.$apply();
+        $timeout(() => $scope.$apply());
       }
     });
 

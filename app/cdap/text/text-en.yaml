@@ -2469,8 +2469,11 @@ features:
         0: Pipeline execution failed.
         1: Pipeline execution failed with {context} error.
         _: Pipeline execution failed with {context} errors.
+      errorInMultipleStagesMessage: Pipeline execution failed in multiple stages.
+      errorInSingleStageMessage: "Pipeline execution failed in stage: {stageName}."
       closeButton: Close
       viewDetailsButton: View details
+      viewStageErrorButton: View errors
       viewLogsButton: View logs
       downloadLogsButton: Download raw logs
       errorCategoryHeader: Error category

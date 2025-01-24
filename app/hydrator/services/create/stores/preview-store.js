@@ -27,7 +27,8 @@ let getInitialState = () => {
     // `runtimeArgsForDisplay` combines `macros` map and `userRuntimeArguments` map
     // to create an object that can be used as a prop to the KeyValuePairs component
     runtimeArgsForDisplay: {},
-    timeoutInMinutes: 2
+    timeoutInMinutes: 2,
+    previewErrorDetails: null,
   };
 };
 
@@ -41,7 +42,9 @@ var preview = (state = getInitialState(), action = {}) => {
       return Object.assign({}, state, {startTime});
     case previewActions.SET_PREVIEW_STATUS:
       let status = action.payload.status;
-      return Object.assign({}, state, {status});
+      let previewErrorDetails = status !== "RUN_FAILED" ? null 
+        : state.previewErrorDetails;
+      return Object.assign({}, state, {status, previewErrorDetails});
     case previewActions.SET_PREVIEW_ID:
       let previewId = action.payload.previewId;
       return Object.assign({}, state, {previewId});
@@ -61,6 +64,8 @@ var preview = (state = getInitialState(), action = {}) => {
       return Object.assign({}, state, {previewData: true});
     case previewActions.RESET_PREVIEW_DATA:
       return Object.assign({}, state, {previewData: false});
+    case previewActions.SET_PREVIEW_ERROR_DETAILS:
+      return Object.assign({}, state, { previewErrorDetails: action.payload });
     case previewActions.PREVIEW_RESET:
       return getInitialState();
     default:
@@ -98,6 +103,7 @@ angular.module(`${PKG.name}.feature.hydrator`)
     'SET_RUNTIME_ARGS_FOR_DISPLAY': 'SET_RUNTIME_ARGS_FOR_DISPLAY',
     'SET_TIMEOUT_IN_MINUTES': 'SET_TIMEOUT_IN_MINUTES',
     'SET_PREVIEW_DATA': 'SET_PREVIEW_DATA',
-    'RESET_PREVIEW_DATA': 'RESET_PREVIEW_DATA'
+    'RESET_PREVIEW_DATA': 'RESET_PREVIEW_DATA',
+    'SET_PREVIEW_ERROR_DETAILS': 'SET_PREVIEW_ERROR_DETAILS',
   })
   .factory('HydratorPlusPlusPreviewStore', PreviewStore);
