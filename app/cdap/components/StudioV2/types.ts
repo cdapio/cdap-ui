@@ -14,6 +14,8 @@
  * the License.
  */
 
+import { IConfigurationGroup, IPropertyFilter, IWidgetProperty } from "components/shared/ConfigurationGroup/types";
+
 export type ArtifactScope = 'USER' | 'SYSTEM';
 
 export interface IArtifactSummary {
@@ -58,5 +60,46 @@ export interface IPluginTemplate {
   templateType?: string;
   properties?: {
     [key: string]: any;
+  };
+};
+
+export interface IDagConnection {
+  from: string;
+  to: string;
+};
+
+export interface IPluginWithProperties extends IPlugin {
+  properties?: any;
+};
+
+export interface IPluginNode {
+  id: string;
+  name?: string;
+  description?: string;
+  type?: string;
+
+  configGroups?: Array<IConfigurationGroup>;
+  errorCount?: number;
+  filters?: Array<IPropertyFilter>;
+  icon?: string;
+  
+  implicitSchema?: any; // TODO: add proper type
+  outputSchema?: any;
+
+  outputSchemaProperty?: string;
+  outputs?: Array<IWidgetProperty>;
+  plugin?: IPluginWithProperties;
+  
+  isPluginAvailable?: boolean;
+  selected?: boolean;
+  visibilityMap?: {
+    [key: string]: boolean;
+  };
+  warning?: boolean;
+
+  _backendProperties?: any; // TODO: add proper types
+  _uiPosition?: {
+    top?: string;
+    left?: string;
   };
 };

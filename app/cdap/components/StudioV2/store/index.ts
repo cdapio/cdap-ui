@@ -18,11 +18,13 @@ import { combineReducers, createStore } from 'redux';
 import { common, commonDefaultInitialState } from './common/reducer';
 import { consoleReducer, consoleInitialState } from './console/reducer';
 import { plugins, pluginsInitialState } from './plugins/reducer';
+import { nodes, nodesInitialState } from './nodes/reducer';
 
 const defaultInitialState = {
   common: commonDefaultInitialState,
   console: consoleInitialState,
   plugins: pluginsInitialState,
+  nodes: nodesInitialState,
 };
 
 const StudioV2Store = createStore(
@@ -30,6 +32,7 @@ const StudioV2Store = createStore(
     common,
     console: consoleReducer,
     plugins,
+    nodes,
   }),
   defaultInitialState,
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
