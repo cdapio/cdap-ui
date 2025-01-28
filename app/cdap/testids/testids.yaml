@@ -340,5 +340,6 @@ features:
       errorCountMessage: ~
       viewDetailsButton: ~
       viewLogsButton: ~
+      viewStageErrorButton: ~
     runLevel:
       currentRunIndex: ~

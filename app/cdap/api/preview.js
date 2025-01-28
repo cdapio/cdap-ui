@@ -22,6 +22,7 @@ const basepath = '/namespaces/:namespace/previews';
 
 export const MyPreviewApi = {
   getStageData: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/:previewId/tracers`),
+  getErrorDetails: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/:previewId/classify`),
 
   // logs
   nextLogs: apiCreator(dataSrc, 'GET', 'REQUEST', `${basepath}/:previewId/logs/next`),

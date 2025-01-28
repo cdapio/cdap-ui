@@ -115,7 +115,7 @@ const LogViewerContainer: React.FC<ILogViewerProps> = ({
       <div
         className={withErrorBanner ? classes.logsContainerWithErrorBanner : classes.logsContainer}
       >
-        <LogViewer dataFetcher={dataFetcher} onClose={toggleLogViewer} />
+        <LogViewer dataFetcher={dataFetcher} onClose={toggleLogViewer} showStats={true} />
       </div>
     </div>
   );

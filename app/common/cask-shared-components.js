@@ -149,6 +149,10 @@ var LeftPanelReact = require('../cdap/components/hydrator/components/LeftPanel/L
 var PipelineCanvasActionBtns = require('../cdap/components/PipelineCanvasActions/ActionButtons/PipelineCanvasActionBtns')
   .PipelineCanvasActionBtns;
 var TopPanelReact = require('../cdap/components/hydrator/components/TopPanel/TopPanel').TopPanel;
+var PreviewErrorClassificationBanner = require('../cdap/components/PipelineDetails/PipelineDetailsTopPanel/PipelineRunErrorDetails/PreviewErrorDetailsBanner')
+  .default;
+var ErrorStageOutline = require('../cdap/components/PipelineDetails/PipelineDetailsTopPanel/PipelineRunErrorDetails/ErrorStageOutline')
+  .default;
 
 export {
   TopPanelReact,
@@ -258,4 +262,6 @@ export {
   Comment,
   PipelineCommentsActionBtn,
   Connections,
+  PreviewErrorClassificationBanner,
+  ErrorStageOutline,
 };

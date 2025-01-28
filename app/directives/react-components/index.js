@@ -195,4 +195,10 @@ angular
   })
   .directive('pipelineCanvasActionBtns', function(reactDirective) {
     return reactDirective(window.CaskCommon.PipelineCanvasActionBtns);
+  })
+  .directive('previewErrorClassification', function(reactDirective) {
+    return reactDirective(window.CaskCommon.PreviewErrorClassificationBanner);
+  })
+  .directive('errorStageOutline', function (reactDirective) {
+    return reactDirective(window.CaskCommon.ErrorStageOutline);
   });

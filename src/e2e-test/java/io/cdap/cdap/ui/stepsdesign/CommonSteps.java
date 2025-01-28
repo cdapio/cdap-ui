@@ -218,6 +218,15 @@ public class CommonSteps {
       ElementHelper.getElementText(Helper.locateElementByTestId("valium-banner-hydrator")).contains(message));
   }
 
+  @Then("Error classification banner is shown")
+  public void errorClassificationBannerIsShown() {
+    WaitHelper.waitForElementToBeDisplayed(
+        Helper.locateElementByTestId("features-pipelineDetails-errorDetails-errorCountMessage"));
+    Assert.assertTrue(
+        ElementHelper.isElementDisplayed(
+            Helper.locateElementByTestId("features-pipelineDetails-errorDetails-errorCountMessage")));
+  }
+
   @Then("Cleanup pipeline {string}")
   public void cleanupPipeline(String pipelineName) {
     Helper.cleanupPipelines(pipelineName);

@@ -84,6 +84,7 @@ interface ILogViewerProps extends WithStyles<typeof styles> {
   dataFetcher: DataFetcher;
   stopPoll?: boolean;
   onClose?: () => void;
+  showStats?: boolean;
 }
 
 interface ILogViewerState {
@@ -448,6 +449,7 @@ class LogViewerView extends React.PureComponent<ILogViewerProps, ILogViewerState
           setSystemLogs={this.setIncludeSystemLogs}
           onClose={this.props.onClose}
           loading={this.state.isFetching}
+          showStats={this.props.showStats}
         />
         <div className={classes.logsTableHeader}>
           <div className={classes.cell}>Time</div>
