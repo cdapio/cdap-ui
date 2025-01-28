@@ -214,6 +214,7 @@ var webpackConfig = {
     path: __dirname + '/packaged/public/cdap_dist/cdap_assets/',
     publicPath: '/cdap_assets/',
     pathinfo: false, // added. reduces 0.2~0.3 seconds
+    hashFunction: 'sha512',
   },
   stats: {
     assets: false,

@@ -172,6 +172,7 @@ var webpackConfig = {
     libraryTarget: 'umd',
     publicPath: '/common_assets/',
     globalObject: 'window',
+    hashFunction: 'sha512',
   },
   externals: {
     react: {
