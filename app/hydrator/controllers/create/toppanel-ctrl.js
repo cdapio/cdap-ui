@@ -1393,8 +1393,10 @@ class HydratorPlusPlusTopPanelCtrl {
                 "Unable to run preview. Please try again in sometime.";
             }
             if (res.status === RUN_FAILED) {
-              failureMsg = `${pipelinePreviewPlaceholder} has failed. Please check the logs for more information.`;
+              // this case will be handled by ErrorClassificationBanner
+              return;
             }
+            
             this.myAlertOnValium.show({
               type: "danger",
               content: failureMsg,

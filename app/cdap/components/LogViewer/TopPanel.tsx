@@ -145,6 +145,7 @@ interface ITopPanelProps extends WithStyles<typeof styles> {
   getLatestLogs: () => void;
   setSystemLogs: (includeSystemLogs: boolean) => void;
   onClose?: () => void;
+  showStats?: boolean;
 }
 
 const TopPanelView: React.FC<ITopPanelProps> = ({
@@ -155,6 +156,7 @@ const TopPanelView: React.FC<ITopPanelProps> = ({
   setSystemLogs,
   onClose,
   loading,
+  showStats,
 }) => {
   const [includeSystemLogs, setLocalIncludeSystemLogs] = React.useState(
     dataFetcher.getIncludeSystemLogs()
@@ -183,9 +185,13 @@ const TopPanelView: React.FC<ITopPanelProps> = ({
   return (
     <div className={classes.root} data-cy="log-viewer-top-panel" data-testid="log-viewer-top-panel">
       <div className={classes.leftContainer}>
-        <Provider store={PipelineDetailStore}>
-          <RunLogsStatsChips />
-        </Provider>
+        {showStats ? (
+          <Provider store={PipelineDetailStore}>
+            <RunLogsStatsChips />
+          </Provider>
+        ) : (
+          <div />
+        )}
       </div>
       <div className={classes.rightContainer}>
         <Button

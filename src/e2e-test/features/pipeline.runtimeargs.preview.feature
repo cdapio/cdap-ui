@@ -54,7 +54,7 @@ Feature: Pipeline - Runtime Args - It must be possible to preview a pipeline wit
     And Enter preview runtime argument value "random value1" in row "0"
     And Enter preview runtime argument value "random value2" in row "1"
     And Click run button from preview runtime arguments
-    Then Pipeline banner is shown with message "The preview of the pipeline \"Airport_test_macros\" has failed. Please check the logs for more information."
+    Then Error classification banner is shown
 
   @PIPELINE_RUNTIME_ARGS_TEST
   Scenario: Providing correct runtime arguments should allow the preview to pass
