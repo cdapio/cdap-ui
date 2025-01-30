@@ -34,6 +34,7 @@ var webpackConfig = {
     filename: 'index.js',
     path: __dirname + '/packaged/server_dist/',
     publicPath: '/packaged/server_dist/',
+    hashFunction: 'sha512',
   },
   plugins: [
     new CleanWebpackPlugin(cleanOptions),

@@ -234,6 +234,7 @@ var webpackConfig = {
     chunkFilename: '[name].[chunkhash].js',
     path: __dirname + '/packaged/public/cdap_dist/cdap_assets/',
     publicPath: '/cdap_assets/',
+    hashFunction: 'sha512',
   },
   stats: {
     assets: false,
