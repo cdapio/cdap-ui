@@ -31,6 +31,7 @@ import org.junit.Assert;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.UnhandledAlertException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WindowType;
@@ -219,12 +220,21 @@ public class CommonSteps {
   }
 
   @Then("Error classification banner is shown")
-  public void errorClassificationBannerIsShown() {
-    WaitHelper.waitForElementToBeDisplayed(
-        Helper.locateElementByTestId("features-pipelineDetails-errorDetails-errorCountMessage"));
+  public void errorClassificationBannerIsShown() throws InterruptedException {
+    String bannerTestid = "features-pipelineDetails-errorDetails-errorCountMessage";
+    for (int retries = 0; retries < 3; retries += 1) {
+      try {
+        WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId(bannerTestid));
+        break;
+      } catch (StaleElementReferenceException e) {
+        // do nothing, if this exception was thrown in all 3 retries,
+        // then the next assertion will fail anyway
+      }
+    }
+    Thread.sleep(1000);
     Assert.assertTrue(
         ElementHelper.isElementDisplayed(
-            Helper.locateElementByTestId("features-pipelineDetails-errorDetails-errorCountMessage")));
+            Helper.locateElementByTestId(bannerTestid)));
   }
 
   @Then("Cleanup pipeline {string}")
