@@ -14,6 +14,9 @@
  * the License.
  */
 
+import React from 'react';
+import { Provider, useSelector } from 'react-redux';
+
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import ZoomOutIcon from '@material-ui/icons/ZoomOut';
 import UndoIcon from '@material-ui/icons/Undo';
@@ -21,9 +24,10 @@ import RedoIcon from '@material-ui/icons/Redo';
 import AspectRatioIcon from '@material-ui/icons/AspectRatio';
 import OpenWithIcon from '@material-ui/icons/OpenWith';
 import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
-import React from 'react';
 import PipelineCommentsActionBtn from '../PipelineCommentsActionBtn';
 import { ActionButton, ActionButtonGroup, CanvasButtonTooltip } from './styles';
+import PipelineDetailStore from 'components/PipelineDetails/store';
+import { isErrorClassificationBannerDisplayed } from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineRunErrorDetails';
 
 interface IPipelineCanvasActionBtnsProps {
   setPipelineComments: () => void;
@@ -41,7 +45,7 @@ interface IPipelineCanvasActionBtnsProps {
   zoomIn: () => void;
 }
 
-export const PipelineCanvasActionBtns = ({
+export const PipelineCanvasActionBtnsView = ({
   setPipelineComments,
   pipelineComments,
   isDisabled,
@@ -56,8 +60,10 @@ export const PipelineCanvasActionBtns = ({
   zoomOut,
   zoomIn,
 }: IPipelineCanvasActionBtnsProps) => {
+  const isErrorBannerDisplayed = useSelector(isErrorClassificationBannerDisplayed);
+
   return (
-    <ActionButtonGroup>
+    <ActionButtonGroup isErrorBannerDisplayed={isErrorBannerDisplayed}>
       {!disableNodeClick && (
         <>
           <CanvasButtonTooltip title="Zoom In">
@@ -143,3 +149,9 @@ export const PipelineCanvasActionBtns = ({
     </ActionButtonGroup>
   );
 };
+
+export const PipelineCanvasActionBtns = (props: IPipelineCanvasActionBtnsProps) => (
+  <Provider store={PipelineDetailStore}>
+    <PipelineCanvasActionBtnsView {...props} />
+  </Provider>
+);

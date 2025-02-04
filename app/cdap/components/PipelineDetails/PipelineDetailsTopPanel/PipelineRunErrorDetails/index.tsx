@@ -17,7 +17,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ACTIONS } from '../../store';
+import PipelineDetailStore, { ACTIONS } from '../../store';
 import { MyPipelineApi } from 'api/pipeline';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import ProgramDataFetcher from 'components/LogViewer/DataFetcher/ProgramDataFetcher';
@@ -26,6 +26,13 @@ import { delay } from '@cdap-ui/utils/time';
 import { IErrorEntry } from './types';
 import { RETRY_DELAY_MS } from './constants';
 import ErrorDetailsBanner from './ErrorDetailsBanner';
+
+export function isErrorClassificationBannerDisplayed(pipelineDetailsState) {
+  const { currentRun, runErrorDetailsLoading } = pipelineDetailsState;
+  const runid = currentRun?.runid;
+  const loading = runErrorDetailsLoading[runid] || false;
+  return currentRun?.status === 'FAILED' && !loading;
+}
 
 export default function PipelineRunErrorDetails() {
   const appId = useSelector((state) => state.name);

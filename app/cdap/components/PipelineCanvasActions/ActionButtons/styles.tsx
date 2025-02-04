@@ -33,7 +33,7 @@ export const ActionButtonGroup = styled.div`
   position: fixed;
   width: 37px;
   right: 15px;
-  top: 170px;
+  top: ${(props) => (props.isErrorBannerDisplayed ? '202px' : '170px')};
   vertical-align: middle;
   z-index: 998;
   > * {
