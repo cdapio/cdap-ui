@@ -26,27 +26,27 @@ import { GLOBALS } from 'services/global-constants';
 import ProgramDataFetcher from 'components/LogViewer/DataFetcher/ProgramDataFetcher';
 import LogViewer from 'components/LogViewer';
 import { PIPELINE_LOGS_FILTER } from 'services/global-constants';
+import { isErrorClassificationBannerDisplayed } from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineRunErrorDetails';
 
-const PIPELINE_TOP_PANEL_OFFSET = '160px';
+const LOGVIEWER_TOP_OFFSET = '110px';
 const FOOTER_HEIGHT = '54px';
-
-const ERROR_BANNER_OFFSET = '20px'; // to align the top of the logs viewer when the error banner is present
-const LOGS_PORTAL_OFFSET = '50px'; // to remove the unnecessary page scroll
+const HEADER_HEIGHT = '48px';
+const ERROR_BANNER_OFFSET = '32px'; // to align the top of the logs viewer when the error banner is present
 
 const styles = (theme): StyleRules => {
   const portalContainerBase = {
-    position: 'absolute',
-    top: 0,
+    position: 'fixed',
+    top: HEADER_HEIGHT,
     left: 0,
-    height: '100vh',
+    height: `calc(100vh - ${HEADER_HEIGHT} - ${FOOTER_HEIGHT})`,
     width: '100vw',
     zIndex: 1301,
   };
 
   const logsContainerBase = {
     position: 'absolute',
-    top: PIPELINE_TOP_PANEL_OFFSET,
-    height: `calc(100% - ${PIPELINE_TOP_PANEL_OFFSET} - ${FOOTER_HEIGHT})`,
+    top: LOGVIEWER_TOP_OFFSET,
+    height: `calc(100% - ${LOGVIEWER_TOP_OFFSET})`,
     width: '100%',
     backgroundColor: theme.palette.white[50],
   };
@@ -54,14 +54,10 @@ const styles = (theme): StyleRules => {
   return {
     portalContainer: portalContainerBase as CreateCSSProperties<{}>,
     logsContainer: logsContainerBase as CreateCSSProperties<{}>,
-    portalContainerWithErrorBanner: {
-      ...portalContainerBase,
-      height: `calc(100vh - ${LOGS_PORTAL_OFFSET})`,
-    } as CreateCSSProperties<{}>,
     logsContainerWithErrorBanner: {
       ...logsContainerBase,
-      height: `calc(100% - ${PIPELINE_TOP_PANEL_OFFSET} - ${FOOTER_HEIGHT} - ${ERROR_BANNER_OFFSET})`,
-      top: `calc(${PIPELINE_TOP_PANEL_OFFSET} - ${ERROR_BANNER_OFFSET})`,
+      height: `calc(100% - ${LOGVIEWER_TOP_OFFSET} - ${ERROR_BANNER_OFFSET})`,
+      top: `calc(${LOGVIEWER_TOP_OFFSET} + ${ERROR_BANNER_OFFSET})`,
     } as CreateCSSProperties<{}>,
   };
 };
@@ -107,11 +103,7 @@ const LogViewerContainer: React.FC<ILogViewerProps> = ({
   }
 
   return (
-    <div
-      className={withErrorBanner ? classes.portalContainerWithErrorBanner : classes.portalContainer}
-      ref={backgroundElem}
-      onClick={handleBackgroundClick}
-    >
+    <div className={classes.portalContainer} ref={backgroundElem} onClick={handleBackgroundClick}>
       <div
         className={withErrorBanner ? classes.logsContainerWithErrorBanner : classes.logsContainer}
       >
@@ -128,6 +120,7 @@ const mapStateToProps = (state) => {
     currentRun: state.currentRun,
     appId: state.name,
     artifactName: state.artifact.name,
+    withErrorBanner: isErrorClassificationBannerDisplayed(state),
   };
 };
 

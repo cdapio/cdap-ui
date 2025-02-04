@@ -335,7 +335,7 @@ function ErrorDetailsBannerView({
           />
         ) : (
           <Provider store={PipelineDetailStore}>
-            <PipelineLogViewer toggleLogViewer={toggleLogs} withErrorBanner={true} />
+            <PipelineLogViewer toggleLogViewer={toggleLogs} />
           </Provider>
         ))}
     </ThemeWrapper>
