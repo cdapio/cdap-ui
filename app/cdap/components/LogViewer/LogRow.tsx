@@ -20,6 +20,7 @@ import { ILogResponse, LogLevel } from 'components/LogViewer/types';
 import moment from 'moment';
 import { logsTableGridStyle } from 'components/LogViewer';
 import classnames from 'classnames';
+import LoadingSVG from 'components/shared/LoadingSVG';
 
 const styles = (theme): StyleRules => {
   const tableStyle = logsTableGridStyle(theme);
@@ -43,11 +44,20 @@ const styles = (theme): StyleRules => {
 
 interface ILogRowProps extends WithStyles<typeof styles> {
   logObj: ILogResponse;
+  loading?: boolean;
 }
 
 const TIMESTAMP_FORMAT = 'L H:mm:ss';
 
-const LogRowView: React.FC<ILogRowProps> = ({ classes, logObj }) => {
+const LogRowView: React.FC<ILogRowProps> = ({ classes, logObj, loading = false }) => {
+  if (loading) {
+    return (
+      <div className={classes.root} data-cy="log-viewer-row" data-testid="log-viewer-row">
+        <LoadingSVG />
+      </div>
+    );
+  }
+
   const timeDate = new Date(logObj.log.timestamp);
   const displayTime = moment(timeDate).format(TIMESTAMP_FORMAT);
 

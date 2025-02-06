@@ -18,6 +18,7 @@ import React, { useEffect, useState } from 'react';
 import T from 'i18n-react';
 import { useSelector, Provider, useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import _uniq from 'lodash/uniq';
 
 import LaunchIcon from '@material-ui/icons/Launch';
 import GetAppIcon from '@material-ui/icons/GetApp';
@@ -232,7 +233,7 @@ function ErrorDetailsBannerView({
           <ShortErrorMessage>
             <PipelineErrorCountMessage
               classifiedErrorCount={errorDetails?.length}
-              stages={errorDetails?.map((err) => err.stageName)}
+              stages={_uniq(errorDetails?.map((err) => err.stageName)?.filter(Boolean) || [])}
             />
             {canExapndErrorDetails ? (
               <Button
@@ -335,7 +336,7 @@ function ErrorDetailsBannerView({
           />
         ) : (
           <Provider store={PipelineDetailStore}>
-            <PipelineLogViewer toggleLogViewer={toggleLogs} withErrorBanner={true} />
+            <PipelineLogViewer toggleLogViewer={toggleLogs} />
           </Provider>
         ))}
     </ThemeWrapper>
