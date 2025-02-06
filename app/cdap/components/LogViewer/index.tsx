@@ -93,6 +93,8 @@ interface ILogViewerState {
   isPolling: boolean;
   error?: string;
   initLoading: boolean;
+  isFetchingPrev: boolean;
+  isFetchingNext: boolean;
 }
 
 const MAX_LOG_ROWS = 100;
@@ -120,6 +122,8 @@ class LogViewerView extends React.PureComponent<ILogViewerProps, ILogViewerState
     isPolling: true,
     error: null,
     initLoading: true,
+    isFetchingPrev: false,
+    isFetchingNext: false,
   };
 
   public componentDidMount() {
@@ -270,7 +274,7 @@ class LogViewerView extends React.PureComponent<ILogViewerProps, ILogViewerState
     if (this.state.isFetching || this.state.isPolling) {
       return;
     }
-    this.setState({ isFetching: true });
+    this.setState({ isFetching: true, isFetchingPrev: true });
 
     const logsContainer = this.logsContainer.current;
     const currentScrollHeight = logsContainer.scrollHeight;
@@ -284,6 +288,7 @@ class LogViewerView extends React.PureComponent<ILogViewerProps, ILogViewerState
       this.setState(
         {
           isFetching: false,
+          isFetchingPrev: false,
         },
         () => {
           // maintaining scroll position
@@ -309,7 +314,7 @@ class LogViewerView extends React.PureComponent<ILogViewerProps, ILogViewerState
     if (this.state.isFetching || this.state.isPolling) {
       return;
     }
-    this.setState({ isFetching: true });
+    this.setState({ isFetching: true, isFetchingNext: true });
 
     this.props.dataFetcher.getNext().subscribe((res) => {
       if (res.length > 0) {
@@ -320,6 +325,7 @@ class LogViewerView extends React.PureComponent<ILogViewerProps, ILogViewerState
       this.setState(
         {
           isFetching: false,
+          isFetchingNext: false,
         },
         this.trimTopExcessLogs
       );
@@ -431,9 +437,11 @@ class LogViewerView extends React.PureComponent<ILogViewerProps, ILogViewerState
 
     return (
       <React.Fragment>
+        {this.state.isFetchingPrev && <LogRow loading logObj={null} />}
         {this.state.logs.map((logObj, i) => {
           return <LogRow key={`${logObj.offset}-${i}`} logObj={logObj} />;
         })}
+        {this.state.isFetchingNext && <LogRow loading logObj={null} />}
       </React.Fragment>
     );
   }
@@ -448,7 +456,7 @@ class LogViewerView extends React.PureComponent<ILogViewerProps, ILogViewerState
           getLatestLogs={this.getLatestLogs}
           setSystemLogs={this.setIncludeSystemLogs}
           onClose={this.props.onClose}
-          loading={this.state.isFetching}
+          loading={this.state.initLoading}
           showStats={this.props.showStats}
         />
         <div className={classes.logsTableHeader}>
