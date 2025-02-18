@@ -40,7 +40,7 @@ const styles = (theme): StyleRules => {
     left: 0,
     height: `calc(100vh - ${HEADER_HEIGHT} - ${FOOTER_HEIGHT})`,
     width: '100vw',
-    zIndex: 1301,
+    zIndex: 1299,
   };
 
   const logsContainerBase = {
