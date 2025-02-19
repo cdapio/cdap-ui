@@ -21,16 +21,15 @@ import { copyToClipBoard } from 'services/Clipboard';
 import IconSVG from 'components/shared/IconSVG';
 import CommentIcon from 'components/AbstractWidget/Comment/CommentIcon';
 
-export default function PluginContextMenu({
+export function getPluginMenuOptions({
   nodeId,
   getPluginConfiguration,
   getSelectedConnections,
   getSelectedNodes,
   onDelete,
-  onOpen,
   onAddComment,
-}) {
-  const PluginContextMenuOptions: IContextMenuOption[] = [
+}): IContextMenuOption[] {
+  return [
     {
       name: 'plugin comment',
       label: 'Add a comment',
@@ -71,6 +70,26 @@ export default function PluginContextMenu({
       },
     },
   ];
+}
+
+export default function PluginContextMenu({
+  nodeId,
+  getPluginConfiguration,
+  getSelectedConnections,
+  getSelectedNodes,
+  onDelete,
+  onOpen,
+  onAddComment,
+}) {
+  const PluginContextMenuOptions: IContextMenuOption[] = getPluginMenuOptions({
+    nodeId,
+    getPluginConfiguration,
+    getSelectedConnections,
+    getSelectedNodes,
+    onDelete,
+    onAddComment,
+  });
+
   const onPluginContextMenuOpen = () => {
     onOpen(nodeId);
   };

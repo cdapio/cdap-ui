@@ -31,7 +31,6 @@ const getWebpackOutputObj = (mode) => {
     filename: 'dll.cdap.[name].js',
     library: 'cdap_[name]',
     globalObject: 'window',
-    hashFunction: 'sha512',
   };
   if (mode === 'development') {
     output.filename = 'dll.cdap.[name].development.js';

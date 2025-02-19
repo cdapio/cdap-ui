@@ -69,7 +69,7 @@ const getWebpackDllPlugins = (mode) => {
 var plugins = [
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),
-  ...getWebpackDllPlugins(mode),
+  //...getWebpackDllPlugins(mode),
   new LodashModuleReplacementPlugin({
     shorthands: true,
     collections: true,
@@ -167,6 +167,19 @@ var rules = [
     exclude: loaderExclude,
   },
   {
+    test: /node_modules[\/\\]@?reactflow[\/\\].*.js$/,
+    use: {
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-env', "@babel/preset-react"],
+        plugins: [
+          "@babel/plugin-proposal-optional-chaining",
+          "@babel/plugin-proposal-nullish-coalescing-operator",
+        ]
+      }
+    }
+  },
+  {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     use: [
       {
@@ -214,7 +227,6 @@ var webpackConfig = {
     path: __dirname + '/packaged/public/cdap_dist/cdap_assets/',
     publicPath: '/cdap_assets/',
     pathinfo: false, // added. reduces 0.2~0.3 seconds
-    hashFunction: 'sha512',
   },
   stats: {
     assets: false,

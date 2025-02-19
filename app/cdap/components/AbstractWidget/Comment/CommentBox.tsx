@@ -129,6 +129,7 @@ export default function CommentBox({
       )}
     </div>
   );
+
   if (!editMode) {
     return (
       <Card className={classes.root}>
