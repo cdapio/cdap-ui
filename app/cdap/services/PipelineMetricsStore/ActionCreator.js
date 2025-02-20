@@ -84,8 +84,15 @@ const parseMetrics = (metrics) => {
   let metricObj = {};
   let logsMetrics = {};
   metrics.series.forEach(function(metric) {
-    let split = metric.metricName.split(/user.(.*).records.*/);
-    let key = split[1];
+    const metricName = metric.metricName;
+    const metricValue = metric.data[0].value;
+
+    if (systemLogMetrics.includes(metricName)) {
+      logsMetrics[metricName] = metricValue;
+    }
+
+    const split = metric.metricName.split(/user.(.*).records.*/);
+    const key = split[1];
 
     if (!key) {
       return;
@@ -96,15 +103,12 @@ const parseMetrics = (metrics) => {
       };
     }
 
-    let metricName = metric.metricName;
-    let metricValue = metric.data[0].value;
-
     if (metricName.indexOf(key + '.records.in') !== -1) {
       metricObj[key].recordsIn = metricValue;
     } else if (metricName.indexOf(key + '.records.out') !== -1) {
       // contains multiple records.out metrics
       if (metricName.indexOf(key + '.records.out.') !== -1) {
-        let port = split[split.length - 1];
+        const port = split[split.length - 1];
         if (!metricObj[key].recordsOut) {
           metricObj[key].recordsOut = {};
         }
@@ -114,8 +118,6 @@ const parseMetrics = (metrics) => {
       }
     } else if (metricName.indexOf(key + '.records.error') !== -1) {
       metricObj[key].recordsError = metricValue;
-    } else if (systemLogMetrics.indexOf(metricName) !== -1) {
-      logsMetrics[metricName] = metricValue;
     }
   });
 
