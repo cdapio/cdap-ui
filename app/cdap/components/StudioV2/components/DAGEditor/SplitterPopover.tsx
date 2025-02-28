@@ -32,31 +32,37 @@ export const PortContainer = styled.div`
   }
 `;
 
-export default function SplitterPopover({ ports, isDisabled, node, onMetricsClick, disableMetricsClick, metricsData }) {
+export default function SplitterPopover({
+  ports,
+  isDisabled,
+  node,
+  onMetricsClick,
+  disableMetricsClick,
+  metricsData,
+}) {
   return (
     <>
       {ports.map((port) => (
         <PortContainer>
           <span>{port.name}</span>
-          <Handle 
-            type="source" 
-            position={Position.Right} 
-            id={`source-port-${node.id}-${port.name}`} 
+          <Handle
+            type="source"
+            position={Position.Right}
+            id={`source-port-${node.id}-${port.name}`}
             style={isDisabled ? disabledSourceHandleStyle : sourceHandleStyle}
             data-testid={`plugin-endpoint-${node.plugin.name}-${node.type}-port-${port.name}`}
           />
-          {
-            isDisabled &&
+          {isDisabled && (
             <div className="port-metrics">
               <NodeMetrics
                 onClick={onMetricsClick}
                 node={node}
                 disabled={disableMetricsClick}
                 metricsData={metricsData}
-                portName={port.name} 
+                portName={port.name}
               />
             </div>
-          }
+          )}
         </PortContainer>
       ))}
     </>

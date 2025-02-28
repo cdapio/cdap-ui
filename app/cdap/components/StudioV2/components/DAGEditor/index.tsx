@@ -49,7 +49,7 @@ import PipelineContextMenu from 'components/PipelineContextMenu';
 
 export interface IDAGEditorContext {
   isDisabled?: boolean;
-};
+}
 
 const MIN_ZOOM = 0.4;
 const MAX_ZOOM = 2;
@@ -65,8 +65,8 @@ export interface IConnection {
 
 export interface IDAGEditorProps {
   isDisabled?: boolean;
-  pipelineArtifactType?: "cdap-data-pipeline" | "cdap-data-streams";
-  
+  pipelineArtifactType?: 'cdap-data-pipeline' | 'cdap-data-streams';
+
   metricsData?: any;
   disableMetricsClick?: boolean;
   onMetricsClick?(node: any, portName?: string): void;
@@ -113,7 +113,9 @@ export interface IDAGEditorProps {
 }
 
 function removeUnits(length?: string | number): number {
-  if (typeof length === 'undefined') return 0;
+  if (typeof length === 'undefined') {
+    return 0;
+  }
 
   if (typeof length === 'number') {
     return length;
@@ -192,10 +194,10 @@ export function DagComponent({
     addConnection,
     moveConnection,
     removeConnection,
-    prevalidateConnection,
+    prevalidateConnection
   );
 
-  function getNodeByName (nodeName){
+  function getNodeByName(nodeName) {
     return dagNodes.find((n) => n.name === nodeName) || null;
   }
 
@@ -210,7 +212,7 @@ export function DagComponent({
       data: {
         label: node.plugin.label,
         pluginNode: node,
-        
+
         onPropertiesClick: onNodeClick || _noop,
         disableMetricsClick,
         onMetricsClick,
@@ -254,7 +256,7 @@ export function DagComponent({
       edgeType = 'dashed';
     }
 
-    const edge: Edge =  {
+    const edge: Edge = {
       id: `edge-${from}-${to}`,
       type: edgeType,
       source: from,
@@ -267,7 +269,7 @@ export function DagComponent({
 
     if (!sourceNode || !targetNode) {
       return edge;
-    } 
+    }
 
     const isConditionEdge = condition === 'false';
     const isAlertEdge = targetNode.type === 'alertpublisher';
@@ -287,13 +289,13 @@ export function DagComponent({
       handleType = 'condition-false';
     } else if (isSplitterEdge) {
       sourceHandle = `source-port-${sourceNode.id}-${conn.port}`;
-      handleType = 'splitter-port'
+      handleType = 'splitter-port';
     }
 
     if (sourceNode.type === 'condition') {
       if (handleType === 'default') {
         edgeType = 'condition-true';
-      } else if (handleType ===  'condition-false') {
+      } else if (handleType === 'condition-false') {
         edgeType = 'condition-false';
       }
     }
@@ -304,11 +306,11 @@ export function DagComponent({
       sourceHandle,
       data: {
         isSourceAtBottom: isAlertEdge || isErrorEdge || isConditionEdge,
-      }
+      },
     };
   }
 
-  function fitToScreen () {
+  function fitToScreen() {
     reactflow.fitView({
       padding: 50,
       minZoom: MIN_ZOOM,
@@ -327,12 +329,14 @@ export function DagComponent({
   }, []);
 
   useEffect(() => {
-    if (previewMode) document.body.classList.add('preview-mode');
+    if (previewMode) {
+      document.body.classList.add('preview-mode');
+    }
 
     return () => {
       document.body.classList.remove('preview-mode');
     };
-  }, [previewMode])
+  }, [previewMode]);
 
   useEffect(fitToScreen, [uiAutoLayout]);
 
@@ -380,7 +384,7 @@ export function DagComponent({
           <Controls position="top-right" style={{ top: 80 }}>
             {!isDisabled && (
               <>
-                <ControlButton 
+                <ControlButton
                   onClick={cleanupGraph}
                   title="Align"
                   data-testid="pipeline-clean-up-graph-control"
@@ -416,7 +420,7 @@ export function DagComponent({
           </Controls>
           {/* <MiniMap zoomable pannable style={{ bottom: 80 }} /> */}
           <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-          { !isDisabled && 
+          {!isDisabled && (
             <PipelineContextMenu
               onWranglerSourceAdd={onPipelineContextMenuPaste}
               onNodesPaste={onPipelineContextMenuPaste}
@@ -426,7 +430,7 @@ export function DagComponent({
               fitToScreen={fitToScreen}
               prettyPrintGraph={cleanupGraph}
             />
-          }
+          )}
         </ReactFlow>
       </DAGEditorContext.Provider>
     </Provider>

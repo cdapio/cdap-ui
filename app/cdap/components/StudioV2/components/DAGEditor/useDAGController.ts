@@ -44,7 +44,7 @@ interface IDAGController {
 function getNodesComparisonKey(nodes) {
   return JSON.stringify(
     nodes.map((node) => node.data),
-    (key, value) => (key === '_uiPosition' ? undefined : value === _noop ? "_noop" : value)
+    (key, value) => (key === '_uiPosition' ? undefined : value === _noop ? '_noop' : value)
   );
 }
 
@@ -56,11 +56,11 @@ export function useDAGController(
   addConnection,
   moveConnection,
   removeConnection,
-  prevalidateConnection,
+  prevalidateConnection
 ): IDAGController {
   const [nodes, setNodes, onNodesChange] = useNodesState(uiNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(uiEdges);
-  
+
   const pluginsMapRef = useRef(null);
   function setUpPluginsListener() {
     return AvailablePluginsStore.subscribe(() => {
@@ -149,7 +149,7 @@ export function useDAGController(
   );
 
   const isValidConnection = useCallback(
-    (conn: Connection) => prevalidateConnection(populateEdge(conn)), 
+    (conn: Connection) => prevalidateConnection(populateEdge(conn)),
     [nodes, prevalidateConnection, populateEdge]
   );
 

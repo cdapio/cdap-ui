@@ -22,10 +22,18 @@ export interface INodeMetricsProps {
   disabled?: boolean;
   metricsData?: any;
   portName?: string;
-};
+}
 
-export default function NodeMetrics({ onClick, node, disabled, metricsData, portName}: INodeMetricsProps) {
-  if (!metricsData) return null;
+export default function NodeMetrics({
+  onClick,
+  node,
+  disabled,
+  metricsData,
+  portName,
+}: INodeMetricsProps) {
+  if (!metricsData) {
+    return null;
+  }
 
   function handleClick(event) {
     return onClick(event, node, portName);
@@ -33,45 +41,57 @@ export default function NodeMetrics({ onClick, node, disabled, metricsData, port
 
   return (
     <div className={`metrics-content ${disabled ? 'disabled' : ''}`}>
-      { node.type !== 'splittertransform' &&
+      {node.type !== 'splittertransform' && (
         <a className="node-metrics-labels" onClick={handleClick}>
           <span className="metric-records-out">
-            { node.type.indexOf('sink') === -1 && 
+            {node.type.indexOf('sink') === -1 && (
               <span>
                 <span className="metric-records-out-label">Out </span>
-                <span>{ parseInt(metricsData[node.name]?.recordsOut || '0', 10).toLocaleString('en-US') }</span>
-              </span>
-            }
-            { node.type.indexOf('sink') !== -1 && 
                 <span>
-                  <span className="metric-records-out-label">In </span>
-                  <span>{ parseInt(metricsData[node.name]?.recordsIn || '0', 10).toLocaleString('en-US') }</span>
+                  {parseInt(metricsData[node.name]?.recordsOut || '0', 10).toLocaleString('en-US')}
                 </span>
-            }
+              </span>
+            )}
+            {node.type.indexOf('sink') !== -1 && (
+              <span>
+                <span className="metric-records-out-label">In </span>
+                <span>
+                  {parseInt(metricsData[node.name]?.recordsIn || '0', 10).toLocaleString('en-US')}
+                </span>
+              </span>
+            )}
             <span>{' / '}</span>
           </span>
           <span className="metric-errors">
             <span className="metric-errors-label">Errors </span>
-            <span>{ parseInt(metricsData[node.name]?.recordsError || '0', 10).toLocaleString('en-US') }</span>
+            <span>
+              {parseInt(metricsData[node.name]?.recordsError || '0', 10).toLocaleString('en-US')}
+            </span>
           </span>
         </a>
-      }
-      { node.type === 'splittertransform' && 
+      )}
+      {node.type === 'splittertransform' && (
         <a className="node-metrics-labels">
-          { !!portName && 
+          {!!portName && (
             <span className="metric-records-out" onClick={handleClick}>
               <span className="metric-records-out-label">Out </span>
-              <span>{ parseInt(metricsData[node.name]?.recordsOut[portName] || '0', 10).toLocaleString('en-US') }</span>
+              <span>
+                {parseInt(metricsData[node.name]?.recordsOut[portName] || '0', 10).toLocaleString(
+                  'en-US'
+                )}
+              </span>
             </span>
-          }
-          { !portName && 
+          )}
+          {!portName && (
             <span className="metric-errors" onClick={handleClick}>
               <span className="metric-errors-label">Errors </span>
-              <span>{ parseInt(metricsData[node.name]?.recordsError || '0', 10).toLocaleString('en-US') }</span>
+              <span>
+                {parseInt(metricsData[node.name]?.recordsError || '0', 10).toLocaleString('en-US')}
+              </span>
             </span>
-          }
+          )}
         </a>
-      }
+      )}
     </div>
   );
 }

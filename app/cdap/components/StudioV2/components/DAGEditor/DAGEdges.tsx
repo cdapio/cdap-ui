@@ -105,15 +105,23 @@ function getEdgePath(
   });
 }
 
-export function StandardEdge({ id, sourceX, sourceY, targetX, targetY, selected, data }: EdgeProps) {
+export function StandardEdge({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  selected,
+  data,
+}: EdgeProps) {
   const [path] = getEdgePath(
-    sourceX, 
-    sourceY, 
-    data?.isSourceAtBottom ? Position.Bottom : Position.Right, 
-    targetX, 
-    targetY, 
+    sourceX,
+    sourceY,
+    data?.isSourceAtBottom ? Position.Bottom : Position.Right,
+    targetX,
+    targetY,
     Position.Left
-    );
+  );
 
   useEffect(() => {
     appendMarkersSvg();

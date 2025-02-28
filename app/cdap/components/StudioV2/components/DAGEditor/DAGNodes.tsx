@@ -36,7 +36,14 @@ import {
 } from 'services/PipelineMetricsStore/ActionCreator';
 import ErrorStageOutline from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineRunErrorDetails/ErrorStageOutline';
 import { DAGEditorContext } from '.';
-import { AlertHandle, ErrorHandle, FalseHandle, disabledSourceHandleStyle, sourceHandleStyle, targetHandleStyle } from './NodeHandleStyles';
+import {
+  AlertHandle,
+  ErrorHandle,
+  FalseHandle,
+  disabledSourceHandleStyle,
+  sourceHandleStyle,
+  targetHandleStyle,
+} from './NodeHandleStyles';
 import SplitterPopover, { PortContainer } from './SplitterPopover';
 import NodeMetrics from './NodeMetrics';
 import { isPluginSink } from 'services/helpers';
@@ -52,17 +59,21 @@ const NODE_HIGHLIGHT_COLORS = {
 };
 
 type ConditionHandle = 'CONDITION_TRUE' | 'CONDITION_FALSE';
-type NodeHandle = ConditionHandle | 'GENERIC' ;
+type NodeHandle = ConditionHandle | 'GENERIC';
 
 const conditionHandleStyles = {
   CONDITION_TRUE: sourceHandleStyle,
   CONDITION_FALSE: sourceHandleStyle,
 };
 
-function getNodeHandleStyle ({ nodeType, isDisabled, handleType = 'GENERIC' }: {
-  nodeType?: string,
-  isDisabled?: boolean,
-  handleType?: NodeHandle,
+function getNodeHandleStyle({
+  nodeType,
+  isDisabled,
+  handleType = 'GENERIC',
+}: {
+  nodeType?: string;
+  isDisabled?: boolean;
+  handleType?: NodeHandle;
 }) {
   if (isDisabled) {
     return disabledSourceHandleStyle;
@@ -195,7 +206,7 @@ const SplitterHandlesContainer = styled.div`
   top: 0;
   width: 80px;
 
-  transform: translateY(calc((100px - 100%) / 2 ));
+  transform: translateY(calc((100px - 100%) / 2));
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -206,7 +217,7 @@ const SplitterHandlesContainer = styled.div`
 `;
 
 const BottomPortsContainer = styled.div`
-  display: ${({ isVisible }) => isVisible ? 'flex' :  'none' };
+  display: ${({ isVisible }) => (isVisible ? 'flex' : 'none')};
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
@@ -249,11 +260,10 @@ export function PipelineComments({
         onOpen={setPluginActiveForComment}
         onClose={() => setPluginActiveForComment()}
         disabled={isDisabled}
-      />  
+      />
     </CommentsIconContainer>
   );
 }
-
 
 export function PipelineNode({ id, data, selected }: NodeProps) {
   const updateNodeInternals = useUpdateNodeInternals();
@@ -305,7 +315,7 @@ export function PipelineNode({ id, data, selected }: NodeProps) {
       if (typeof onClickHandler === 'function') {
         onClickHandler();
       }
-    }
+    };
   }
 
   return (
@@ -317,11 +327,9 @@ export function PipelineNode({ id, data, selected }: NodeProps) {
         nodeType={node.type}
         id={node.id}
       >
-        { data.isErrorStage() &&
-        <ErrorStageOutline stageName={node.name}></ErrorStageOutline>
-        }
-        <PipelineComments 
-          comments={node?.information?.comments?.list || []} 
+        {data.isErrorStage() && <ErrorStageOutline stageName={node.name}></ErrorStageOutline>}
+        <PipelineComments
+          comments={node?.information?.comments?.list || []}
           node={node}
           setComments={data.setNodeComments}
           setPluginActiveForComment={data.onPluginAddComment}
@@ -347,22 +355,21 @@ export function PipelineNode({ id, data, selected }: NodeProps) {
               <PluginVersion>{node.plugin.artifact.version}</PluginVersion>
             </PluginMetaContainer>
           </NodeInfoContainer>
-          {
-            (data.previewMode  && !['action', 'sparkprogram', 'condition'].includes(node.type)) &&
+          {data.previewMode && !['action', 'sparkprogram', 'condition'].includes(node.type) && (
             <NodeButtonsContainer>
               <Button
-                variant='text'
-                color='default'
-                size='small'
+                variant="text"
+                color="default"
+                size="small"
                 data-testid={`${node.plugin.name}-preview-data-btn`}
                 onClick={(event) => data.onPreviewData(event, node)}
               >
                 Preview Data
               </Button>
             </NodeButtonsContainer>
-          }
+          )}
           <NodeButtonsContainer>
-            <Button 
+            <Button
               variant="text"
               color="primary"
               size="small"
@@ -372,7 +379,9 @@ export function PipelineNode({ id, data, selected }: NodeProps) {
             >
               PROPERTIES
             </Button>
-            { isDisabled ? <div/> :
+            {isDisabled ? (
+              <div />
+            ) : (
               <IconButton
                 size="small"
                 data-testid={`hamburgermenu-${node.plugin.name}-${node.type}-${data.index}-toggle`}
@@ -381,7 +390,7 @@ export function PipelineNode({ id, data, selected }: NodeProps) {
               >
                 <MenuIcon />
               </IconButton>
-            }
+            )}
             <Menu
               anchorEl={menuAnchorEl}
               keepMounted
@@ -396,107 +405,99 @@ export function PipelineNode({ id, data, selected }: NodeProps) {
               ))}
             </Menu>
           </NodeButtonsContainer>
-          {
-            (isDisabled && !['action', 'sparkprogram', 'condition'].includes(node.type)) &&
-              <div className="node-metrics">
-                <NodeMetrics
-                  onClick={data.onMetricsClick}
-                  node={node}
-                  disabled={data.disableMetricsClick}
-                  metricsData={data.metricsData}
-                />
-              </div>
-          }
+          {isDisabled && !['action', 'sparkprogram', 'condition'].includes(node.type) && (
+            <div className="node-metrics">
+              <NodeMetrics
+                onClick={data.onMetricsClick}
+                node={node}
+                disabled={data.disableMetricsClick}
+                metricsData={data.metricsData}
+              />
+            </div>
+          )}
         </NodeInnerLayout>
-        { node.type === 'splittertransform' &&
-          <SplitterHandlesContainer
-            selected={selected}
-            nodeType={node.type}
-          >
-            { (node?.outputSchema?.length && node.outputSchema[0].name !== 'etlSchemaBody') ?
-                <SplitterPopover
-                  node={node}
-                  isDisabled={isDisabled}
-                  ports={node.outputSchema || []}
-                  onMetricsClick={data.onMetricsClick}
-                  disableMetricsClick={data.disableMetricsClick}
-                  metricsData={data.metricsData}
-                />
-                : <PortContainer>0 Splits</PortContainer>
-            }
-
+        {node.type === 'splittertransform' && (
+          <SplitterHandlesContainer selected={selected} nodeType={node.type}>
+            {node?.outputSchema?.length && node.outputSchema[0].name !== 'etlSchemaBody' ? (
+              <SplitterPopover
+                node={node}
+                isDisabled={isDisabled}
+                ports={node.outputSchema || []}
+                onMetricsClick={data.onMetricsClick}
+                disableMetricsClick={data.disableMetricsClick}
+                metricsData={data.metricsData}
+              />
+            ) : (
+              <PortContainer>0 Splits</PortContainer>
+            )}
           </SplitterHandlesContainer>
-        }
-        <BottomPortsContainer 
-          isVisible={hasBottomPorts}
-          selected={selected}
-          nodeType={node.type}
-        >
-          { node.type === 'condition' &&
+        )}
+        <BottomPortsContainer isVisible={hasBottomPorts} selected={selected} nodeType={node.type}>
+          {node.type === 'condition' && (
             <FalseHandle>
               False
               <Handle
-                type="source" 
-                position={Position.Bottom} 
-                id={`source-port-${node.id}-condition-false`} 
-                style={getNodeHandleStyle({ 
-                  nodeType: node.type, 
-                  isDisabled, 
-                  handleType: 'CONDITION_FALSE'
+                type="source"
+                position={Position.Bottom}
+                id={`source-port-${node.id}-condition-false`}
+                style={getNodeHandleStyle({
+                  nodeType: node.type,
+                  isDisabled,
+                  handleType: 'CONDITION_FALSE',
                 })}
                 data-testid={`plugin-endpoint-${node.plugin.name}-${node.type}-false`}
               />
             </FalseHandle>
-          }
-          { !!shouldShowAlertsPort && 
+          )}
+          {!!shouldShowAlertsPort && (
             <AlertHandle>
               Alert
               <Handle
-                type="source" 
-                position={Position.Bottom} 
-                id={`source-port-${node.id}-alerts`} 
-                style={getNodeHandleStyle({ 
-                  nodeType: node.type, 
-                  isDisabled, 
-                  handleType: 'GENERIC'
+                type="source"
+                position={Position.Bottom}
+                id={`source-port-${node.id}-alerts`}
+                style={getNodeHandleStyle({
+                  nodeType: node.type,
+                  isDisabled,
+                  handleType: 'GENERIC',
                 })}
                 data-testid={`plugin-endpoint-${node.plugin.name}-${node.type}-alerts`}
               />
             </AlertHandle>
-          }
-          { !!shouldShowErrorsPort && 
+          )}
+          {!!shouldShowErrorsPort && (
             <ErrorHandle>
               Error
               <Handle
-                type="source" 
-                position={Position.Bottom} 
-                id={`source-port-${node.id}-errors`} 
-                style={getNodeHandleStyle({ 
-                  nodeType: node.type, 
-                  isDisabled, 
-                  handleType: 'GENERIC'
+                type="source"
+                position={Position.Bottom}
+                id={`source-port-${node.id}-errors`}
+                style={getNodeHandleStyle({
+                  nodeType: node.type,
+                  isDisabled,
+                  handleType: 'GENERIC',
                 })}
                 data-testid={`plugin-endpoint-${node.plugin.name}-${node.type}-errors`}
               />
             </ErrorHandle>
-          }
+          )}
         </BottomPortsContainer>
       </NodeContainer>
-      {(node.type !== "splittertransform" && !isPluginSink(node.type)) &&
-        <Handle 
-          type="source" 
-          position={Position.Right} 
-          id={`source-port-${node.id}-output`} 
-          style={getNodeHandleStyle({ 
-            nodeType: node.type, 
-            isDisabled, 
-            handleType: node.type === 'condition' ? 'CONDITION_TRUE' : 'GENERIC'
+      {node.type !== 'splittertransform' && !isPluginSink(node.type) && (
+        <Handle
+          type="source"
+          position={Position.Right}
+          id={`source-port-${node.id}-output`}
+          style={getNodeHandleStyle({
+            nodeType: node.type,
+            isDisabled,
+            handleType: node.type === 'condition' ? 'CONDITION_TRUE' : 'GENERIC',
           })}
           data-testid={`plugin-endpoint-${node.plugin.name}-${node.type}-right`}
         />
-      }
-      { !isDisabled &&
-        <PluginContextMenu 
+      )}
+      {!isDisabled && (
+        <PluginContextMenu
           nodeId={node.id}
           getPluginConfiguration={data.getPluginConfiguration}
           getSelectedConnections={data.getSelectedConnections}
@@ -505,7 +506,7 @@ export function PipelineNode({ id, data, selected }: NodeProps) {
           onOpen={data.onPluginMenuOpen}
           onAddComment={data.onPluginAddComment}
         />
-      }
+      )}
     </>
   );
 }
