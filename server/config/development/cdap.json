@@ -23,5 +23,6 @@
   "hsts.enabled": "false",
   "hsts.max.age": 31536000,
   "hsts.include.sub.domains": "true",
-  "hsts.preload": "true"
+  "hsts.preload": "true",
+  "app.cdap.file.max.size.bytes": "2097152"
 }
