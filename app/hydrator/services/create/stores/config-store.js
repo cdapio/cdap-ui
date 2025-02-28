@@ -15,7 +15,7 @@
  */
 
 class HydratorPlusPlusConfigStore {
-  constructor(HydratorPlusPlusConfigDispatcher, HydratorPlusPlusCanvasFactory, GLOBALS, mySettings, HydratorPlusPlusConsoleActions, $stateParams, NonStorePipelineErrorFactory, HydratorPlusPlusHydratorService, $q, HydratorPlusPlusPluginConfigFactory, uuid, $state, HYDRATOR_DEFAULT_VALUES, myHelpers, MY_CONFIG, EventPipe, myPipelineApi, myAppsApi, HydratorPlusPlusNodeService) {
+  constructor(HydratorPlusPlusConfigDispatcher, HydratorPlusPlusCanvasFactory, GLOBALS, mySettings, HydratorPlusPlusConsoleActions, $stateParams, NonStorePipelineErrorFactory, HydratorPlusPlusHydratorService, $q, HydratorPlusPlusPluginConfigFactory, uuid, $state, HYDRATOR_DEFAULT_VALUES, myHelpers, MY_CONFIG, EventPipe, myPipelineApi, myAppsApi, HydratorPlusPlusNodeService, myAlertOnValium) {
     'ngInject';
     this.state = {};
     this.mySettings = mySettings;
@@ -36,6 +36,7 @@ class HydratorPlusPlusConfigStore {
     this.myPipelineApi = myPipelineApi;
     this.myAppsApi = myAppsApi;
     this.isDistributed = MY_CONFIG.isEnterprise ? true : false;
+    this.myAlertOnValium = myAlertOnValium;
 
     this.changeListeners = [];
     this.setDefaults();
@@ -70,7 +71,34 @@ class HydratorPlusPlusConfigStore {
       this.changeListeners.splice(index, 1);
     };
   }
+  checkPipelineJsonSize = () => {
+    try {
+      const MB = 1024 * 1024; // Bytes
+      const pipelineSizeLimit = parseInt(window.CDAP_CONFIG.cdap.maxPipelineJsonSizeBytes || 2 * MB, 10);
+      const pipelineSizeLimitMB = pipelineSizeLimit / MB;
+      const pipelineSizeLimitMBRounded = pipelineSizeLimitMB.toFixed(2);
+
+      const pipelineJson = this.getConfigForExport();
+      delete pipelineJson.__ui__;
+      const jsonBlob = new Blob([JSON.stringify(pipelineJson, null, 4)], { type: 'application/json' });
+      const blobSize = jsonBlob.size || 1;
+      const blobSizeInMB = blobSize / MB;
+      const blobSizeInMBRounded = blobSizeInMB.toFixed(2);
+
+      if (jsonBlob.size > pipelineSizeLimit) {
+        this.myAlertOnValium.show({
+          type: "danger",
+          content: `Pipeline size is ${blobSizeInMBRounded}MB. Pipelines larger than ${pipelineSizeLimitMBRounded}MB are not supported.`,
+        });
+        return false;
+      }
+    } catch (e) {
+      console.error("Unable to check pipeline size.");
+    } 
+    return true;
+  }
   emitChange() {
+    this.checkPipelineJsonSize();
     this.changeListeners.forEach( callback => callback() );
   }
   setDefaults(config) {
@@ -1207,6 +1235,8 @@ class HydratorPlusPlusConfigStore {
       }]);
       return;
     }
+
+    if (!this.checkPipelineJsonSize()) return;
 
     let config = this.getConfigForExport({ shouldPruneProperties: false });
     const draftId = this.getDraftId() || this.uuid.v4();
