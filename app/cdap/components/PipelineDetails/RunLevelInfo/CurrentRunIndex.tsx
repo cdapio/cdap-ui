@@ -32,6 +32,9 @@ import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 import Popover from 'components/shared/Popover';
 import { GLOBALS } from 'services/global-constants';
 import { getDataTestid } from '@cdap-ui/testids/TestidsProvider';
+import { IconButton } from '@material-ui/core';
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import { copyToClipBoard } from 'services/Clipboard';
 
 const PREFIX = 'features.PipelineDetails.RunLevel';
 const TESTID_PREFIX = 'features.pipelineDetails.runLevel';
@@ -47,6 +50,22 @@ const StyledPointerA = styled.a`
   cursor: pointer;
 `;
 
+const CopyButtonContainer = styled.span`
+  height: 16px;
+  margin-left: 8px;
+  vertical-align: baseline;
+
+  button,
+  svg {
+    height: 14px;
+    width: 14px;
+  }
+
+  button {
+    margin-top: -4px;
+  }
+`;
+
 const mapStateToProps = (state) => {
   return {
     pipelineName: state.name,
@@ -59,10 +78,14 @@ const mapStateToProps = (state) => {
   };
 };
 
+interface ICurrentRun extends Object {
+  runid: string;
+}
+
 interface ICurrentRunIndexProps {
   runs: any[];
   runsCount: number;
-  currentRun: object;
+  currentRun: ICurrentRun;
   pipelineName: string;
   versionHasRun: boolean;
   version: string;
@@ -194,6 +217,10 @@ const CurrentRunIndex = ({
     setCurrentRunId(runid);
   };
 
+  function copyCurrentRunId() {
+    copyToClipBoard(currentRun.runid);
+  }
+
   return (
     <div className="run-number-container run-info-container">
       <h4
@@ -211,6 +238,17 @@ const CurrentRunIndex = ({
           currentRunIndex: runIndexInTotalRunsCount + 1,
           numRuns: runsCount,
         })}
+        {runsCount > 0 && (
+          <CopyButtonContainer>
+            <IconButton
+              onClick={copyCurrentRunId}
+              title="Copy current run ID to clipboard"
+              size="small"
+            >
+              <FileCopyOutlinedIcon fontSize="small" />
+            </IconButton>
+          </CopyButtonContainer>
+        )}
       </h4>
       <div className="run-number-switches">
         <button
