@@ -258,7 +258,6 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         hstsIncludeSubDomains: cdapConfig['hsts.include.sub.domains'],
         hstsPreload: cdapConfig['hsts.preload'],
         runRecordsTtl: cdapConfig['app.run.records.ttl.days'],
-        maxPipelineJsonSizeBytes: cdapConfig['app.cdap.file.max.size.bytes'],
       },
       hydrator: {
         previewEnabled: cdapConfig['enable.preview'] === 'true',

@@ -589,7 +589,6 @@ class HydratorPlusPlusTopPanelCtrl {
     this.checkNameError();
   }
   onPublishV2(isEdit = false) {
-    if (!this.HydratorPlusPlusConfigStore.checkPipelineJsonSize()) return;
     this.HydratorPlusPlusConfigActions.publishPipeline(isEdit);
     this.checkNameError();
   }
@@ -1460,19 +1459,17 @@ class HydratorPlusPlusTopPanelCtrl {
     let uploadedFile = files[0];
 
     try {
-      const MB = 1024 * 1024; // Bytes
-      const pipelineSizeLimit = parseInt(window.CDAP_CONFIG.cdap.maxPipelineJsonSizeBytes || 2 * MB, 10);
-      const pipelineSizeLimitMB = pipelineSizeLimit / MB;
+      const pipelineSizeLimit = this.GLOBALS.MIN_PIPELINE_SIZE_FOR_WARNING_BYTES;
+      const pipelineSizeLimitMB = pipelineSizeLimit / this.GLOBALS.MemoryUnits.MB;
       const pipelineSizeLimitMBRounded = pipelineSizeLimitMB.toFixed(2);
 
       if (files[0].size > pipelineSizeLimit) {
-        const fileSizeInMB = (files[0].size || 1) / MB;
+        const fileSizeInMB = (files[0].size || 1) / this.GLOBALS.MemoryUnits.MB;
         const fileSizeInMBRounded = fileSizeInMB.toFixed(2);
         this.myAlertOnValium.show({
-          type: "danger",
-          content: `File size is ${fileSizeInMBRounded}MB. Pipelines larger than ${pipelineSizeLimitMBRounded}MB are not supported.`,
+          type: "warning",
+          content: `File size is ${fileSizeInMBRounded}MB. Pipelines larger than ${pipelineSizeLimitMBRounded}MB may fail during deployment.`,
         });
-        return;
       }
     } catch (e) {
       console.error("Unable to check pipeline size.");
