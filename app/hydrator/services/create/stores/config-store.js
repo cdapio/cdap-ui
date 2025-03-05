@@ -71,25 +71,26 @@ class HydratorPlusPlusConfigStore {
       this.changeListeners.splice(index, 1);
     };
   }
-  checkPipelineJsonSize = () => {
+  checkPipelineJsonSize = (showWarning = true) => {
     try {
-      const MB = 1024 * 1024; // Bytes
-      const pipelineSizeLimit = parseInt(window.CDAP_CONFIG.cdap.maxPipelineJsonSizeBytes || 2 * MB, 10);
-      const pipelineSizeLimitMB = pipelineSizeLimit / MB;
+      const pipelineSizeLimit = this.GLOBALS.MIN_PIPELINE_SIZE_FOR_WARNING_BYTES; 
+      const pipelineSizeLimitMB = pipelineSizeLimit / this.GLOBALS.MemoryUnits.MB;
       const pipelineSizeLimitMBRounded = pipelineSizeLimitMB.toFixed(2);
 
       const pipelineJson = this.getConfigForExport();
       delete pipelineJson.__ui__;
       const jsonBlob = new Blob([JSON.stringify(pipelineJson, null, 4)], { type: 'application/json' });
       const blobSize = jsonBlob.size || 1;
-      const blobSizeInMB = blobSize / MB;
+      const blobSizeInMB = blobSize / this.GLOBALS.MemoryUnits.MB;
       const blobSizeInMBRounded = blobSizeInMB.toFixed(2);
 
       if (jsonBlob.size > pipelineSizeLimit) {
-        this.myAlertOnValium.show({
-          type: "danger",
-          content: `Pipeline size is ${blobSizeInMBRounded}MB. Pipelines larger than ${pipelineSizeLimitMBRounded}MB are not supported.`,
-        });
+        if (showWarning) {
+          this.myAlertOnValium.show({
+            type: "warning",
+            content: `Pipeline size is ${blobSizeInMBRounded}MB. Pipelines larger than ${pipelineSizeLimitMBRounded}MB may fail during deployment.`,
+          });
+        }
         return false;
       }
     } catch (e) {
@@ -97,8 +98,8 @@ class HydratorPlusPlusConfigStore {
     } 
     return true;
   }
-  emitChange() {
-    this.checkPipelineJsonSize();
+  emitChange(warnPipelineSize = true) {
+    if (warnPipelineSize) this.checkPipelineJsonSize();
     this.changeListeners.forEach( callback => callback() );
   }
   setDefaults(config) {
@@ -837,7 +838,7 @@ class HydratorPlusPlusConfigStore {
       match = match[0];
       angular.forEach(nodeConfig, (pValue, pName) => match[pName] = pValue);
       if (!this.validateState()) {
-        this.emitChange();
+        this.emitChange(false);
       }
     }
   }
@@ -1236,8 +1237,6 @@ class HydratorPlusPlusConfigStore {
       return;
     }
 
-    if (!this.checkPipelineJsonSize()) return;
-
     let config = this.getConfigForExport({ shouldPruneProperties: false });
     const draftId = this.getDraftId() || this.uuid.v4();
     const params = {
@@ -1266,12 +1265,15 @@ class HydratorPlusPlusConfigStore {
         .then(() => {
           this.$stateParams.draftId = draftId;
           this.$state.go('hydrator.create', this.$stateParams, {notify: false});
-          this.HydratorPlusPlusConsoleActions.addMessage([{
-            type: 'success',
-            content: `Draft ${config.name} saved successfully.`
-          }]);
+          const isPipelineSizeInLimit = this.checkPipelineJsonSize();
+          if (isPipelineSizeInLimit) {
+            this.HydratorPlusPlusConsoleActions.addMessage([{
+              type: 'success',
+              content: `Draft ${config.name} saved successfully.`
+            }]);
+          }
           this.__defaultState = angular.copy(this.state);
-          this.emitChange();
+          this.emitChange(false);
         },
         err => {
           let message = err;
