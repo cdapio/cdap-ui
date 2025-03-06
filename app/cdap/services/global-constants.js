@@ -25,7 +25,19 @@ const pluginLabels = {
 };
 const NUMBER_TYPES = ['integer', 'int', 'short', 'long', 'float', 'double', 'bigdecimal'];
 const NATIVE_NUMBER_TYPES = ['integer', 'int', 'short', 'long', 'float', 'double'];
+
+const MemoryUnits = {};
+MemoryUnits.Byte = 1;
+MemoryUnits.KB = 1024 * MemoryUnits.Byte;
+MemoryUnits.MB = 1024 * MemoryUnits.KB;
+MemoryUnits.GB = 1024 * MemoryUnits.MB;
+
+const MIN_PIPELINE_SIZE_FOR_WARNING_BYTES = 2 * MemoryUnits.MB;
+
 const GLOBALS = {
+  MemoryUnits,
+  MIN_PIPELINE_SIZE_FOR_WARNING_BYTES,
+
   pageLevelErrors: {
     'UNKNOWN-NAMESPACE': (invalidNS) => { return `\'namespace:${invalidNS}' was not found.`},
     'UNAUTHORIZED-NAMESPACE': (invalidNS) => { return `You are not authorized to access '${invalidNS}' namespace`},
@@ -380,14 +392,6 @@ const PIPELINE_LOGS_FILTER =
 
 const SNAPSHOT_VERSION = '-SNAPSHOT';
 
-const MemoryUnits = {};
-MemoryUnits.Byte = 1;
-MemoryUnits.KB = 1024 * MemoryUnits.Byte;
-MemoryUnits.MB = 1024 * MemoryUnits.KB;
-MemoryUnits.GB = 1024 * MemoryUnits.MB;
-
-const MIN_PIPELINE_SIZE_FOR_WARNING_BYTES = 2 * MemoryUnits.MB;
-
 export {
   NUMBER_TYPES,
   NATIVE_NUMBER_TYPES,
@@ -403,6 +407,4 @@ export {
   PIPELINE_LOGS_FILTER,
   GENERATED_RUNTIMEARGS,
   SNAPSHOT_VERSION,
-  MemoryUnits,
-  MIN_PIPELINE_SIZE_FOR_WARNING_BYTES,
 };
