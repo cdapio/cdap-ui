@@ -1457,23 +1457,6 @@ class HydratorPlusPlusTopPanelCtrl {
     }
 
     let uploadedFile = files[0];
-
-    try {
-      const pipelineSizeLimit = this.GLOBALS.MIN_PIPELINE_SIZE_FOR_WARNING_BYTES;
-      const pipelineSizeLimitMB = pipelineSizeLimit / this.GLOBALS.MemoryUnits.MB;
-      const pipelineSizeLimitMBRounded = pipelineSizeLimitMB.toFixed(2);
-
-      if (files[0].size > pipelineSizeLimit) {
-        const fileSizeInMB = (files[0].size || 1) / this.GLOBALS.MemoryUnits.MB;
-        const fileSizeInMBRounded = fileSizeInMB.toFixed(2);
-        this.myAlertOnValium.show({
-          type: "warning",
-          content: `File size is ${fileSizeInMBRounded}MB. Pipelines larger than ${pipelineSizeLimitMBRounded}MB may fail during deployment.`,
-        });
-      }
-    } catch (e) {
-      console.error("Unable to check pipeline size.");
-    }
     this.HydratorUpgradeService.validateAndUpgradeConfigFile(uploadedFile, this.getParentVersion());
   }
 
