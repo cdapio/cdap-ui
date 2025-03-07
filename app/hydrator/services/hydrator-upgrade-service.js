@@ -15,7 +15,7 @@
  */
 
 class HydratorUpgradeService {
-  constructor($rootScope, myPipelineApi, HydratorPlusPlusLeftPanelStore, $state, $uibModal, HydratorPlusPlusConfigStore, $q, PipelineAvailablePluginsActions, myAlertOnValium, NonStorePipelineErrorFactory) {
+  constructor($rootScope, myPipelineApi, HydratorPlusPlusLeftPanelStore, $state, $uibModal, HydratorPlusPlusConfigStore, $q, PipelineAvailablePluginsActions, myAlertOnValium, NonStorePipelineErrorFactory, GLOBALS) {
     this.$rootScope = $rootScope;
     this.myPipelineApi = myPipelineApi;
     this.$state = $state;
@@ -30,6 +30,7 @@ class HydratorUpgradeService {
     this.PipelineAvailablePluginsActions = PipelineAvailablePluginsActions;
     this.myAlertOnValium = myAlertOnValium;
     this.NonStorePipelineErrorFactory = NonStorePipelineErrorFactory;
+    this.GLOBALS = GLOBALS;
   }
 
   _checkVersionIsInRange(range, version) {
@@ -289,6 +290,27 @@ class HydratorUpgradeService {
       } catch (e) {
         return;
       }
+    }
+
+    // validate that the imported pipeline json is less than 2MB. Otherwise throw a warning.
+    try {
+      const pipelineSizeLimit = this.GLOBALS.MIN_PIPELINE_SIZE_FOR_WARNING_BYTES;
+      const pipelineSizeLimitMB = pipelineSizeLimit / this.GLOBALS.MemoryUnits.MB;
+      const pipelineSizeLimitMBRounded = pipelineSizeLimitMB.toFixed(2);
+
+      const jsonBlob = new Blob([JSON.stringify(jsonData, null, 4)], { type: 'application/json' });
+      const blobSize = jsonBlob.size || 1;
+
+      if (blobSize > pipelineSizeLimit) {
+        const blobSizeInMB = blobSize / this.GLOBALS.MemoryUnits.MB;
+        const blobSizeInMBRounded = blobSizeInMB.toFixed(2);
+        this.myAlertOnValium.show({
+          type: "warning",
+          content: `File size is ${blobSizeInMBRounded}MB. Pipelines larger than ${pipelineSizeLimitMBRounded}MB may fail during deployment.`,
+        });
+      }
+    } catch (e) {
+      console.error("Unable to check pipeline size.");
     }
 
     /**
