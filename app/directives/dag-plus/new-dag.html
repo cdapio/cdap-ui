@@ -1,0 +1,61 @@
+<!--
+  Copyright © 2025 Cask Data, Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  use this file except in compliance with the License. You may obtain a copy of
+  the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  License for the specific language governing permissions and limitations under
+  the License.
+-->
+
+<dag-editor
+  preview-mode="previewMode"
+  pipeline-artifact-type="DAGPlusPlusCtrl.pipelineArtifactType"
+  set-pipeline-comments="DAGPlusPlusCtrl.setPipelineComments"
+  pipeline-comments="pipelineComments"
+  redo-states="DAGPlusPlusCtrl.redoStates"
+  redo-actions="DAGPlusPlusCtrl.redoActions"
+  undo-states="DAGPlusPlusCtrl.undoStates"
+  undo-actions="DAGPlusPlusCtrl.undoActions"
+  cleanup-graph="DAGPlusPlusCtrl.cleanUpGraph"
+  on-pipeline-context-menu-paste="DAGPlusPlusCtrl.onPipelineContextMenuPaste"
+
+  is-disabled="DAGPlusPlusCtrl.isDisabled"
+  dag-nodes="nodes"
+  update-node="DAGPlusPlusCtrl.updateNode"
+  remove-node="DAGPlusPlusCtrl.removeNode"
+  on-node-click="DAGPlusPlusCtrl.onNodeClick"
+  error-stages="errorStages"
+  should-show-alerts-port="DAGPlusPlusCtrl.shouldShowAlertsPort"
+  should-show-errors-port="DAGPlusPlusCtrl.shouldShowErrorsPort"
+  set-node-comments="DAGPlusPlusCtrl.setComments"
+  active-plugin-to-comment="DAGPlusPlusCtrl.activePluginToComment"
+  
+  get-plugin-configuration="DAGPlusPlusCtrl.getPluginConfiguration"
+  get-selected-connections="DAGPlusPlusCtrl.getSelectedConnections"
+  get-selected-nodes="DAGPlusPlusCtrl.getSelectedNodes"
+  on-selected-delete="DAGPlusPlusCtrl.deleteSelectedNodes"
+  on-plugin-menu-open="DAGPlusPlusCtrl.onPluginContextMenuOpen"
+  on-plugin-add-comment="DAGPlusPlusCtrl.setPluginActiveForComment"
+  node-menu-open="DAGPlusPlusCtrl.nodeMenuOpen"
+  toggle-node-menu="DAGPlusPlusCtrl.toggleNodeMenu"
+
+  connections="connections"
+  add-connection="DAGPlusPlusCtrl.addConnection"
+  move-connection="DAGPlusPlusCtrl.moveConnection"
+  remove-connection="DAGPlusPlusCtrl.removeConnection"
+  prevalidate-connection="DAGPlusPlusCtrl.prevalidateConnection"
+
+  on-metrics-click="DAGPlusPlusCtrl.onMetricsClick"
+  on-preview-data="DAGPlusPlusCtrl.onPreviewData"
+  metrics-data="metricsData"
+
+  on-viewport-change="DAGPlusPlusCtrl.onViewportChange"
+  ui-auto-layout="DAGPlusPlusCtrl.uiAutoLayout"
+></dag-editor>

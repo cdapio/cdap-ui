@@ -175,7 +175,9 @@
           <div class="node"
                 ng-mouseenter="DAGPlusPlusCtrl.nodeMouseEnter(node)"
                 ng-mouseleave="DAGPlusPlusCtrl.nodeMouseLeave(node)"
-                ng-click="DAGPlusPlusCtrl.selectNode($event, node)">
+                ng-click="DAGPlusPlusCtrl.selectNode($event, node)"
+                data-testid="plugin-endpoint-{{node.plugin.name}}-{{node.type}}-input"
+                >
             <div class="inner" ng-if="['action', 'sparkprogram'].indexOf(node.type) !== -1"></div>
             <div class="endpoint-circle"
                   ng-if="node.type !== 'splittertransform'"

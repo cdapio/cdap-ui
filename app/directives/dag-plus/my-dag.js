@@ -19,6 +19,8 @@ commonModule.factory('jsPlumb', function ($window) {
   return $window.jsPlumb;
 });
 
+var isNewDagEditor = window.CDAP_CONFIG.featureFlags["studio.new.dag.editor"] === "true";
+
 commonModule.directive('myDagPlus', function() {
   return {
     restrict: 'E',
@@ -40,6 +42,9 @@ commonModule.directive('myDagPlus', function() {
       errorStages: '='
     },
     link: function(scope, element) {
+      if (isNewDagEditor) {
+        return {};
+      }
       scope.element = element;
       scope.getGraphMargins = function (plugins) {
         var margins = this.element[0].parentElement.getBoundingClientRect();
@@ -91,8 +96,8 @@ commonModule.directive('myDagPlus', function() {
         };
       };
     },
-    templateUrl: 'dag-plus/my-dag.html',
-    controller: 'DAGPlusPlusCtrl',
+    templateUrl: isNewDagEditor ? 'dag-plus/new-dag.html' : 'dag-plus/my-dag.html',
+    controller: isNewDagEditor ? 'DAGPlusPlusCtrlV2' : 'DAGPlusPlusCtrl',
     controllerAs: 'DAGPlusPlusCtrl'
   };
 });
