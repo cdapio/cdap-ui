@@ -43,34 +43,9 @@ const loaderExclude = [
 
 var mode = process.env.NODE_ENV || 'production';
 const isModeProduction = (mode) => mode === 'production' || mode === 'non-optimized-production';
-const getWebpackDllPlugins = (mode) => {
-  var sharedDllManifestFileName = 'shared-vendor-manifest.json';
-  var cdapDllManifestFileName = 'cdap-vendor-manifest.json';
-  if (mode === 'development') {
-    sharedDllManifestFileName = 'shared-vendor-development-manifest.json';
-    cdapDllManifestFileName = 'cdap-vendor-development-manifest.json';
-  }
-  return [
-    new webpack.DllReferencePlugin({
-      context: path.resolve(__dirname, 'packaged', 'public', 'dll'),
-      manifest: require(path.join(
-        __dirname,
-        'packaged',
-        'public',
-        'dll',
-        sharedDllManifestFileName
-      )),
-    }),
-    new webpack.DllReferencePlugin({
-      context: path.resolve(__dirname, 'packaged', 'public', 'dll'),
-      manifest: require(path.join(__dirname, 'packaged', 'public', 'dll', cdapDllManifestFileName)),
-    }),
-  ];
-};
 var plugins = [
   new CleanWebpackPlugin(cleanOptions),
   new CaseSensitivePathsPlugin(),
-  ...getWebpackDllPlugins(mode),
   new LodashModuleReplacementPlugin({
     shorthands: true,
     collections: true,
@@ -172,6 +147,19 @@ var rules = [
     include: [path.join(__dirname, 'app'), path.join(__dirname, '.storybook')],
   },
   {
+    test: /node_modules[\/\\]@?reactflow[\/\\].*.js$/,
+    use: {
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-env', "@babel/preset-react"],
+        plugins: [
+          "@babel/plugin-proposal-optional-chaining",
+          "@babel/plugin-proposal-nullish-coalescing-operator",
+        ]
+      }
+    }
+  },
+  {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     use: [
       {
@@ -234,7 +222,6 @@ var webpackConfig = {
     chunkFilename: '[name].[chunkhash].js',
     path: __dirname + '/packaged/public/cdap_dist/cdap_assets/',
     publicPath: '/cdap_assets/',
-    hashFunction: 'sha512',
   },
   stats: {
     assets: false,

@@ -183,7 +183,6 @@ var webpackConfig = {
     filename: '[name].js',
     path: __dirname + '/packaged/public/login_dist/login_assets',
     publicPath: '/login_assets/',
-    hashFunction: 'sha512',
   },
   plugins: plugins,
   resolve: {

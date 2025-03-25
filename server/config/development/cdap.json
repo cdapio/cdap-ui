@@ -18,11 +18,13 @@
   "feature.lifecycle.management.edit.enabled": "true",
   "feature.source.control.management.git.enabled": "true",
   "feature.source.control.management.multi.app.enabled": "true",
+
+  "feature.studio.new.dag.editor": "false",
+
   "ui.analyticsTag": "",
   "ui.GTM": "",
   "hsts.enabled": "false",
   "hsts.max.age": 31536000,
   "hsts.include.sub.domains": "true",
-  "hsts.preload": "true",
-  "app.cdap.file.max.size.bytes": "2097152"
+  "hsts.preload": "true"
 }
