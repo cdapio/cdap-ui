@@ -494,7 +494,7 @@ body.theme-cdap {
 
 // Overrides for adjusted height with  error classification banner
 body.theme-cdap.with-error-banner.state-hydrator {
-  my-dag-plus {
+  .react-version .right-wrapper my-dag-plus {
     height: ~"-moz-calc(100vh - 190px)"; // Header (50) + toppanel in detailed view (55) + footer (53) + error banner (32)
     height: ~"-webkit-calc(100vh - 190px)";
     height: ~"calc(100vh - 190px)";
@@ -519,5 +519,21 @@ body.theme-cdap.with-error-banner.state-hydrator {
   // Push this button 20px down so that it does not overlap the error banner
   .cask-resourcecenter-button {
     top: 91px;
+  }
+}
+
+body.theme-cdap.with-new-dag-editor.state-hydrator {
+  background-color: #efefef;
+  background-image: none;
+
+  &.preview-mode {
+    background: #e1f0ff;
+  }
+}
+
+body.theme-cdap.state-hydrator-create.with-new-dag-editor,
+body.theme-cdap.state-hydrator-detail.with-new-dag-editor {
+  footer {
+    position: fixed;
   }
 }

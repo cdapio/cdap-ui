@@ -49,6 +49,7 @@ angular.module(PKG.name + '.services')
      * @return {promise} resolved with the response from server
      */
     MyPersistentStorage.prototype.set = function (key, value) {
+      if (!this.data) this.data = {};
 
       myHelpers.deepSet(this.data, key, value);
       if (window.CaskCommon.CDAPHelpers.isAuthSetToManagedMode()) {
