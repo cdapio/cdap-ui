@@ -26,6 +26,7 @@ import uuidv4 from 'uuid/v4';
 import { PipelineComments } from 'components/PipelineCanvasActions/PipelineComments';
 import { IPipelineComment } from 'components/PipelineCanvasActions/PipelineCommentsConstants';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { ControlButton } from 'reactflow';
 
 const useStyle = makeStyles<Theme, { toggle: boolean }>((theme) => {
   return {
@@ -79,6 +80,7 @@ interface IPipelineCommentsActionBtnProps {
   onChange: (comments: IPipelineComment[]) => void;
   comments: IPipelineComment[];
   disabled?: boolean;
+  isV2?: boolean;
 }
 
 function PipelineCommentsActionBtn({
@@ -86,6 +88,7 @@ function PipelineCommentsActionBtn({
   onChange,
   comments = [],
   disabled,
+  isV2 = false,
 }: IPipelineCommentsActionBtnProps) {
   const [localToggle, setLocalToggle] = React.useState(false);
   const [showMarker, setShowMarker] = React.useState(comments.length > 0);
@@ -122,6 +125,25 @@ function PipelineCommentsActionBtn({
   React.useEffect(() => {
     setShowMarker(Array.isArray(comments) && comments.length > 0);
   }, [comments]);
+
+  if (isV2) {
+    return (
+      <ClickAwayListener onClickAway={onClose}>
+        <ControlButton title={tooltip} disabled={!showMarker && disabled} onClick={onClick}>
+          {showMarker && <span className={classes.marker}></span>}
+          <CommentRounded fontSize="small" />
+          <PipelineComments
+            comments={comments}
+            onChange={onChange}
+            anchorEl={anchorEl}
+            disabled={disabled}
+            onClose={onClose}
+          />
+        </ControlButton>
+      </ClickAwayListener>
+    );
+  }
+
   return (
     <ClickAwayListener onClickAway={onClose}>
       <Tooltip

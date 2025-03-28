@@ -153,6 +153,7 @@ var PreviewErrorClassificationBanner = require('../cdap/components/PipelineDetai
   .default;
 var ErrorStageOutline = require('../cdap/components/PipelineDetails/PipelineDetailsTopPanel/PipelineRunErrorDetails/ErrorStageOutline')
   .default;
+var DAGEditor = require('../cdap/components/StudioV2/components/DAGEditor').default;
 
 export {
   TopPanelReact,
@@ -264,4 +265,5 @@ export {
   Connections,
   PreviewErrorClassificationBanner,
   ErrorStageOutline,
+  DAGEditor,
 };
