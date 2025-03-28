@@ -201,4 +201,7 @@ angular
   })
   .directive('errorStageOutline', function (reactDirective) {
     return reactDirective(window.CaskCommon.ErrorStageOutline);
+  })
+  .directive('dagEditor', function (reactDirective) {
+    return reactDirective(window.CaskCommon.DAGEditor);
   });
