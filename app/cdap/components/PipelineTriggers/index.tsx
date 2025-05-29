@@ -83,8 +83,6 @@ const PipelineTriggers = ({
       },
     });
 
-    fetchTriggersAndApps(pipelineName, GLOBALS.programId[pipelineType], namespace);
-
     return () => {
       if (sub) {
         sub();
@@ -93,6 +91,11 @@ const PipelineTriggers = ({
   }, []);
 
   const onToggleSidebar = (isExpanded) => {
+    const enabledTriggers = PipelineTriggersStore.getState().triggers.enabledTriggers;
+
+    if (isExpanded && enabledTriggers.length === 0) {
+      fetchTriggersAndApps(pipelineName, GLOBALS.programId[pipelineType], namespace);
+    }
     setTabText(isExpanded ? `${PREFIX}.expandedTabLabel` : `${PREFIX}.collapsedTabLabel`);
   };
 
