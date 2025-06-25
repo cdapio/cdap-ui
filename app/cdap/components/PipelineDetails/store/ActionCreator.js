@@ -225,9 +225,12 @@ const getRuns = (params) => {
   return runsFetch;
 };
 
-const getRunsForVersion = (params) => {
+const getRunsForVersion = (params, clearPollIntervalCb = () => {}) => {
   MyPipelineApi.getVersionedRuns(params).subscribe((runs) => {
     setVersionHasRun(runs.length > 0);
+    if (runs.length > 0 && typeof clearPollIntervalCb === 'function') {
+      clearPollIntervalCb();
+    }
   });
 };
 
