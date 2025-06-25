@@ -137,7 +137,7 @@ const CurrentRunIndex = ({
     getRunsForVersion(params);
     const interval = setInterval(() => {
       getRunsForVersion(params);
-    }, 2000);
+    }, 10000); // 10s
     return () => clearInterval(interval);
   }, []);
 
