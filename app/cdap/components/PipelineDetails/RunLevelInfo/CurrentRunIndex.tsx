@@ -38,6 +38,7 @@ import { copyToClipBoard } from 'services/Clipboard';
 
 const PREFIX = 'features.PipelineDetails.RunLevel';
 const TESTID_PREFIX = 'features.pipelineDetails.runLevel';
+const DEFAULT_POLL_RUNS_INTERVAL_MS = 10000; // 10s
 
 const StyledNoRunsHeader = styled.div`
   display: flex;
@@ -133,13 +134,26 @@ const CurrentRunIndex = ({
       versionId: version,
       programType: GLOBALS.programInfo[artifactName].programType,
       programName: GLOBALS.programInfo[artifactName].programName,
+      limit: 1,
     };
-    getRunsForVersion(params);
     const interval = setInterval(() => {
-      getRunsForVersion(params);
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
+      getRunsForVersion(params, clearPollInterval);
+    }, DEFAULT_POLL_RUNS_INTERVAL_MS);
+
+    function clearPollInterval() {
+      if (interval) {
+        clearInterval(interval);
+      }
+    }
+
+    // Avoid the delay caused by the interval by calling the API early
+    // if this succeeds, we clear the interval and avoid further polling
+    getRunsForVersion(params, clearPollInterval);
+
+    // if the version changes, clear the old interval before running this
+    // effect again
+    return clearPollInterval;
+  }, [version]);
 
   if (!reversedRuns || currentRunIndex === -1) {
     return (
