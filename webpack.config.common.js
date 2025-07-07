@@ -106,6 +106,19 @@ var rules = [
     exclude: loaderExclude,
   },
   {
+    test: /node_modules[\/\\]@?reactflow[\/\\].*.js$/,
+    use: {
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-env', "@babel/preset-react"],
+        plugins: [
+          "@babel/plugin-proposal-optional-chaining",
+          "@babel/plugin-proposal-nullish-coalescing-operator",
+        ]
+      }
+    }
+  },
+  {
     test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
     use: [
       {
@@ -172,7 +185,6 @@ var webpackConfig = {
     libraryTarget: 'umd',
     publicPath: '/common_assets/',
     globalObject: 'window',
-    hashFunction: 'sha512',
   },
   externals: {
     react: {

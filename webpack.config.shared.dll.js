@@ -31,7 +31,6 @@ const getWebpackOutputObj = (mode) => {
     filename: 'dll.shared.[name].js',
     library: 'shared_[name]',
     globalObject: 'window',
-    hashFunction: 'sha512',
   };
   if (mode === 'development') {
     output.filename = 'dll.shared.[name].development.js';
