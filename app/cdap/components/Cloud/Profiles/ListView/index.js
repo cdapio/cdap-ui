@@ -27,6 +27,7 @@ import ViewAllLabel from 'components/shared/ViewAllLabel';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import AutoScaleBadge from 'components/Cloud/Profiles/AutoScaleBadge';
 import ProfilesStore, { PROFILE_STATUSES } from 'components/Cloud/Profiles/Store';
+import { alpha } from '@material-ui/core';
 import {
   getProfiles,
   deleteProfile,
@@ -47,7 +48,19 @@ import { CLOUD, SYSTEM_NAMESPACE } from 'services/global-constants';
 import { preventPropagation } from 'services/helpers';
 import findIndex from 'lodash/findIndex';
 import { SCOPES } from 'services/global-constants';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+} from '@material-ui/core';
 require('./ListView.scss');
+import styled from 'styled-components';
+import history from 'services/history';
 
 const PREFIX = 'features.Cloud.Profiles';
 
@@ -106,6 +119,71 @@ const SORT_METHODS = {
 };
 
 const NUM_PROFILES_TO_SHOW = 5;
+
+const StyledTableContainer = styled(TableContainer).attrs(() => ({
+  component: Paper,
+  elevation: 10,
+}))`
+  margin-top: 1.3rem;
+`;
+
+const StyledTableCell = styled(TableCell)`
+  font-size: 1rem;
+
+  &.default-star {
+    cursor: pointer;
+  }
+
+  &.default-star {
+    .default-profile {
+      color: var(--brand-primary-color);
+    }
+
+    .not-default-profile {
+      display: none;
+    }
+  }
+
+  &.enabled-label {
+    color: ${(props) => {
+      return props.theme.palette.green[100];
+    }};
+  }
+
+  &.disabled-label {
+    color: ${(props) => {
+      return props.theme.palette.red[100];
+    }};
+  }
+`;
+
+const StyledTableRow = styled(TableRow)`
+  &.highlighted {
+    border: 2px solid
+      ${(props) => {
+        return props.theme.palette.green[200];
+      }};
+    background-color: ${(props) => {
+      return alpha(props.theme.palette.green[200], 0.1);
+    }};
+  }
+
+  & {
+    cursor: pointer;
+  }
+
+  &.native-profile {
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    .default-star {
+      .not-default-profile {
+        display: inline-block;
+      }
+    }
+  }
+`;
 
 class ProfilesListView extends Component {
   state = {
@@ -245,12 +323,12 @@ class ProfilesListView extends Component {
     }
 
     return (
-      <div className="grid-wrapper">
-        <div className="grid grid-container">
+      <StyledTableContainer>
+        <Table>
           {this.renderProfilesTableHeader()}
           {this.renderProfilesTableBody()}
-        </div>
-      </div>
+        </Table>
+      </StyledTableContainer>
     );
   }
 
@@ -268,40 +346,35 @@ class ProfilesListView extends Component {
 
   renderProfilesTableHeader() {
     return (
-      <div className="grid-header">
-        <div className="grid-row sub-header">
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-          <div className="sub-title">{T.translate(`${PREFIX}.ListView.pipelineUsage`)}</div>
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-        </div>
-        <div className="grid-row">
+      <TableHead>
+        <StyledTableRow>
           {PROFILES_TABLE_HEADERS.map((header, i) => {
             if (header.property) {
               return (
-                <strong
-                  className={classnames('sortable-header', {
-                    active: this.state.sortColumn === header.property,
-                  })}
+                <StyledTableCell
                   key={i}
-                  onClick={this.handleProfilesSort.bind(this, header.property)}
+                  sortDirection={
+                    this.state.sortColumn === header.property ? this.state.sortMethod : false
+                  }
                 >
-                  <span>{header.label}</span>
-                  {this.renderSortIcon(header.property)}
-                </strong>
+                  <TableSortLabel
+                    active={this.state.sortColumn === header.property}
+                    direction={
+                      this.state.sortColumn === header.property
+                        ? this.state.sortMethod
+                        : SORT_METHODS.asc
+                    }
+                    onClick={this.handleProfilesSort.bind(this, header.property)}
+                  >
+                    {header.label}
+                  </TableSortLabel>
+                </StyledTableCell>
               );
             }
-            return <strong key={i}>{header.label}</strong>;
+            return <StyledTableCell key={i}>{header.label}</StyledTableCell>;
           })}
-        </div>
-      </div>
+        </StyledTableRow>
+      </TableHead>
     );
   }
 
@@ -317,7 +390,6 @@ class ProfilesListView extends Component {
     let provisionerName = profile.provisioner.name;
     profile.provisioner.label = this.state.provisionersMap[provisionerName] || provisionerName;
     let profileStatus = PROFILE_STATUSES[profile.status];
-    let Tag = Link;
     const profileName = getProfileNameWithScope(profile.name, profile.scope);
     const isNativeProfile = profileName === CLOUD.DEFAULT_PROFILE_NAME;
     const profileIsDefault = profileName === this.props.defaultProfile;
@@ -335,39 +407,46 @@ class ProfilesListView extends Component {
       }
       return <IconSVG name="icon-more" />;
     };
-    if (isNativeProfile) {
-      Tag = 'div';
-    }
     return (
-      <Tag
-        to={`/ns/${namespace}/profiles/details/${profile.name}`}
-        className={classnames('grid-row grid-link', {
-          'native-profile': isNativeProfile,
-          highlighted: profileName === this.props.newProfile,
-        })}
+      <StyledTableRow
+        className={
+          ('highlighted',
+          classnames({
+            'native-profile': isNativeProfile,
+            highlighted: profileName === this.props.newProfile,
+          }))
+        }
+        onClick={
+          !isNativeProfile
+            ? () => history.push(`/ns/${namespace}/profiles/details/${profile.name}`)
+            : undefined
+        }
+        hover
         key={uuidV4()}
       >
-        <div className="default-star" onClick={this.setProfileAsDefault.bind(this, profileName)}>
+        <StyledTableCell
+          className="default-star"
+          onClick={this.setProfileAsDefault.bind(this, profileName)}
+        >
           {profileIsDefault ? (
             <IconSVG name="icon-star" className="default-profile" />
           ) : (
             <IconSVG name="icon-star-o" className="not-default-profile" />
           )}
-        </div>
-        <div
-          className="profile-label"
+        </StyledTableCell>
+        <StyledTableCell
           title={profile.label || profile.name}
           data-cy={`profile-list-${profile.name}`}
           data-testid={`profile-list-${profile.name}`}
         >
           {profile.label || profile.name}
-        </div>
-        <div>{profile.provisioner.label}</div>
-        <div>
+        </StyledTableCell>
+        <StyledTableCell>{profile.provisioner.label}</StyledTableCell>
+        <StyledTableCell>
           {profile.provisioner.totalProcessingCpusLabel || '--'}
           <AutoScaleBadge properties={profile.provisioner.properties} />
-        </div>
-        <div>{profile.scope}</div>
+        </StyledTableCell>
+        <StyledTableCell>{profile.scope}</StyledTableCell>
         {/*
           We should set the defaults in the metrics call but since it is not certain that we get metrics
           for all the profiles all the time I have added the defaults here in the view
@@ -378,15 +457,15 @@ class ProfilesListView extends Component {
           Also, need to make these properties sortable, using SortableStickyGrid.
           JIRA: CDAP-13895
         */}
-        <div>{profile.oneDayMetrics.runs || '--'}</div>
-        <div>{getNodeHours(profile.oneDayMetrics.minutes || '--')}</div>
-        <div>{getNodeHours(profile.overAllMetrics.minutes || '--')}</div>
-        <div>{profile.schedulesCount}</div>
-        <div>{profile.triggersCount}</div>
-        <div className={`${profileStatus}-label`}>
+        <StyledTableCell>{profile.oneDayMetrics.runs || '--'}</StyledTableCell>
+        <StyledTableCell>{getNodeHours(profile.oneDayMetrics.minutes || '--')}</StyledTableCell>
+        <StyledTableCell>{getNodeHours(profile.overAllMetrics.minutes || '--')}</StyledTableCell>
+        <StyledTableCell>{profile.schedulesCount}</StyledTableCell>
+        <StyledTableCell>{profile.triggersCount}</StyledTableCell>
+        <StyledTableCell className={`${profileStatus}-label`}>
           {T.translate(`${PREFIX}.common.${profileStatus}`)}
-        </div>
-        <div className="grid-item-sm">
+        </StyledTableCell>
+        <StyledTableCell>
           <ActionsPopover
             target={actionsElem}
             namespace={this.props.namespace}
@@ -394,8 +473,8 @@ class ProfilesListView extends Component {
             disabled={isNativeProfile}
             onDeleteClick={this.toggleDeleteConfirmationModal.bind(this, profile)}
           />
-        </div>
-      </Tag>
+        </StyledTableCell>
+      </StyledTableRow>
     );
   };
 
@@ -406,7 +485,7 @@ class ProfilesListView extends Component {
       profiles = profiles.slice(0, NUM_PROFILES_TO_SHOW);
     }
 
-    return <div className="grid-body">{profiles.map(this.renderProfilerow)}</div>;
+    return <TableBody>{profiles.map(this.renderProfilerow)}</TableBody>;
   }
 
   renderDeleteConfirmationModal() {
