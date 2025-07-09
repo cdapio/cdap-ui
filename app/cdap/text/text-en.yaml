@@ -403,6 +403,8 @@ features:
         profileUsage: Profile usage
         schedules: Schedules
         triggers: Triggers
+        viewAll: View all
+        viewLess: View less
   ConfirmationModal:
     cancelDefaultText: Cancel
     confirmDefaultText: OK
