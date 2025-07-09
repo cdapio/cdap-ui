@@ -23,11 +23,10 @@ import classnames from 'classnames';
 import IconSVG from 'components/shared/IconSVG';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import orderBy from 'lodash/orderBy';
-import ViewAllLabel from 'components/shared/ViewAllLabel';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import AutoScaleBadge from 'components/Cloud/Profiles/AutoScaleBadge';
 import ProfilesStore, { PROFILE_STATUSES } from 'components/Cloud/Profiles/Store';
-import { alpha } from '@material-ui/core';
+import { alpha, Box, Button } from '@material-ui/core';
 import {
   getProfiles,
   deleteProfile,
@@ -183,6 +182,10 @@ const StyledTableRow = styled(TableRow)`
       }
     }
   }
+`;
+
+const StyledViewAllButton = styled(Button)`
+  margin: 10px 0;
 `;
 
 class ProfilesListView extends Component {
@@ -533,12 +536,15 @@ class ProfilesListView extends Component {
     return (
       <div className="profiles-list-view">
         {this.renderProfilesTable()}
-        <ViewAllLabel
-          arrayToLimit={this.state.profiles}
-          limit={NUM_PROFILES_TO_SHOW}
-          viewAllState={this.state.viewAll}
-          toggleViewAll={this.toggleViewAll}
-        />
+        {this.state.profiles.length > NUM_PROFILES_TO_SHOW && (
+          <Box display="flex" flexDirection="row-reverse">
+            <StyledViewAllButton variant="outlined" color="primary" onClick={this.toggleViewAll}>
+              {this.state.viewAll
+                ? T.translate(`${PREFIX}.ListView.viewLess`)
+                : T.translate(`${PREFIX}.ListView.viewAll`)}
+            </StyledViewAllButton>
+          </Box>
+        )}
         {this.renderDeleteConfirmationModal()}
         {this.renderError()}
       </div>
