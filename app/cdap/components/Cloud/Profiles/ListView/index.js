@@ -19,14 +19,12 @@ import PropTypes from 'prop-types';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { Link } from 'react-router-dom';
 import T from 'i18n-react';
-import classnames from 'classnames';
 import IconSVG from 'components/shared/IconSVG';
 import LoadingSVG from 'components/shared/LoadingSVG';
 import orderBy from 'lodash/orderBy';
 import ConfirmationModal from 'components/shared/ConfirmationModal';
 import AutoScaleBadge from 'components/Cloud/Profiles/AutoScaleBadge';
 import ProfilesStore, { PROFILE_STATUSES } from 'components/Cloud/Profiles/Store';
-import { alpha, Box, Button } from '@material-ui/core';
 import {
   getProfiles,
   deleteProfile,
@@ -47,19 +45,17 @@ import { CLOUD, SYSTEM_NAMESPACE } from 'services/global-constants';
 import { preventPropagation } from 'services/helpers';
 import findIndex from 'lodash/findIndex';
 import { SCOPES } from 'services/global-constants';
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-} from '@material-ui/core';
-require('./ListView.scss');
-import styled from 'styled-components';
+import { Box, Table, TableBody, TableHead, TableSortLabel } from '@material-ui/core';
 import history from 'services/history';
+import {
+  StyledStarIcon,
+  StyledTableCell,
+  StyledTableContainer,
+  StyledTableRow,
+  StyledViewAllButton,
+} from './styles';
+
+require('./ListView.scss');
 
 const PREFIX = 'features.Cloud.Profiles';
 
@@ -118,75 +114,6 @@ const SORT_METHODS = {
 };
 
 const NUM_PROFILES_TO_SHOW = 5;
-
-const StyledTableContainer = styled(TableContainer).attrs(() => ({
-  component: Paper,
-  elevation: 10,
-}))`
-  margin-top: 1.3rem;
-`;
-
-const StyledTableCell = styled(TableCell)`
-  font-size: 1rem;
-
-  &.default-star {
-    cursor: pointer;
-  }
-
-  &.default-star {
-    .default-profile {
-      color: var(--brand-primary-color);
-    }
-
-    .not-default-profile {
-      display: none;
-    }
-  }
-
-  &.enabled-label {
-    color: ${(props) => {
-      return props.theme.palette.green[100];
-    }};
-  }
-
-  &.disabled-label {
-    color: ${(props) => {
-      return props.theme.palette.red[100];
-    }};
-  }
-`;
-
-const StyledTableRow = styled(TableRow)`
-  &.highlighted {
-    border: 2px solid
-      ${(props) => {
-        return props.theme.palette.green[200];
-      }};
-    background-color: ${(props) => {
-      return alpha(props.theme.palette.green[200], 0.1);
-    }};
-  }
-
-  & {
-    cursor: pointer;
-  }
-
-  &.native-profile {
-    cursor: not-allowed;
-  }
-
-  &:hover {
-    .default-star {
-      .not-default-profile {
-        display: inline-block;
-      }
-    }
-  }
-`;
-
-const StyledViewAllButton = styled(Button)`
-  margin: 10px 0;
-`;
 
 class ProfilesListView extends Component {
   state = {
@@ -412,13 +339,8 @@ class ProfilesListView extends Component {
     };
     return (
       <StyledTableRow
-        className={
-          ('highlighted',
-          classnames({
-            'native-profile': isNativeProfile,
-            highlighted: profileName === this.props.newProfile,
-          }))
-        }
+        isNativeProfile={isNativeProfile}
+        isNewProfile={profileName === this.props.newProfile}
         onClick={
           !isNativeProfile
             ? () => history.push(`/ns/${namespace}/profiles/details/${profile.name}`)
@@ -428,13 +350,13 @@ class ProfilesListView extends Component {
         key={uuidV4()}
       >
         <StyledTableCell
-          className="default-star"
+          defaultStar={true}
           onClick={this.setProfileAsDefault.bind(this, profileName)}
         >
           {profileIsDefault ? (
-            <IconSVG name="icon-star" className="default-profile" />
+            <StyledStarIcon name="icon-star" profileIsDefault={profileIsDefault} />
           ) : (
-            <IconSVG name="icon-star-o" className="not-default-profile" />
+            <StyledStarIcon name="icon-star-o" />
           )}
         </StyledTableCell>
         <StyledTableCell
@@ -465,7 +387,7 @@ class ProfilesListView extends Component {
         <StyledTableCell>{getNodeHours(profile.overAllMetrics.minutes || '--')}</StyledTableCell>
         <StyledTableCell>{profile.schedulesCount}</StyledTableCell>
         <StyledTableCell>{profile.triggersCount}</StyledTableCell>
-        <StyledTableCell className={`${profileStatus}-label`}>
+        <StyledTableCell profileStatus={profileStatus}>
           {T.translate(`${PREFIX}.common.${profileStatus}`)}
         </StyledTableCell>
         <StyledTableCell>
