@@ -43,8 +43,10 @@ import LoadingIndicatorStore, {
 import { IDataSource } from './IDataSource';
 import { Subscription } from 'rxjs/Subscription';
 import { REQUEST_ORIGIN_ROUTER, REQUEST_ORIGIN_MARKET } from './requestTypes';
+import { getCdapConfig } from 'services/helpers';
 
 const CDAP_API_VERSION = 'v3';
+const CONFIG_DEFAULT_POLL_INTERVAL_MS = 'defaultPollIntervalMs';
 
 function isBackendDown(status) {
   return status === BACKENDSTATUS.NODESERVERDOWN || status === BACKENDSTATUS.BACKENDDOWN;
@@ -324,7 +326,7 @@ export default class DataSource implements IDataSource {
   public poll(resource: IInboundResource = {}) {
     const excludeFromHealthCheck = !!resource.excludeFromHealthCheck;
     const id = uuidV4();
-    const intervalTime = resource.interval || 10000;
+    const intervalTime = resource.interval || getCdapConfig(CONFIG_DEFAULT_POLL_INTERVAL_MS, 10000);
     const generatedResource: IResource = {
       id,
       interval: null,

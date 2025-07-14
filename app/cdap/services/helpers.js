@@ -28,6 +28,7 @@ import { connect } from 'react-redux';
 import isEqual from 'lodash/isEqual';
 import transform from 'lodash/transform';
 import isArray from 'lodash/isArray';
+
 // We don't use webpack alias here because this is used in Footer which is used in login app
 // And for login 'components/Lab/..' aliases to components folder inside login app.
 import experimentsList from '../components/Lab/experiment-list.tsx';
@@ -930,6 +931,9 @@ const isPushdownEnabled = (runtimeArgs) => {
   return pushdownEnabledKeyValuePair ? pushdownEnabledKeyValuePair.value === 'true' : false
 }
 
+const getCdapConfig = (configName, defaultValue) => 
+  objectQuery(window, 'CDAP_CONFIG', 'cdap', configName) || defaultValue;
+
 export {
   openLinkInNewTab,
   objectQuery,
@@ -994,5 +998,6 @@ export {
   PIPELINE_ARTIFACTS,
   BATCH_PIPELINE_TYPE,
   getPushdownObjectFromRuntimeArgs,
-  isPushdownEnabled
+  isPushdownEnabled,
+  getCdapConfig,
 };
