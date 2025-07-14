@@ -22,5 +22,6 @@
   "hsts.enabled": "false",
   "hsts.max.age": 31536000,
   "hsts.include.sub.domains": "true",
-  "hsts.preload": "true"
+  "hsts.preload": "true",
+  "ui.default.poll.interval.millis": "10000"
 }
