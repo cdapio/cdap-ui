@@ -21,6 +21,7 @@ import { MyPipelineApi } from 'api/pipeline';
 import { SourceControlApi } from 'api/sourcecontrol';
 import PipelineDetailStore, { ACTIONS } from 'components/PipelineDetails/store';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
+import { PROGRAM_ENDSTATES } from 'services/global-constants';
 
 const init = (pipeline) => {
   PipelineDetailStore.dispatch({
@@ -204,6 +205,28 @@ const getRunDetails = ({ namespace, appId, programType, programName, runid }) =>
   });
 };
 
+const updateRunDetails = (
+  { namespace, appId, programType, programName, runid },
+  clearPollIntervalCb
+) => {
+  return getRunDetails({
+    namespace,
+    appId,
+    programName,
+    programType,
+    runid,
+  }).subscribe((runRecord = {}) => {
+    const { runs: currentRuns = [] } = PipelineDetailStore.getState();
+    const updatedRuns = currentRuns.map((run) => (run.runid === runRecord.runid ? runRecord : run));
+
+    setRuns(updatedRuns);
+
+    if (PROGRAM_ENDSTATES.includes(runRecord.status) && typeof clearPollIntervalCb === 'function') {
+      clearPollIntervalCb();
+    }
+  });
+};
+
 const getAppVersion = ({ namespace, appId, version }) => {
   return MyPipelineApi.getAppVersion({
     namespace,
@@ -254,43 +277,68 @@ const pollRunsCount = ({ appId, programType, programName: programId, namespace }
 };
 
 const pollRuns = (params) => {
-  return MyPipelineApi.pollRuns(params).subscribe(
+  let { runs: currentRuns = [] } = PipelineDetailStore.getState();
+  const [lastRun] = currentRuns;
+
+  return MyPipelineApi.pollRuns({ ...params, limit: 1 }).subscribe(
     (runs) => {
-      // When there are new runs, always set current run to most recent run
-      let { runs: currentRuns } = PipelineDetailStore.getState();
-      /**
-       *  If there is a run id in the url then stick to that runid.
-       *  Even if the user starts a new run.
-       */
-      let isRunIdAvailableInURLAsQueryParam = location.search.indexOf('runid') === -1;
-
-      // Oh my :|
-      if (
-        isRunIdAvailableInURLAsQueryParam &&
-        runs.length &&
-        (runs.length > currentRuns.length ||
-          runs[0].runid !== currentRuns[0].runid ||
-          runs[0].status !== currentRuns[0].status)
-      ) {
-        PipelineDetailStore.dispatch({
-          type: ACTIONS.SET_CURRENT_RUN_ID,
-          payload: { runId: runs[0].runid },
-        });
+      const [latestRun] = runs;
+      // if the latest run is still the last latest run, then we do not need to
+      // fetch more runs as we do not risk missing any runs that may have
+      // triggered during the poll interval
+      if (lastRun && latestRun && lastRun.runid === latestRun.runid) {
+        return;
       }
 
-      // Find if there are any new runs started
-      let difference = differenceBy(runs, currentRuns, 'runid');
-      // Update any existing runs, say 'status', in UI
-      let newRuns = currentRuns.map((run) => {
-        let updatedRun = find(runs, ['runid', run.runid]);
-        return !updatedRun ? run : updatedRun;
-      });
-      // If there are any new runs add it to the existing runs we have
-      if (difference.length) {
-        newRuns = difference.concat(currentRuns);
-      }
-      setRuns(newRuns);
+      // at this point the latest run has changed, so there is a real possibility
+      // that one or more runs were triggered during the poll interval. In this case
+      // we fetch the full runs list. This can be optimized more to fetch only the
+      // newer and updated runs - contingent on implementation of the API changes required.
+      return MyPipelineApi.getRuns(params).subscribe(
+        (runs) => {
+          // When there are new runs, always set current run to most recent run
+          currentRuns = PipelineDetailStore.getState().runs || [];
+          /**
+           *  If there is a run id in the url then stick to that runid.
+           *  Even if the user starts a new run.
+           */
+          let isRunIdAvailableInURLAsQueryParam = location.search.indexOf('runid') === -1;
+
+          // Oh my :|
+          if (
+            isRunIdAvailableInURLAsQueryParam &&
+            runs.length &&
+            (runs.length > currentRuns.length ||
+              runs[0].runid !== currentRuns[0].runid ||
+              runs[0].status !== currentRuns[0].status)
+          ) {
+            PipelineDetailStore.dispatch({
+              type: ACTIONS.SET_CURRENT_RUN_ID,
+              payload: { runId: runs[0].runid },
+            });
+          }
+
+          // Find if there are any new runs started
+          let difference = differenceBy(runs, currentRuns, 'runid');
+          // Update any existing runs, say 'status', in UI
+          let newRuns = currentRuns.map((run) => {
+            let updatedRun = find(runs, ['runid', run.runid]);
+            return !updatedRun ? run : updatedRun;
+          });
+          // If there are any new runs add it to the existing runs we have
+          if (difference.length) {
+            newRuns = difference.concat(currentRuns);
+          }
+
+          setRuns(newRuns);
+        },
+
+        (err) => {
+          console.log(err);
+        }
+      );
     },
+
     (err) => {
       console.log(err);
     }
@@ -545,4 +593,5 @@ export {
   setPullStatus,
   setSourceControlMeta,
   reset,
+  updateRunDetails,
 };

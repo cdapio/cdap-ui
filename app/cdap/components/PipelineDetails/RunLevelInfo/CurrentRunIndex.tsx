@@ -25,15 +25,18 @@ import {
   getRunsForVersion,
   init,
   setCurrentRunId,
+  getRunDetails,
+  updateRunDetails,
 } from 'components/PipelineDetails/store/ActionCreator';
 import T from 'i18n-react';
 import { getCurrentNamespace } from 'services/NamespaceStore';
 import { getHydratorUrl } from 'services/UiUtils/UrlGenerator';
 import Popover from 'components/shared/Popover';
-import { GLOBALS } from 'services/global-constants';
+import { GLOBALS, PROGRAM_ENDSTATES } from 'services/global-constants';
+import { getCdapConfig } from 'services/helpers';
 
 const PREFIX = 'features.PipelineDetails.RunLevel';
-const DEFAULT_POLL_RUNS_INTERVAL_MS = 10000; // 10s
+const CONFIG_DEFAULT_POLL_RUNS_INTERVAL_MS = 'defaultPollIntervalMs';
 
 const StyledNoRunsHeader = styled.div`
   display: flex;
@@ -58,10 +61,15 @@ const mapStateToProps = (state) => {
   };
 };
 
+interface ICurrentRun extends Object {
+  runid: string;
+  status: string;
+}
+
 interface ICurrentRunIndexProps {
   runs: any[];
   runsCount: number;
-  currentRun: object;
+  currentRun: ICurrentRun;
   pipelineName: string;
   versionHasRun: boolean;
   version: string;
@@ -113,7 +121,7 @@ const CurrentRunIndex = ({
     };
     const interval = setInterval(() => {
       getRunsForVersion(params, clearPollInterval);
-    }, DEFAULT_POLL_RUNS_INTERVAL_MS);
+    }, getCdapConfig(CONFIG_DEFAULT_POLL_RUNS_INTERVAL_MS, 10000));
 
     function clearPollInterval() {
       if (interval) {
@@ -129,6 +137,42 @@ const CurrentRunIndex = ({
     // effect again
     return clearPollInterval;
   }, [version]);
+
+  // if the currentRun is not in a finished state, then poll the currentRun for
+  // status changes
+  useEffect(() => {
+    if (!currentRun?.runid || PROGRAM_ENDSTATES.includes(currentRun.status)) {
+      clearPollInterval();
+      return;
+    }
+
+    const params = {
+      namespace,
+      appId: pipelineName,
+      versionId: version,
+      programType: GLOBALS.programInfo[artifactName].programType,
+      programName: GLOBALS.programInfo[artifactName].programName,
+      runid: currentRun.runid,
+    };
+
+    const interval = setInterval(() => {
+      updateRunDetails(params, clearPollInterval);
+    }, getCdapConfig(CONFIG_DEFAULT_POLL_RUNS_INTERVAL_MS, 10000));
+
+    function clearPollInterval() {
+      if (interval) {
+        clearInterval(interval);
+      }
+    }
+
+    // Avoid the delay caused by the interval by calling the API early
+    // if this succeeds, we clear the interval and avoid further polling
+    updateRunDetails(params, clearPollInterval);
+
+    // if the current runid changes, clear the old interval before running this
+    // effect again
+    return clearPollInterval;
+  }, [currentRun?.runid]);
 
   if (!reversedRuns || currentRunIndex === -1) {
     return (
