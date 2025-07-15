@@ -277,11 +277,11 @@ const pollRunsCount = ({ appId, programType, programName: programId, namespace }
 };
 
 const pollRuns = (params) => {
-  let { runs: currentRuns = [] } = PipelineDetailStore.getState();
-  const [lastRun] = currentRuns;
-
   return MyPipelineApi.pollRuns({ ...params, limit: 1 }).subscribe(
     (runs) => {
+      let { runs: currentRuns = [] } = PipelineDetailStore.getState();
+      const [lastRun] = currentRuns;
+
       const [latestRun] = runs;
       // if the latest run is still the last latest run, then we do not need to
       // fetch more runs as we do not risk missing any runs that may have
