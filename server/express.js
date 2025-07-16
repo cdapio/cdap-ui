@@ -258,6 +258,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         hstsIncludeSubDomains: cdapConfig['hsts.include.sub.domains'],
         hstsPreload: cdapConfig['hsts.preload'],
         runRecordsTtl: cdapConfig['app.run.records.ttl.days'],
+        defaultPollIntervalMs: parseInt(cdapConfig['ui.default.poll.interval.millis'], 10) || 10000,
       },
       hydrator: {
         previewEnabled: cdapConfig['enable.preview'] === 'true',
