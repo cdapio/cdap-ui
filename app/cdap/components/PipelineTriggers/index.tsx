@@ -108,9 +108,9 @@ const PipelineTriggers = ({
       return <EnabledTriggersTab setTab={setTab} />;
     } else if (activeTab === 1) {
       return pipelineCompositeTriggersEnabled ? (
-        <PipelineListCompositeTab setTab={setTab} />
+        <PipelineListCompositeTab setTab={setTab} pipelineType={pipelineType} />
       ) : (
-        <PipelineListTab />
+        <PipelineListTab pipelineType={pipelineType} />
       );
     }
   };

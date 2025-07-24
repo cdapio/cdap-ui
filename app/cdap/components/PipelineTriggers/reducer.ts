@@ -68,11 +68,6 @@ export function triggerNameReducer(oldstate, action) {
         namespaceList: nsList,
         namespace: ns,
       };
-    case 'SET_SEARCH_INPUT':
-      return {
-        ...oldstate,
-        searchInput: action.searchInput,
-      };
     case 'NO_TRIGGER_NAME_ERROR':
       return {
         ...oldstate,
@@ -115,7 +110,6 @@ export function triggerNameReducer(oldstate, action) {
 }
 
 export const initialAvailablePipelineListState = {
-  searchInput: '',
   namespaceList: [],
   namespace: '',
   triggerName: '',

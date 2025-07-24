@@ -60,6 +60,11 @@ export interface ISchedule {
   isTransformed?: boolean;
 }
 
+export interface IPipelineListResponse {
+  applications: IPipelineInfo[];
+  nextPageToken?: string;
+}
+
 export interface IPipelineInfo {
   appVersion: string;
   artifact: IArtifactObj;
@@ -69,6 +74,7 @@ export interface IPipelineInfo {
   name: string;
   plugins: IPlugin[];
   programs: IProgramInfo[];
+  isEnabledForTriggers?: boolean;
 }
 
 interface IProgram {
