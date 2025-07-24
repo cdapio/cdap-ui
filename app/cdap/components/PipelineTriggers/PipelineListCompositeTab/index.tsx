@@ -14,15 +14,21 @@
  * the License.
  */
 
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import {
   changeMaxConcurrentRuns,
   changeNamespace,
   changeTriggersType,
   enableGroupTrigger,
+  fetchTriggersAndApps,
+  isLastPipelinesPage,
+  fetchPipelinesList,
+  setNameFilter,
+  updateCurrentPage,
+  updatePageSize,
 } from 'components/PipelineTriggers/store/PipelineTriggersActionCreator';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import PipelineTriggersActions from 'components/PipelineTriggers/store/PipelineTriggersActions';
 import PipelineTriggersTypes from 'components/PipelineTriggers/store/PipelineTriggersTypes';
 import T from 'i18n-react';
@@ -39,15 +45,16 @@ import {
 } from 'components/PipelineTriggers/store/ScheduleTypes';
 import ConfigTabs from 'components/PipelineTriggers/ScheduleRuntimeArgs/Tabs/TabConfig';
 import {
-  PipelineCount,
   PipelineListContainer,
   PipelineListHeader,
-  PipelineName,
+  PipelineNameHeading,
   PipelineTriggerButton,
   PipelineTriggerHeader,
+  RefreshTimeLabel,
   SearchTriggerTextField,
+  StyledRefreshIcon,
 } from 'components/PipelineTriggers/shared.styles';
-import { InputAdornment, TextField, Tooltip, withStyles } from '@material-ui/core';
+import { InputAdornment, TablePagination, TextField, Tooltip, withStyles } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import {
   initialAvailablePipelineListState,
@@ -56,9 +63,11 @@ import {
 import PayloadConfigModal from 'components/PipelineTriggers/PayloadConfigModal';
 import PipelineCompositeTriggerRow from './PipelineCompositeTriggerRow';
 import { DEFAULT_TRIGGER_MAX_CONCURRENT_RUNS } from '../store/PipelineTriggersStore';
+import { getDataTestid } from '@cdap-ui/testids/TestidsProvider';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PREFIX = `${TRIGGER_PREFIX}.SetTriggers`;
+const TESTID_PREFIX = 'features.pipelineTriggers.setTriggers';
 
 const CloseTabIconButton = styled(IconButton)`
   float: right;
@@ -87,7 +96,7 @@ const PipelineListTabDiv = styled.div`
 `;
 
 const SelectedGroupPipelinesContainer = styled.div`
-  margin: 20px 0;
+  margin: 10px 0;
   font-weight: bold;
 `;
 
@@ -137,12 +146,13 @@ const CustomTooltip = withStyles(() => {
 
 interface IPipelineListCompositeTabViewProps {
   existingTriggers: ISchedule[];
-  pipelineList: IPipelineInfo[];
+  paginatedPipelineList: IPipelineInfo[][];
   triggersGroupToAdd: IProgramStatusTrigger[];
   triggersGroupRunArgsToAdd: ICompositeTriggerRunArgsWithTargets;
   selectedNamespace: string;
   selectedTriggersType: string;
   pipelineName: string;
+  pipelineType: string;
   expandedPipeline: string;
   toggleExpandPipeline: (pipeline: string) => void;
   configureError: string;
@@ -153,10 +163,11 @@ interface IPipelineListCompositeTabViewProps {
 
 const PipelineListCompositeTabView = ({
   existingTriggers,
-  pipelineList,
+  paginatedPipelineList,
   triggersGroupToAdd,
   triggersGroupRunArgsToAdd,
   pipelineName,
+  pipelineType,
   selectedNamespace,
   selectedTriggersType,
   expandedPipeline,
@@ -166,12 +177,22 @@ const PipelineListCompositeTabView = ({
   maxConcurrentRuns = DEFAULT_TRIGGER_MAX_CONCURRENT_RUNS,
 }: IPipelineListCompositeTabViewProps) => {
   const [state, dispatch] = useReducer(triggerNameReducer, initialAvailablePipelineListState);
+  const [isReloading, setIsReloading] = useState(false);
+  const { ready, pageSize, currentPage, lastRefreshTime, nameFilter } = useSelector(
+    ({ triggers }) => triggers
+  );
   const emptyTriggerErrorMsg =
     triggersGroupToAdd.length === 0 ? T.translate(`${PREFIX}.emptyCompositeTriggerError`) : '';
 
   useEffect(() => {
     dispatch({ type: 'SET_NAMESPACE' });
   }, []);
+
+  useEffect(() => {
+    if (!ready && state.namespace) {
+      fetchPipelinesList();
+    }
+  }, [ready]);
 
   const triggeredPipelineInfo = {
     id: pipelineName,
@@ -201,19 +222,7 @@ const PipelineListCompositeTabView = ({
 
   const onSearchPipelineChange = (e) => {
     const searchInput = e.target.value;
-    dispatch({ type: 'SET_SEARCH_INPUT', searchInput });
-  };
-
-  const getFilteredPipelines = () => {
-    if (!state.searchInput) {
-      return pipelineList;
-    }
-    const newFilteredPipelines = pipelineList.filter(
-      (pipeline) =>
-        pipeline.name.toLowerCase().includes(state.searchInput) ||
-        (pipeline.description && pipeline.description.toLowerCase().includes(state.searchInput))
-    );
-    return newFilteredPipelines;
+    setNameFilter(searchInput);
   };
 
   const changeNamespaceEvent = (e) => {
@@ -239,6 +248,25 @@ const PipelineListCompositeTabView = ({
   const configureComputeProfile = (mapping, propertiesConfig = {}) => {
     dispatch({ type: 'COMPUTE_PROFILE', computeProfile: propertiesConfig });
   };
+
+  const handlePageChange = (event: React.MouseEvent | null, page: number) => {
+    updateCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    updatePageSize(parseInt(value, 10));
+  };
+
+  const handleRefeshTriggersClick = (event: React.MouseEvent | null) => {
+    setIsReloading(true);
+    setTimeout(() => {
+      setIsReloading(false);
+    }, 500);
+    fetchTriggersAndApps(pipelineName, GLOBALS.programId[pipelineType]);
+  };
+
+  const pipelineList = paginatedPipelineList[currentPage] || [];
 
   return (
     <PipelineListTabDiv>
@@ -322,13 +350,10 @@ const PipelineListCompositeTabView = ({
           <span>{T.translate(`${PREFIX}.selectPipelineInstruction`)}</span>
         </SelectedGroupPipelinesContainer>
       </div>
-      <PipelineCount>
-        {T.translate(`${PREFIX}.pipelineCount`, { count: pipelineList.length })}
-      </PipelineCount>
-
       <SearchTriggerTextField
         onChange={onSearchPipelineChange}
         placeholder="Search available pipelines"
+        value={nameFilter}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
@@ -340,36 +365,77 @@ const PipelineListCompositeTabView = ({
         }}
       />
 
-      {pipelineList.length === 0 ? null : (
-        <PipelineListContainer>
-          <PipelineListHeader>
-            <PipelineName>{T.translate(`${TRIGGER_PREFIX}.pipelineName`)}</PipelineName>
-          </PipelineListHeader>
-          {getFilteredPipelines().map((pipeline) => {
-            const triggeringPipelineInfo: ITriggeringPipelineInfo = {
-              id: pipeline.name,
-              namespace: selectedNamespace,
-              description: pipeline.description,
-              workflowName: GLOBALS.programId[pipeline.artifact.name],
-            };
-            return (
-              <PipelineCompositeTriggerRow
-                key={pipeline.name}
-                pipelineRow={pipeline.name}
-                isExpanded={expandedPipeline === pipeline.name}
-                onToggle={toggleExpandPipeline}
-                triggeringPipelineInfo={triggeringPipelineInfo}
-                triggeredPipelineInfo={triggeredPipelineInfo}
-                selectedNamespace={selectedNamespace}
-                configureError={configureError}
-                pipelineName={pipelineName}
-                triggersGroupToAdd={triggersGroupToAdd}
-                triggersGroupRunArgsToAdd={triggersGroupRunArgsToAdd}
-              />
-            );
-          })}
-        </PipelineListContainer>
-      )}
+      <PipelineListContainer>
+        <PipelineListHeader>
+          <PipelineNameHeading>{T.translate(`${TRIGGER_PREFIX}.pipelineName`)}</PipelineNameHeading>
+          <RefreshTimeLabel>
+            {T.translate(`${PREFIX}.lastRefreshedAtLabel`, {
+              datetime: lastRefreshTime,
+            })}
+            <StyledRefreshIcon rotated={isReloading} onClick={handleRefeshTriggersClick} />
+          </RefreshTimeLabel>
+        </PipelineListHeader>
+        {pipelineList.length === 0 ? null : (
+          <div data-testid={getDataTestid(`${TESTID_PREFIX}.pipelines-container`)}>
+            {pipelineList.map((pipeline) => {
+              const triggeringPipelineInfo: ITriggeringPipelineInfo = {
+                id: pipeline.name,
+                namespace: selectedNamespace,
+                description: pipeline.description,
+                workflowName: GLOBALS.programId[pipeline.artifact.name],
+              };
+              return (
+                <PipelineCompositeTriggerRow
+                  key={pipeline.name}
+                  pipelineRow={pipeline.name}
+                  isExpanded={expandedPipeline === pipeline.name}
+                  onToggle={toggleExpandPipeline}
+                  triggeringPipelineInfo={triggeringPipelineInfo}
+                  triggeredPipelineInfo={triggeredPipelineInfo}
+                  selectedNamespace={selectedNamespace}
+                  configureError={configureError}
+                  pipelineName={pipelineName}
+                  triggersGroupToAdd={triggersGroupToAdd}
+                  triggersGroupRunArgsToAdd={triggersGroupRunArgsToAdd}
+                  isEnabledForTriggers={pipeline.isEnabledForTriggers}
+                />
+              );
+            })}
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, 50]}
+              component="span"
+              count={-1}
+              rowsPerPage={pageSize}
+              page={currentPage}
+              onPageChange={handlePageChange}
+              onRowsPerPageChange={handlePageSizeChange}
+              labelDisplayedRows={({ from, to }) =>
+                T.translate(`${PREFIX}.pipelinesPaginationLabel`, {
+                  from: Math.min(from, currentPage * pageSize + pipelineList.length),
+                  to: Math.min(to, currentPage * pageSize + pipelineList.length),
+                })
+              }
+              nextIconButtonProps={
+                {
+                  disabled: isLastPipelinesPage(),
+                  'data-testid': getDataTestid(`${TESTID_PREFIX}.pagination-next-btn`),
+                } as any
+              }
+              backIconButtonProps={
+                {
+                  'data-testid': getDataTestid(`${TESTID_PREFIX}.pagination-back-btn`),
+                } as any
+              }
+              SelectProps={{
+                native: true,
+                inputProps: {
+                  'data-testid': getDataTestid(`${TESTID_PREFIX}.pagination-select`),
+                },
+              }}
+            />
+          </div>
+        )}
+      </PipelineListContainer>
       <SelectedGroupPipelinesContainer>
         <ButtonsWrap>
           <PipelineTriggerComputeProfileButton
@@ -415,7 +481,7 @@ const PipelineListCompositeTabView = ({
 const mapStateToProps = (state) => {
   return {
     existingTriggers: state.triggers.enabledTriggers,
-    pipelineList: state.triggers.pipelineList,
+    paginatedPipelineList: state.triggers.paginatedPipelineList,
     triggersGroupToAdd: state.triggers.triggersGroupToAdd,
     triggersGroupRunArgsToAdd: state.triggers.triggersGroupRunArgsToAdd,
     selectedNamespace: state.triggers.selectedNamespace,

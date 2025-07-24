@@ -23,7 +23,8 @@ const PipelineTriggersActions = {
   setExpandedPipeline: 'TRIGGERS_SET_EXPANDED_PIPELINE',
   setExpandedSchedule: 'TRIGGERS_SET_EXPANDED_SCHEDULE',
   setExpandedInlineTrigger: 'TRIGGERS_SET_EXPANDED_INLINE_TRIGGER',
-  setTriggersAndPipelineList: 'TRIGGERS_SET_TRIGGERS_PIPELINE',
+  resetTriggers: 'TRIGGERS_RESET_TRIGGERS',
+  setPaginatedPipelineList: 'TRIGGERS_SET_PAGINATED_PIPELINE_LIST',
   setEnabledTriggerPipelineInfo: 'TRIGGERS_SET_PIPELINE_INFO',
   setEnabledTriggerInlinePipelineInfo: 'TRIGGERS_SET_INLINE_PIPELINE_INFO',
   setConfigureTriggerError: 'TRIGGERS_SET_CONFIGURE_ERROR',
@@ -32,6 +33,14 @@ const PipelineTriggersActions = {
   setTriggerType: 'TRIGGERS_SET_TYPE',
   reset: 'TRIGGERS_RESET',
   setMaxConcurrentRuns: 'TRIGGERS_SET_MAX_CONCURRENT_RUNS',
+  setPageSize: 'TRIGGERS_SET_PAGE_SIZE',
+  setCurrentPage: 'TRIGGERS_SET_CURRENT_PAGE',
+  setPageToken: 'TRIGGERS_SET_PAGE_TOKEN',
+  markStale: 'TRIGGERS_MARK_STATE',
+  setLastRefreshTime: 'TRIGGERS_SET_LAST_REFRESH_TIME',
+  setNameFilter: 'TRIGGERS_SET_NAME_FILTER',
+  applySearch: 'TRIGGERS_APPLY_SERACH',
+  markReady: 'TRIGGERS_MARK_READY',
 };
 
 export default PipelineTriggersActions;
