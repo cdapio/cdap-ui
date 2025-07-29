@@ -32,7 +32,7 @@ MemoryUnits.KB = 1024 * MemoryUnits.Byte;
 MemoryUnits.MB = 1024 * MemoryUnits.KB;
 MemoryUnits.GB = 1024 * MemoryUnits.MB;
 
-const MIN_PIPELINE_SIZE_FOR_WARNING_BYTES = 2 * MemoryUnits.MB;
+const MIN_PIPELINE_SIZE_FOR_WARNING_BYTES = 5 * MemoryUnits.MB;
 
 const GLOBALS = {
   MemoryUnits,
