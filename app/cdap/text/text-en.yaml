@@ -2899,6 +2899,8 @@ features:
       triggerAndType: "Wait for all events (AND)"
       triggerOrType: "Trigger on any selected event (OR)"
       viewNamespace: View pipelines in namespace
+      pipelinesPaginationLabel: "Results {from} - {to}"
+      lastRefreshedAtLabel: Last refreshed at {datetime}
     viewPipeline: View Pipeline
     viewPipelineCapitalized: VIEW PIPELINE
   PreviewData:

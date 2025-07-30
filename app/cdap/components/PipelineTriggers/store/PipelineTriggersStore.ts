@@ -26,13 +26,14 @@ import {
 import PipelineTriggersTypes from 'components/PipelineTriggers/store/PipelineTriggersTypes';
 
 export const DEFAULT_TRIGGER_MAX_CONCURRENT_RUNS = 3;
+export const DEFAULT_PAGE_SIZE = 10;
 
 interface IPayLoad {
   pipelineName?: string;
   workflowName?: string;
   pipelineCompositeTriggersEnabled?: boolean;
   lifecycleManagementEditEnabled?: boolean;
-  pipelineList?: IPipelineInfo[];
+  paginatedPipelineList?: IPipelineInfo[][];
   selectedNamespace?: string;
   selectedTriggersType?: string;
   triggersGroupToAdd?: IProgramStatusTrigger[];
@@ -44,6 +45,12 @@ interface IPayLoad {
   expandedSchedule?: string;
   pipelineInfo?: IPipelineInfo;
   maxConcurrentRuns?: number;
+  pageSize?: number;
+  nextPageToken?: string;
+  currentPage?: number;
+  ready?: boolean;
+  lastRefreshTime?: string;
+  nameFilter?: string;
 }
 
 interface IAction {
@@ -57,7 +64,7 @@ const defaultAction: IAction = {
 };
 
 const defaultInitialState = {
-  pipelineList: [],
+  paginatedPipelineList: [],
   triggersGroupToAdd: [],
   selectedNamespace: '',
   selectedTriggersType: PipelineTriggersTypes.orType,
@@ -75,6 +82,11 @@ const defaultInitialState = {
   pipelineCompositeTriggersEnabled: false,
   lifecycleManagementEditEnabled: false,
   maxConcurrentRuns: DEFAULT_TRIGGER_MAX_CONCURRENT_RUNS,
+  currentPage: 0,
+  pageSize: DEFAULT_PAGE_SIZE,
+  nextPageTokensList: [],
+  ready: false,
+  nameFilter: '',
 };
 
 const defaultInitialEnabledTriggersState = {
@@ -82,6 +94,16 @@ const defaultInitialEnabledTriggersState = {
   pipelineInfo: null,
   disableError: null,
 };
+
+function updateNextPageToken(
+  nextPageTokensList: string[],
+  currentPage: number,
+  nextPageToken?: string
+): string[] {
+  const tokensDraft = [...nextPageTokensList];
+  tokensDraft[currentPage] = nextPageToken;
+  return tokensDraft;
+}
 
 const triggers = (state = defaultInitialState, action = defaultAction) => {
   let stateCopy;
@@ -99,10 +121,12 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
     case PipelineTriggersActions.changeNamespace:
       stateCopy = {
         ...state,
-        pipelineList: action.payload.pipelineList,
         selectedNamespace: action.payload.selectedNamespace,
         expandedPipeline: null,
         configureError: null,
+        nameFilter: '',
+        paginatedPipelineList: [],
+        nextPageTokensList: [],
       };
       break;
     case PipelineTriggersActions.setTriggerType:
@@ -133,12 +157,24 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
         configureError: null,
       };
       break;
-    case PipelineTriggersActions.setTriggersAndPipelineList:
+    case PipelineTriggersActions.resetTriggers:
       stateCopy = {
         ...state,
-        pipelineList: action.payload.pipelineList,
         enabledTriggers: action.payload.enabledTriggers,
         selectedNamespace: action.payload.selectedNamespace,
+        paginatedPipelineList: [],
+        expandedPipeline: null,
+        configureError: null,
+        ready: true,
+        currentPage: 0,
+        nextPageTokensList: [],
+      };
+      break;
+    case PipelineTriggersActions.setPaginatedPipelineList:
+      stateCopy = {
+        ...state,
+        paginatedPipelineList: action.payload.paginatedPipelineList,
+        ready: true,
         expandedPipeline: null,
         configureError: null,
       };
@@ -169,6 +205,60 @@ const triggers = (state = defaultInitialState, action = defaultAction) => {
         maxConcurrentRuns: action.payload.maxConcurrentRuns,
       };
       break;
+    case PipelineTriggersActions.setPageSize:
+      stateCopy = {
+        ...state,
+        pageSize: action.payload,
+        nextPageTokensList: [],
+        paginatedPipelineList: [],
+      };
+      break;
+    case PipelineTriggersActions.setCurrentPage:
+      stateCopy = {
+        ...state,
+        currentPage: action.payload,
+      };
+      break;
+    case PipelineTriggersActions.setPageToken:
+      stateCopy = {
+        ...state,
+        nextPageTokensList: updateNextPageToken(
+          state.nextPageTokensList,
+          action.payload.currentPage,
+          action.payload.nextPageToken
+        ),
+      };
+      break;
+    case PipelineTriggersActions.markStale:
+      stateCopy = {
+        ...state,
+        ready: false,
+      };
+      break;
+    case PipelineTriggersActions.markReady:
+      stateCopy = {
+        ...state,
+        ready: true,
+      };
+      break;
+    case PipelineTriggersActions.setNameFilter:
+      stateCopy = {
+        ...state,
+        nameFilter: action.payload.nameFilter,
+      };
+      break;
+    case PipelineTriggersActions.applySearch:
+      return {
+        ...state,
+        paginatedPipelineList: [],
+        nextPageTokensList: [],
+      };
+    case PipelineTriggersActions.setLastRefreshTime:
+      stateCopy = {
+        ...state,
+        lastRefreshTime: action.payload,
+      };
+      break;
     case PipelineTriggersActions.reset:
       return defaultInitialState;
     default:
@@ -189,7 +279,7 @@ const enabledTriggers = (state = defaultInitialEnabledTriggersState, action = de
         disableError: null,
       };
       break;
-    case PipelineTriggersActions.setTriggersAndPipelineList:
+    case PipelineTriggersActions.resetTriggers:
       stateCopy = {
         ...state,
         disableError: null,

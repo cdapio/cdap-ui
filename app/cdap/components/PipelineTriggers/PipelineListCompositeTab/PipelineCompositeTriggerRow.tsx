@@ -69,6 +69,7 @@ interface IPipelineTriggersRowViewProps {
   pipelineName: string;
   triggersGroupToAdd: IProgramStatusTrigger[];
   triggersGroupRunArgsToAdd: ICompositeTriggerRunArgsWithTargets;
+  isEnabledForTriggers?: boolean;
 }
 
 const PipelineCompositeTriggerRow = ({
@@ -82,6 +83,7 @@ const PipelineCompositeTriggerRow = ({
   pipelineName,
   triggersGroupToAdd,
   triggersGroupRunArgsToAdd,
+  isEnabledForTriggers = false,
 }: IPipelineTriggersRowViewProps) => {
   const currentPipelineSelected = () => {
     return triggersGroupToAdd.filter(
@@ -159,6 +161,24 @@ const PipelineCompositeTriggerRow = ({
     dispatch({ type: 'TOGGLE_PAYLOAD' });
   };
 
+  const handleSucceedsCheckboxClick = () => {
+    if (!state.selected) {
+      dispatch({ type: 'COMPLETED' });
+    }
+  };
+
+  const handleKilledCheckboxClick = () => {
+    if (!state.selected) {
+      dispatch({ type: 'KILLED' });
+    }
+  };
+
+  const handleFailedCheckboxClick = () => {
+    if (!state.selected) {
+      dispatch({ type: 'FAILED' });
+    }
+  };
+
   const enabledButtonDisabled = !state.completed && !state.killed && !state.failed;
 
   return (
@@ -175,7 +195,7 @@ const PipelineCompositeTriggerRow = ({
         <AccordionCheckBox
           checked={state.selected}
           color="primary"
-          disabled={enabledButtonDisabled}
+          disabled={!isEnabledForTriggers || enabledButtonDisabled}
           onClick={(e) => handlePipelineCheckClick(e)}
           data-cy={`${pipelineRow}-enable-trigger-btn`}
           data-testid={`${pipelineRow}-enable-trigger-btn`}
@@ -191,10 +211,10 @@ const PipelineCompositeTriggerRow = ({
             <HelperText>{T.translate(`${TRIGGER_PREFIX}.helperText`, { pipelineName })}</HelperText>
             <CheckboxContainer>
               <CheckboxItemContainer
-                onClick={() => !state.selected && dispatch({ type: 'COMPLETED' })}
+                onClick={isEnabledForTriggers ? handleSucceedsCheckboxClick : undefined}
               >
                 <Checkbox
-                  disabled={state.selected}
+                  disabled={!isEnabledForTriggers || state.selected}
                   checked={state.completed}
                   color="primary"
                   size="small"
@@ -202,10 +222,10 @@ const PipelineCompositeTriggerRow = ({
                 <span>{T.translate(`${TRIGGER_PREFIX}.Events.COMPLETED`)}</span>
               </CheckboxItemContainer>
               <CheckboxItemContainer
-                onClick={() => !state.selected && dispatch({ type: 'KILLED' })}
+                onClick={isEnabledForTriggers ? handleKilledCheckboxClick : undefined}
               >
                 <Checkbox
-                  disabled={state.selected}
+                  disabled={!isEnabledForTriggers || state.selected}
                   checked={state.killed}
                   color="primary"
                   size="small"
@@ -214,10 +234,10 @@ const PipelineCompositeTriggerRow = ({
               </CheckboxItemContainer>
 
               <CheckboxItemContainer
-                onClick={() => !state.selected && dispatch({ type: 'FAILED' })}
+                onClick={isEnabledForTriggers ? handleFailedCheckboxClick : undefined}
               >
                 <Checkbox
-                  disabled={state.selected}
+                  disabled={!isEnabledForTriggers || state.selected}
                   checked={state.failed}
                   color="primary"
                   size="small"
@@ -239,7 +259,7 @@ const PipelineCompositeTriggerRow = ({
           </CardContent>
           <CardActions>
             <TriggerCardButton
-              disabled={state.selected}
+              disabled={!isEnabledForTriggers || state.selected}
               onClick={handlePayloadToggleClick}
               data-cy={`${triggeringPipelineInfo.id}-trigger-config-btn`}
               data-testid={`${triggeringPipelineInfo.id}-trigger-config-btn`}
