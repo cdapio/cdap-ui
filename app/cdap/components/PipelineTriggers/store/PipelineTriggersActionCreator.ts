@@ -13,10 +13,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
+import debounce from 'lodash/debounce';
 import PipelineTriggersActions from 'components/PipelineTriggers/store/PipelineTriggersActions';
 import PipelineTriggersTypes from 'components/PipelineTriggers/store/PipelineTriggersTypes';
-import PipelineTriggersStore from 'components/PipelineTriggers/store/PipelineTriggersStore';
+import PipelineTriggersStore, {
+  DEFAULT_PAGE_SIZE,
+} from 'components/PipelineTriggers/store/PipelineTriggersStore';
 import NamespaceStore from 'services/NamespaceStore';
 import { MyAppApi } from 'api/app';
 import { MyScheduleApi } from 'api/schedule';
@@ -32,35 +34,79 @@ import {
   ITriggerPropertyMapping,
   ICompositeTriggerRunArgsWithTargets,
   ITriggeringPipelineId,
+  IPipelineListResponse,
 } from 'components/PipelineTriggers/store/ScheduleTypes';
+import moment from 'moment';
 
 const WORKFLOW_TYPE = 'workflows';
 
 export function changeNamespace(namespace: string) {
+  PipelineTriggersStore.dispatch({
+    type: PipelineTriggersActions.changeNamespace,
+    payload: {
+      selectedNamespace: namespace,
+    },
+  });
+  updateCurrentPage(0);
+}
+
+async function fetchPipelines(pageNo: number): Promise<void> {
   const currentNamespace = NamespaceStore.getState().selectedNamespace;
   const state = PipelineTriggersStore.getState().triggers;
-  const pipelineName = state.pipelineName;
   const existingTriggers = state.enabledTriggers;
+  const activeNamespaceView = state.selectedNamespace;
+  const { pipelineName, pageSize, nextPageTokensList, nameFilter } = state;
+  const paginatedPipelineList = [...state.paginatedPipelineList];
+  const nextPageToken = getPageToken(nextPageTokensList, pageNo);
+  if (!paginatedPipelineList[pageNo]) {
+    const listParam = {
+      namespace: activeNamespaceView,
+      pageSize,
+      pageToken: nextPageToken,
+      nameFilter,
+    };
+    try {
+      const res: IPipelineListResponse = await MyAppApi.list(listParam).toPromise();
 
-  MyAppApi.list({
-    namespace,
-  }).subscribe((res: IPipelineInfo[]) => {
-    const pipelineList = _filterPipelineList(
-      existingTriggers,
-      res,
-      currentNamespace,
-      namespace,
-      pipelineName
-    );
+      const pipelineList = _filterPipelineList(
+        existingTriggers,
+        res.applications,
+        currentNamespace,
+        activeNamespaceView,
+        pipelineName
+      );
 
-    PipelineTriggersStore.dispatch({
-      type: PipelineTriggersActions.changeNamespace,
-      payload: {
-        pipelineList,
-        selectedNamespace: namespace,
-      },
-    });
-  });
+      paginatedPipelineList[pageNo] = pipelineList;
+      PipelineTriggersStore.dispatch({
+        type: PipelineTriggersActions.setPaginatedPipelineList,
+        payload: {
+          paginatedPipelineList,
+        },
+      });
+      setNextPageToken(pageNo, res.nextPageToken);
+    } catch (err) {
+      markViewReady();
+    }
+  } else {
+    markViewReady();
+  }
+}
+
+export async function fetchPipelinesList() {
+  const currentPage = PipelineTriggersStore.getState().triggers.currentPage;
+  if (currentPage === 0) {
+    await fetchPipelines(currentPage);
+  }
+
+  if (!isLastPipelinesPage()) {
+    await fetchPipelines(currentPage + 1);
+    const paginatedPipelineList = PipelineTriggersStore.getState().triggers.paginatedPipelineList;
+    if (paginatedPipelineList[currentPage + 1].length === 0) {
+      setNextPageToken(currentPage, undefined);
+    }
+  } else {
+    markViewReady();
+  }
 }
 
 export function changeTriggersType(selectedTriggersType: string) {
@@ -463,35 +509,21 @@ export function fetchTriggersAndApps(
     'schedule-status': 'SCHEDULED',
   };
 
-  const lifecycleManagementEditEnabled = PipelineTriggersStore.getState().triggers
-    .lifecycleManagementEditEnabled;
-  const listParam: any = { namespace: activeNamespaceView };
-  if (lifecycleManagementEditEnabled) {
-    listParam.latestOnly = 'true';
-  }
-  MyScheduleApi.getTriggers(params)
-    .combineLatest(MyAppApi.list(listParam))
-    .subscribe((res) => {
-      const existingTriggers = _transformSchedule(res[0]);
-      const appsList = res[1];
+  MyScheduleApi.getTriggers(params).subscribe((res) => {
+    const existingTriggers = _transformSchedule(res);
 
-      const pipelineList = _filterPipelineList(
-        existingTriggers,
-        appsList,
-        namespace,
-        activeNamespaceView,
-        pipeline
-      );
-
-      PipelineTriggersStore.dispatch({
-        type: PipelineTriggersActions.setTriggersAndPipelineList,
-        payload: {
-          pipelineList,
-          enabledTriggers: existingTriggers,
-          selectedNamespace: activeNamespaceView,
-        },
-      });
+    PipelineTriggersStore.dispatch({
+      type: PipelineTriggersActions.resetTriggers,
+      payload: {
+        enabledTriggers: existingTriggers,
+        selectedNamespace: activeNamespaceView,
+      },
     });
+
+    const lastRefreshTime = moment().format('DD/MM/YYYY HH:mm A');
+    setLastRefreshTime(lastRefreshTime);
+    fetchPipelinesList();
+  });
 }
 
 export function disableSchedule(schedule: ISchedule, activePipeline: string, workflowName: string) {
@@ -602,7 +634,7 @@ function _filterPipelineList(
   const pipelineCompositeTriggersEnabled = PipelineTriggersStore.getState().triggers
     .pipelineCompositeTriggersEnabled;
 
-  const pipelineList = appsList.filter((app) => {
+  const pipelineList = appsList.map((app) => {
     const isWorkflow = GLOBALS.programType[app.artifact.name] === WORKFLOW_TYPE;
 
     const isCurrentNamespace =
@@ -610,9 +642,13 @@ function _filterPipelineList(
 
     const isNotExistingTrigger = triggersPipelineName.indexOf(app.name) === -1;
 
-    return (
-      isWorkflow && isCurrentNamespace && (pipelineCompositeTriggersEnabled || isNotExistingTrigger)
-    );
+    return {
+      ...app,
+      isEnabledForTriggers:
+        isWorkflow &&
+        isCurrentNamespace &&
+        (pipelineCompositeTriggersEnabled || isNotExistingTrigger),
+    };
   });
 
   return pipelineList;
@@ -659,3 +695,85 @@ function _transformSchedule(existingSchedules: ISchedule[]) {
 
   return [...transformedSchedules, ...enabledCompositeTriggers];
 }
+
+export const updatePageSize = (payload: number = DEFAULT_PAGE_SIZE) => {
+  PipelineTriggersStore.dispatch({
+    type: PipelineTriggersActions.setPageSize,
+    payload,
+  });
+  // if pageSize changes move to the first page,
+  // to preserve consistency of pagination
+  updateCurrentPage(0);
+};
+
+export const updateCurrentPage = (payload: number) => {
+  PipelineTriggersStore.dispatch({
+    type: PipelineTriggersActions.setCurrentPage,
+    payload,
+  });
+  markViewStale();
+};
+
+const setNextPageToken = (currentPage: number, nextPageToken?: string) => {
+  PipelineTriggersStore.dispatch({
+    type: PipelineTriggersActions.setPageToken,
+    payload: {
+      currentPage,
+      nextPageToken,
+    },
+  });
+};
+
+const getPageToken = (nextPageTokens: string[], pageNo: number = 0) => {
+  if (pageNo === 0) {
+    return undefined;
+  }
+
+  // as the pageToken for the current page is the nextPageToken of the previous
+  return nextPageTokens[pageNo - 1];
+};
+
+export const setLastRefreshTime = (payload?: string) => {
+  PipelineTriggersStore.dispatch({
+    type: PipelineTriggersActions.setLastRefreshTime,
+    payload,
+  });
+};
+
+export const markViewStale = () => {
+  PipelineTriggersStore.dispatch({
+    type: PipelineTriggersActions.markStale,
+  });
+};
+
+export const markViewReady = () => {
+  PipelineTriggersStore.dispatch({
+    type: PipelineTriggersActions.markReady,
+  });
+};
+
+export const isLastPipelinesPage = () => {
+  const { nextPageTokensList, currentPage } = PipelineTriggersStore.getState().triggers;
+  return !nextPageTokensList[currentPage];
+};
+
+const applySearch = () => {
+  PipelineTriggersStore.dispatch({
+    type: PipelineTriggersActions.applySearch,
+  });
+
+  updateCurrentPage(0);
+};
+
+const debouncedApplySearch = debounce(applySearch, 300);
+
+export const setNameFilter = (nameFilter: string) => {
+  PipelineTriggersStore.dispatch({
+    type: PipelineTriggersActions.setNameFilter,
+    payload: {
+      nameFilter,
+    },
+  });
+
+  debouncedApplySearch();
+};

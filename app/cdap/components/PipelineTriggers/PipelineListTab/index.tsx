@@ -14,10 +14,17 @@
  * the License.
  */
 
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
-import { changeNamespace } from 'components/PipelineTriggers/store/PipelineTriggersActionCreator';
-import { connect } from 'react-redux';
+import {
+  changeNamespace,
+  fetchTriggersAndApps,
+  isLastPipelinesPage,
+  fetchPipelinesList,
+  updateCurrentPage,
+  updatePageSize,
+} from 'components/PipelineTriggers/store/PipelineTriggersActionCreator';
+import { connect, useSelector } from 'react-redux';
 import PipelineTriggersActions from 'components/PipelineTriggers/store/PipelineTriggersActions';
 import PipelineTriggersRow from 'components/PipelineTriggers/PipelineListTab/PipelineTriggersRow';
 import T from 'i18n-react';
@@ -27,16 +34,18 @@ import {
   ITriggeringPipelineInfo,
 } from 'components/PipelineTriggers/store/ScheduleTypes';
 import {
-  PipelineCount,
   PipelineListContainer,
   PipelineListHeader,
-  PipelineName,
+  PipelineNameHeading,
   PipelineTriggerHeader,
+  RefreshTimeLabel,
+  StyledRefreshIcon,
 } from 'components/PipelineTriggers/shared.styles';
 import {
   initialAvailablePipelineListState,
   triggerNameReducer,
 } from 'components/PipelineTriggers/reducer';
+import { TablePagination } from '@material-ui/core';
 
 const TRIGGER_PREFIX = 'features.PipelineTriggers';
 const PREFIX = `${TRIGGER_PREFIX}.SetTriggers`;
@@ -61,9 +70,10 @@ const PipelineListTabDiv = styled.div`
 `;
 
 interface IPipelineListTabViewProps {
-  pipelineList: IPipelineInfo[];
+  paginatedPipelineList: IPipelineInfo[][];
   selectedNamespace: string;
   pipelineName: string;
+  pipelineType: string;
   expandedPipeline: string;
   toggleExpandPipeline: (pipeline: string) => void;
   workflowName: string;
@@ -71,8 +81,9 @@ interface IPipelineListTabViewProps {
 }
 
 const PipelineListTabView = ({
-  pipelineList,
+  paginatedPipelineList,
   pipelineName,
+  pipelineType,
   selectedNamespace,
   expandedPipeline,
   toggleExpandPipeline,
@@ -80,10 +91,18 @@ const PipelineListTabView = ({
   configureError,
 }: IPipelineListTabViewProps) => {
   const [state, dispatch] = useReducer(triggerNameReducer, initialAvailablePipelineListState);
+  const [isReloading, setIsReloading] = useState(false);
+  const { ready, pageSize, currentPage, lastRefreshTime } = useSelector(({ triggers }) => triggers);
 
   useEffect(() => {
     dispatch({ type: 'SET_NAMESPACE' });
   }, []);
+
+  useEffect(() => {
+    if (!ready && state.namespace) {
+      fetchPipelinesList();
+    }
+  }, [ready]);
 
   const triggeredPipelineInfo = {
     id: pipelineName,
@@ -93,6 +112,25 @@ const PipelineListTabView = ({
   const changeNamespaceEvent = (e) => {
     changeNamespace(e.target.value);
   };
+
+  const handlePageChange = (event: React.MouseEvent | null, page: number) => {
+    updateCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    updatePageSize(parseInt(value, 10));
+  };
+
+  const handleRefeshTriggersClick = (event: React.MouseEvent | null) => {
+    setIsReloading(true);
+    setTimeout(() => {
+      setIsReloading(false);
+    }, 500);
+    fetchTriggersAndApps(pipelineName, GLOBALS.programId[pipelineType]);
+  };
+
+  const pipelineList = paginatedPipelineList[currentPage] || [];
 
   return (
     <PipelineListTabDiv>
@@ -118,45 +156,67 @@ const PipelineListTabView = ({
           </select>
         </NamespaceSelectorDropdown>
       </div>
-      <PipelineCount>
-        {T.translate(`${PREFIX}.pipelineCount`, { count: pipelineList.length })}
-      </PipelineCount>
-      {pipelineList.length === 0 ? null : (
-        <PipelineListContainer>
-          <PipelineListHeader>
-            <PipelineName>{T.translate(`${TRIGGER_PREFIX}.pipelineName`)}</PipelineName>
-          </PipelineListHeader>
-          {pipelineList.map((pipeline) => {
-            const triggeringPipelineInfo: ITriggeringPipelineInfo = {
-              id: pipeline.name,
-              namespace: selectedNamespace,
-              description: pipeline.description,
-              workflowName: GLOBALS.programId[pipeline.artifact.name],
-            };
-            return (
-              <PipelineTriggersRow
-                key={pipeline.name}
-                pipelineRow={pipeline.name}
-                isExpanded={expandedPipeline === pipeline.name}
-                onToggle={toggleExpandPipeline}
-                triggeringPipelineInfo={triggeringPipelineInfo}
-                triggeredPipelineInfo={triggeredPipelineInfo}
-                selectedNamespace={selectedNamespace}
-                configureError={configureError}
-                pipelineName={pipelineName}
-                workflowName={workflowName}
-              />
-            );
-          })}
-        </PipelineListContainer>
-      )}
+      <PipelineListContainer>
+        <PipelineListHeader>
+          <PipelineNameHeading>{T.translate(`${TRIGGER_PREFIX}.pipelineName`)}</PipelineNameHeading>
+          <RefreshTimeLabel>
+            {T.translate(`${PREFIX}.lastRefreshedAtLabel`, {
+              datetime: lastRefreshTime,
+            })}
+            <StyledRefreshIcon rotated={isReloading} onClick={handleRefeshTriggersClick} />
+          </RefreshTimeLabel>
+        </PipelineListHeader>
+        {pipelineList.length === 0 ? null : (
+          <div>
+            {pipelineList.map((pipeline) => {
+              const triggeringPipelineInfo: ITriggeringPipelineInfo = {
+                id: pipeline.name,
+                namespace: selectedNamespace,
+                description: pipeline.description,
+                workflowName: GLOBALS.programId[pipeline.artifact.name],
+              };
+              return (
+                <PipelineTriggersRow
+                  key={pipeline.name}
+                  pipelineRow={pipeline.name}
+                  isExpanded={expandedPipeline === pipeline.name}
+                  onToggle={toggleExpandPipeline}
+                  triggeringPipelineInfo={triggeringPipelineInfo}
+                  triggeredPipelineInfo={triggeredPipelineInfo}
+                  selectedNamespace={selectedNamespace}
+                  configureError={configureError}
+                  pipelineName={pipelineName}
+                  workflowName={workflowName}
+                  isEnabledForTriggers={pipeline.isEnabledForTriggers}
+                />
+              );
+            })}
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, 50]}
+              component="span"
+              count={-1}
+              rowsPerPage={pageSize}
+              page={currentPage}
+              onPageChange={handlePageChange}
+              onRowsPerPageChange={handlePageSizeChange}
+              labelDisplayedRows={({ from, to }) =>
+                T.translate(`${PREFIX}.pipelinesPaginationLabel`, {
+                  from,
+                  to: Math.min(to, currentPage * pageSize + pipelineList.length),
+                })
+              }
+              nextIconButtonProps={{ disabled: isLastPipelinesPage() }}
+            />
+          </div>
+        )}
+      </PipelineListContainer>
     </PipelineListTabDiv>
   );
 };
 
 const mapStateToProps = (state) => {
   return {
-    pipelineList: state.triggers.pipelineList,
+    paginatedPipelineList: state.triggers.paginatedPipelineList,
     selectedNamespace: state.triggers.selectedNamespace,
     pipelineName: state.triggers.pipelineName,
     expandedPipeline: state.triggers.expandedPipeline,

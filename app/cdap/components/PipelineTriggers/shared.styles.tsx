@@ -18,6 +18,7 @@ import styled from 'styled-components';
 import AccordionSummary, { AccordionSummaryProps } from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import React from 'react';
 
 export const CaretContainer = styled.div`
@@ -52,6 +53,10 @@ export const PipelineName = styled.div`
   vertical-align: middle;
 `;
 
+export const PipelineNameHeading = styled(PipelineName)`
+  text-decoration: underline;
+`;
+
 export const HelperText = styled.div`
   margin: 5px 0;
 `;
@@ -79,7 +84,8 @@ export const PipelineListHeader = styled.div`
   border-bottom: 1px solid #dedede;
   padding: 5px 0;
   margin: 5px 0 0 23px;
-  text-decoration: underline;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const PipelineTriggerHeader = styled.div`
@@ -186,4 +192,21 @@ export const SearchTriggerTextField = styled(TextField)`
       border-bottom: 2px solid black;
     }
   }
+`;
+
+export const RefreshTimeLabel = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-style: italic;
+  font-size: 0.7rem;
+  color: #666666;
+`;
+
+export const StyledRefreshIcon = styled(RefreshIcon)`
+  cursor: pointer;
+  display: inline-block;
+  transition: ${(props) => (props.rotated ? 'transform 0.5s ease-in-out' : 'transform 0s')};
+
+  transform: ${(props) => (props.rotated ? 'rotate(360deg)' : 'rotate(0deg)')};
 `;

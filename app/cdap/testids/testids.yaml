@@ -343,3 +343,9 @@ features:
       viewStageErrorButton: ~
     runLevel:
       currentRunIndex: ~
+  pipelineTriggers:
+    setTriggers:
+      pagination-back-btn: ~
+      pagination-next-btn: ~
+      pagination-select: ~
+      pipelines-container: ~

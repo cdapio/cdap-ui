@@ -38,6 +38,7 @@ import org.openqa.selenium.WindowType;
 import org.openqa.selenium.support.ui.Select;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public class CommonSteps {
@@ -240,6 +241,13 @@ public class CommonSteps {
   @Then("Cleanup pipeline {string}")
   public void cleanupPipeline(String pipelineName) {
     Helper.cleanupPipelines(pipelineName);
+  }
+
+  @Then("Cleanup pipelines list:")
+  public void cleanupMultiplePipelines(List<String> pipelineNames) {
+    for (String pipelineName : pipelineNames) {
+      cleanupPipeline(pipelineName);
+    }
   }
 
   @Then("Visit pipeline {string}")
