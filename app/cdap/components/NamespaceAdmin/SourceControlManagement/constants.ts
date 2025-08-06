@@ -18,9 +18,16 @@ import T from 'i18n-react';
 
 const PREFIX = 'features.SourceControlManagement';
 
-export const scmAuthType = [
-  { id: 'PAT', label: T.translate(`${PREFIX}.configModal.auth.pat.label`) },
-];
+export const SCM_AUTH_TYPE_PAT = {
+  id: 'PAT',
+  label: T.translate(`${PREFIX}.configModal.auth.pat.label`),
+};
+export const SCM_AUTH_TYPE_HTTP_ACCESS_TOKEN = {
+  id: 'HTTP_ACCESS_TOKEN',
+  label: T.translate(`${PREFIX}.configModal.auth.httpAccessToken.label`),
+};
+
+export const scmAuthType = [SCM_AUTH_TYPE_PAT, SCM_AUTH_TYPE_HTTP_ACCESS_TOKEN];
 
 export const githubOnlyProviders = {
   github: 'GITHUB',
