@@ -52,3 +52,16 @@ Feature: Source Control Management - Repository Configuration CRUD operations
     Then Verify saved fake repo config
     Then Delete the repo config
     Then Verify UI directed to initial page
+
+  Scenario: Should support HTTP_ACCESS_TOKEN for BITBUCKET_SERVER
+    When Open Source Control Management Page
+    Then Click on "Link Repository" button
+    Then Select "GITHUB" scm provider
+    Then Verify scm auth type "PAT" exists
+    Then Verify scm auth type "HTTP_ACCESS_TOKEN" does not exist
+    Then Select "BITBUCKET_SERVER" scm provider
+    Then Verify scm auth type "PAT" exists
+    Then Verify scm auth type "HTTP_ACCESS_TOKEN" exists
+    Then Select "GITLAB" scm provider
+    Then Verify scm auth type "PAT" exists
+    Then Verify scm auth type "HTTP_ACCESS_TOKEN" does not exist
