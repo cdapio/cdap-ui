@@ -3224,7 +3224,8 @@ features:
     configModal:
       auth:
         label: Authentication type
-        helperText: Choose method for authentication. Currently only PAT is available
+        helperTextPatOnly: Choose method for authentication. Currently only PAT is available for {provider}.
+        helperText: Choose method for authentication.
         pat:
           label: Personal access token (PAT)
           token: Token
@@ -3233,6 +3234,8 @@ features:
           tokenNameHelperText: Give personal access token a name for secure store. The name can contain lower case alphabets, numbers, _, and -
           username: User name
           usernameHelperText: Add a username to your token
+        httpAccessToken:
+          label: Http access token
       authHeader: Authentication
       basicHeader: Basic
       branch:
