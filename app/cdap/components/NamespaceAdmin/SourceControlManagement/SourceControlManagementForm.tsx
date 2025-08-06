@@ -21,7 +21,14 @@ import { ISourceControlManagementConfig } from './types';
 import PrimaryContainedButton from 'components/shared/Buttons/PrimaryContainedButton';
 import PrimaryOutlinedButton from 'components/shared/Buttons/PrimaryOutlinedButton';
 import ButtonLoadingHoc from 'components/shared/Buttons/ButtonLoadingHoc';
-import { authKeys, githubOnlyProviders, patConfigKeys, providers, scmAuthType } from './constants';
+import {
+  SCM_AUTH_TYPE_PAT,
+  authKeys,
+  githubOnlyProviders,
+  patConfigKeys,
+  providers,
+  scmAuthType,
+} from './constants';
 import { defaultSourceControlManagement, sourceControlManagementFormReducer } from './reducer';
 import { addOrValidateSourceControlManagementForm } from '../store/ActionCreator';
 import { getCurrentNamespace } from 'services/NamespaceStore';
@@ -94,6 +101,9 @@ const SourceControlManagementForm = ({
     sourceControlManagementFormReducer,
     defaultSourceControlManagement
   );
+
+  const supportedAuthTypes =
+    formState?.config?.provider === 'BITBUCKET_SERVER' ? scmAuthType : [SCM_AUTH_TYPE_PAT];
 
   const getMissingFieldsCount = () => {
     let count = 0;
@@ -293,74 +303,77 @@ const SourceControlManagementForm = ({
           <BoldHeader>{T.translate(`${PREFIX}.authHeader`)}</BoldHeader>
           <StyledHr />
           <PropertyRow
-            value={formState.config?.auth?.type ? formState.config.auth.type : scmAuthType[0].id}
+            value={
+              formState.config?.auth?.type ? formState.config.auth.type : supportedAuthTypes[0].id
+            }
             property={{
               name: 'auth',
-              description: T.translate(`${PREFIX}.auth.helperText`).toString(),
+              description:
+                supportedAuthTypes.length === 1
+                  ? T.translate(`${PREFIX}.auth.helperTextPatOnly`, {
+                      provider: formState?.config?.provider,
+                    }).toString()
+                  : T.translate(`${PREFIX}.auth.helperText`).toString(),
               label: T.translate(`${PREFIX}.auth.label`).toString(),
               'widget-type': 'radio-group',
               'widget-attributes': {
-                default: scmAuthType[0].id,
+                default: supportedAuthTypes[0].id,
                 layout: 'inline',
-                options: scmAuthType,
+                options: supportedAuthTypes,
               },
             }}
             onChange={(val) => {
               handleValueChange(val, 'type');
             }}
           />
-          {formState.config?.auth?.type === scmAuthType[0].id && (
-            <>
-              <PropertyRow
-                value={formState.config?.auth?.patConfig?.passwordName}
-                property={{
-                  name: 'tokenName',
-                  description: T.translate(`${PREFIX}.auth.pat.tokenNameHelperText`).toString(),
-                  label: T.translate(`${PREFIX}.auth.pat.tokenName`).toString(),
-                  required: true,
-                }}
-                onChange={(val) => {
-                  handleValueChange(val, 'passwordName');
-                }}
-                errors={
-                  !formState.config?.auth?.patConfig?.passwordName && formState.error
-                    ? [{ msg: T.translate('commons.requiredFieldMissingMsg').toString() }]
-                    : []
-                }
-              />
-              <PropertyRow
-                value={formState.config?.auth?.token}
-                property={{
-                  name: 'token',
-                  description: T.translate(`${PREFIX}.auth.pat.tokenHelperText`, {
-                    provider: formState.config?.provider || providers.github,
-                  }).toString(),
-                  label: T.translate(`${PREFIX}.auth.pat.token`).toString(),
-                  required: !isEdit,
-                  'widget-type': 'password',
-                }}
-                onChange={(val) => {
-                  handleValueChange(val, 'token');
-                }}
-                errors={
-                  !formState.config?.auth?.token && formState.error
-                    ? [{ msg: T.translate('commons.requiredFieldMissingMsg').toString() }]
-                    : []
-                }
-              />
-              <PropertyRow
-                value={formState.config?.auth?.patConfig?.username}
-                property={{
-                  name: 'username',
-                  description: T.translate(`${PREFIX}.auth.pat.usernameHelperText`).toString(),
-                  label: T.translate(`${PREFIX}.auth.pat.username`).toString(),
-                }}
-                onChange={(val) => {
-                  handleValueChange(val, 'username');
-                }}
-              />
-            </>
-          )}
+          <PropertyRow
+            value={formState.config?.auth?.patConfig?.passwordName}
+            property={{
+              name: 'tokenName',
+              description: T.translate(`${PREFIX}.auth.pat.tokenNameHelperText`).toString(),
+              label: T.translate(`${PREFIX}.auth.pat.tokenName`).toString(),
+              required: true,
+            }}
+            onChange={(val) => {
+              handleValueChange(val, 'passwordName');
+            }}
+            errors={
+              !formState.config?.auth?.patConfig?.passwordName && formState.error
+                ? [{ msg: T.translate('commons.requiredFieldMissingMsg').toString() }]
+                : []
+            }
+          />
+          <PropertyRow
+            value={formState.config?.auth?.token}
+            property={{
+              name: 'token',
+              description: T.translate(`${PREFIX}.auth.pat.tokenHelperText`, {
+                provider: formState.config?.provider || providers.github,
+              }).toString(),
+              label: T.translate(`${PREFIX}.auth.pat.token`).toString(),
+              required: !isEdit,
+              'widget-type': 'password',
+            }}
+            onChange={(val) => {
+              handleValueChange(val, 'token');
+            }}
+            errors={
+              !formState.config?.auth?.token && formState.error
+                ? [{ msg: T.translate('commons.requiredFieldMissingMsg').toString() }]
+                : []
+            }
+          />
+          <PropertyRow
+            value={formState.config?.auth?.patConfig?.username}
+            property={{
+              name: 'username',
+              description: T.translate(`${PREFIX}.auth.pat.usernameHelperText`).toString(),
+              label: T.translate(`${PREFIX}.auth.pat.username`).toString(),
+            }}
+            onChange={(val) => {
+              handleValueChange(val, 'username');
+            }}
+          />
         </StyledGroup>
       </StyledForm>
       <StyledButtonGroup>

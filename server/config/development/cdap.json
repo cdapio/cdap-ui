@@ -18,6 +18,7 @@
   "feature.lifecycle.management.edit.enabled": "true",
   "feature.source.control.management.git.enabled": "true",
   "feature.source.control.management.multi.app.enabled": "true",
+  "feature.source.control.management.gitlab.bitbucket.enabled": "true",
   "ui.analyticsTag": "",
   "ui.GTM": "",
   "hsts.enabled": "false",

@@ -120,6 +120,26 @@ public class SourceControlManagement {
     addToken(Constants.FAKE_TOKEN);
   }
 
+  @Then("Select {string} scm provider")
+  public void selectScmProvider(String scmProvider) {
+    WebElement providerSelector = Helper.locateElementByTestId("select-provider");
+    providerSelector.click();
+    WebElement providerOption = Helper.locateElementByTestId("option-" + scmProvider);
+    providerOption.click();
+  }
+
+  @Then("Verify scm auth type {string} exists")
+  public void verifyScmAuthTypeExists(String authType) {
+    String selector = "input[name=\"auth\"][type=\"radio\"][value=\"" + authType + "\"]";
+    Assert.assertNotNull(Helper.locateElementByCssSelector(selector));
+  }
+
+  @Then("Verify scm auth type {string} does not exist")
+  public void verifyScmAuthTypeDoesNotExist(String authType) {
+    String selector = "input[name=\"auth\"][type=\"radio\"][value=\"" + authType + "\"]";
+    Assert.assertFalse(Helper.isElementExists(selector));
+  }
+
   @Then("Add test repository configuration")
   public void addTestRepositoryConfiguration() {
     addRepoUrl(PluginPropertyUtils.pluginProp(Constants.GIT_REPO_URL_PROP_NAME));
