@@ -2244,9 +2244,9 @@
   version "0.0.0"
   resolved "https://codeload.github.com/mbostock-bower/d3-bower/tar.gz/b048d3869f38607e24d3e6e919a248fb828ac3db"
 
-"@bower_components/dagre-d3@cpettitt/dagre-d3#0.4.10":
+"@bower_components/dagre-d3@dagrejs/dagre-d3#0.4.10":
   version "0.4.10"
-  resolved "https://codeload.github.com/cpettitt/dagre-d3/tar.gz/e746821ab29e0cab58dc8a9f12a12f475ff2f0bc"
+  resolved "https://codeload.github.com/dagrejs/dagre-d3/tar.gz/e746821ab29e0cab58dc8a9f12a12f475ff2f0bc"
   dependencies:
     d3 "^3.3.8"
     dagre "^0.7.3"

@@ -187,7 +187,7 @@
     "@bower_components/d3-timeline": "jiahuang/d3-timeline#0.0.5",
     "@bower_components/d3-tip": "Caged/d3-tip#0.6.7",
     "@bower_components/dagre": "cpettitt/dagre#^0.7.3",
-    "@bower_components/dagre-d3": "cpettitt/dagre-d3#0.4.10",
+    "@bower_components/dagre-d3": "dagrejs/dagre-d3#0.4.10",
     "@bower_components/esprima": "ariya/esprima#2.0.0",
     "@bower_components/file-saver": "eligrey/FileSaver.js#^2.0.4",
     "@bower_components/graphlib": "cpettitt/graphlib#^1.0.5",
