@@ -27,7 +27,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PipelineTriggers {
   public static String simpleTriggerName = "simple_trigger_test";
@@ -63,6 +64,61 @@ public class PipelineTriggers {
     ElementHelper.clickOnElement(Helper.locateElementByTestId("Delete"));
     Assert.assertFalse(Helper.isElementExists(Helper.getCssSelectorByDataTestId(simpleTriggerName + "-collapsed")));
     ElementHelper.clickOnElement(Helper.locateElementByTestId("inbound-triggers-toggle"));
+  }
+
+  @Then("Open inbound triggers and add a simple trigger with name {string} when pipeline {string} succeeds")
+  public void openInboundTriggersAndAddASimpleTrigger(String triggerName, String sourcePipeline) {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("inbound-triggers-toggle"));
+    WebElement triggerNameInputField = Helper.locateElementByCssSelector(
+        Helper.getCssSelectorByDataTestId("trigger-name-text-field") + " input"
+    );
+    ElementHelper.clearElementValue(triggerNameInputField);
+    ElementHelper.sendKeys(triggerNameInputField, triggerName);
+    ElementHelper.clickOnElement(Helper.locateElementByTestId(sourcePipeline + "-enable-trigger-btn"));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("enable-group-trigger-btn"));
+    Helper.isElementExists(Helper.getCssSelectorByDataTestId(triggerName + "-collapsed"));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId(triggerName + "-collapsed"));
+    Helper.isElementExists(Helper.getCssSelectorByDataTestId(triggerName + "-expanded"));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("inbound-triggers-toggle"));
+  }
+
+  @Then("Open inbound triggers and delete trigger {string}")
+  public void openInboundTriggersAndDeleteTrigger(String triggerName) {
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("inbound-triggers-toggle"));
+    Helper.isElementExists(Helper.getCssSelectorByDataTestId(triggerName + "-collapsed"));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId(triggerName + "-collapsed"));
+    Helper.isElementExists(Helper.getCssSelectorByDataTestId(triggerName + "-expanded"));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId(triggerName + "-disable-trigger-btn"));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("Delete"));
+    Assert.assertFalse(Helper.isElementExists(Helper.getCssSelectorByDataTestId(triggerName + "-collapsed")));
+    ElementHelper.clickOnElement(Helper.locateElementByTestId("inbound-triggers-toggle"));
+  }
+
+  @Then("Verify inbound triggers count to be {int}")
+  public void verifyInboundTriggersCount(int count) throws InterruptedException {
+    Thread.sleep(3000);
+    WebElement triggersToggle = Helper.locateElementByTestId("inbound-triggers-toggle");
+    String toggleText = triggersToggle.getAttribute("innerText");
+    int actualCount = extractTriggersCount(toggleText);
+    Assert.assertEquals(count, actualCount);
+  }
+
+  private int extractTriggersCount(String toggleText) {
+    String regex = "Inbound triggers \\((\\d+)\\)";
+    Pattern pattern = Pattern.compile(regex);
+    Matcher matcher = pattern.matcher(toggleText);
+
+    if (matcher.find()) {
+      String extracted = matcher.group(1);
+      try {
+        int extractedNum = Integer.parseInt(extracted);
+        return extractedNum;
+      } catch (Exception e) {
+        return 0;
+      }
+    }
+    
+    return 0;
   }
 
   private WebElement getSourceRuntimeArgElement(int index) {
