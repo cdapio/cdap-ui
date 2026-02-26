@@ -82,6 +82,7 @@ const PipelineTriggers = ({
         lifecycleManagementEditEnabled,
       },
     });
+    fetchTriggersAndApps(pipelineName, GLOBALS.programId[pipelineType], namespace, true);
 
     return () => {
       if (sub) {
@@ -91,9 +92,9 @@ const PipelineTriggers = ({
   }, []);
 
   const onToggleSidebar = (isExpanded) => {
-    const enabledTriggers = PipelineTriggersStore.getState().triggers.enabledTriggers;
+    const { enabledTriggers, lastRefreshTime } = PipelineTriggersStore.getState().triggers;
 
-    if (isExpanded && enabledTriggers.length === 0) {
+    if (isExpanded && (enabledTriggers.length === 0 || !lastRefreshTime)) {
       fetchTriggersAndApps(pipelineName, GLOBALS.programId[pipelineType], namespace);
     }
     setTabText(isExpanded ? `${PREFIX}.expandedTabLabel` : `${PREFIX}.collapsedTabLabel`);

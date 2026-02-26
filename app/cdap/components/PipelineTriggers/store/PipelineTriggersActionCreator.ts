@@ -496,7 +496,8 @@ export function validateTriggerMappping(
 export function fetchTriggersAndApps(
   pipeline: string,
   workflowName: string,
-  activeNamespace = null
+  activeNamespace = null,
+  skipFetchingPipelinesList = false
 ) {
   const namespace = NamespaceStore.getState().selectedNamespace;
   const activeNamespaceView =
@@ -521,8 +522,10 @@ export function fetchTriggersAndApps(
     });
 
     const lastRefreshTime = moment().format('DD/MM/YYYY HH:mm A');
-    setLastRefreshTime(lastRefreshTime);
-    fetchPipelinesList();
+    if (!skipFetchingPipelinesList) {
+      fetchPipelinesList();
+      setLastRefreshTime(lastRefreshTime);
+    }
   });
 }
 

@@ -21,6 +21,22 @@ Feature: Pipeline Triggers
     Given No pipelines are deployed
 
   @PIPELINE_TRIGGERS_TEST
+  Scenario: Enabled triggers count in the inbound triggers panel should be correct
+    When Deploy pipeline "trigger_test_pipeline_1" with pipeline JSON file "pipeline_with_macros.json"
+    When Deploy pipeline "trigger_test_pipeline_2" with pipeline JSON file "pipeline_with_macros.json"
+    Then Verify inbound triggers count to be 0
+    Then Open inbound triggers and add a simple trigger with name "test_trigger_1" when pipeline "trigger_test_pipeline_1" succeeds
+    Then Verify inbound triggers count to be 1
+    Then Reload the page
+    Then Verify inbound triggers count to be 1
+    Then Open inbound triggers and delete trigger "test_trigger_1"
+    Then Verify inbound triggers count to be 0
+    Then Reload the page
+    Then Verify inbound triggers count to be 0
+    Then Cleanup pipeline "trigger_test_pipeline_1"
+    Then Cleanup pipeline "trigger_test_pipeline_2"
+
+  @PIPELINE_TRIGGERS_TEST
   Scenario: Deploy two pipelines and enable trigger for pipeline2 when pipeline1 succeeds with a simple trigger and disabling it
     When Deploy pipeline "trigger_test_pipeline_1" with pipeline JSON file "pipeline_with_macros.json"
     When Deploy pipeline "trigger_test_pipeline_2" with pipeline JSON file "pipeline_with_macros.json"
