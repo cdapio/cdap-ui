@@ -66,6 +66,10 @@ jobs:
       with:
         repository: cdapio/cdap
         path: cdap
+        # pull the cdap repo with the correct branch.
+        # We assume that the develop and release/x.y branch names are kept same between
+        # the cdap and cdap-ui repositories
+        ref: ${{ github.event.inputs.branch || github.base_ref || github.ref_name }}
 
     - name: Get Secrets from GCP Secret Manager
       id: secrets
