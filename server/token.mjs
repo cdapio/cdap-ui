@@ -96,17 +96,22 @@ function decrypt(encText, key) {
   return messagetext;
 }
 
+// Generate a random fallback secret once at startup so sessions are not
+// predictable when no explicit key is configured.
+const RANDOM_FALLBACK_SECRET = crypto.randomBytes(64).toString('hex');
+
 function getSecretFromCDAPConfig(cdapConfig, logger) {
-  let secretKey =
-    cdapConfig['session.secret.key'] ||
-    path.resolve(__dirname, 'config', 'development', 'session.secret.key');
   if (!logger) {
     logger = console;
   }
-  if (!secretKey) {
+  let secretKey = cdapConfig['session.secret.key'];
+  if (!secretKey || secretKey === 'sample-secret-key-for-encryption') {
     logger.warn(
-      'Secret key missing. This is required to generate a strong time-based token to prevent cswh'
+      'session.secret.key is missing or uses the insecure default value. ' +
+      'A random secret has been generated for this process. ' +
+      'Set a strong, unique session.secret.key in cdap-site.xml for production use.'
     );
+    secretKey = RANDOM_FALLBACK_SECRET;
   }
   return secretKey;
 }

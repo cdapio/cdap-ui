@@ -704,6 +704,21 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     if (!uiThemePath) {
       return res.status(500).send('UnKnown theme file. Please make sure the path is valid');
     }
+
+    // Validate theme file path to prevent arbitrary file reads.
+    // Only allow .json files within the server/config/themes directory.
+    const allowedThemeDir = path.resolve(__dirname, 'config', 'themes');
+    const resolvedPath = path.resolve(
+      uiThemePath.startsWith('/') ? uiThemePath : path.join(__dirname, uiThemePath)
+    );
+    if (!resolvedPath.startsWith(allowedThemeDir + path.sep) && resolvedPath !== allowedThemeDir) {
+      log.warn('Blocked theme path outside allowed directory: ' + uiThemePath);
+      return res.status(400).send('Theme file must be within the allowed themes directory');
+    }
+    if (!resolvedPath.endsWith('.json')) {
+      return res.status(400).send('Theme file must be a .json file');
+    }
+
     try {
       uiThemeConfig = uiThemeWrapper.extractUITheme(cdapConfig, uiThemePath);
     } catch (e) {
