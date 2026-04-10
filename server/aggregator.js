@@ -17,6 +17,7 @@
 
 import request from 'request';
 import fs from 'fs';
+import path from 'path';
 import log4js from 'log4js';
 import { REQUEST_ORIGIN_ROUTER, REQUEST_ORIGIN_MARKET, constructUrl, deconstructUrl, isVerifiedMarketHost} from 'server/url-helper';
 import * as sessionToken from 'server/token';
@@ -96,24 +97,76 @@ Aggregator.prototype.validateSession = function(message) {
  * FE. These configurations are UI specific and hences need to be supported
  * here.
  */
+// Template and plugin identifiers are supplied by the WebSocket client
+// and are spliced into on-disk paths below. Only allow plain identifier
+// characters so the resulting filePath cannot escape the templates dir.
+var TEMPLATE_ID_RE = /^[A-Za-z0-9_-]+$/;
+
+// Absolute roots for template config lookups. Any resolved filePath must
+// live inside one of these directories.
+var TEMPLATES_DIR = path.resolve(__dirname, '..', 'templates');
+var TEMPLATES_COMMON_DIR = path.resolve(TEMPLATES_DIR, 'common');
+
+function isPathInsideRoot(candidate, root) {
+  var relative = path.relative(root, candidate);
+  return (
+    relative === '' ||
+    (!relative.startsWith('..') && !path.isAbsolute(relative))
+  );
+}
+
+function buildTemplateConfigPaths(templateid, pluginid) {
+  if (
+    typeof templateid !== 'string' ||
+    typeof pluginid !== 'string' ||
+    !TEMPLATE_ID_RE.test(templateid) ||
+    !TEMPLATE_ID_RE.test(pluginid)
+  ) {
+    return [];
+  }
+
+  var templateSpecific = path.resolve(
+    TEMPLATES_DIR,
+    templateid,
+    pluginid + '.json'
+  );
+  var common = path.resolve(TEMPLATES_COMMON_DIR, pluginid + '.json');
+
+  var result = [];
+  if (isPathInsideRoot(templateSpecific, TEMPLATES_DIR)) {
+    result.push(templateSpecific);
+  }
+  if (isPathInsideRoot(common, TEMPLATES_COMMON_DIR)) {
+    result.push(common);
+  }
+  return result;
+}
+
 Aggregator.prototype.pushConfiguration = function(resource) {
   var templateid = resource.templateid;
   var pluginid = resource.pluginid;
   var configString;
   var config = {};
   var statusCode = 404;
-  var filePaths = [];
-  var isConfigSemanticsValid;
   // Some times there might a plugin that is common across multiple templates
   // in which case, this is stored within the common directory. So, if the
   // template specific plugin check fails, then attempt to get it from common.
-  filePaths.push(
-    __dirname + '/../templates/' + templateid + '/' + pluginid + '.json',
-    __dirname + '/../templates/common/' + pluginid + '.json'
-  );
+  var filePaths = buildTemplateConfigPaths(templateid, pluginid);
+  var isConfigSemanticsValid;
   var i,
     paths = filePaths.length;
   var fileFound = true;
+
+  if (paths === 0) {
+    this.connection.write(
+      JSON.stringify({
+        resource: this.stripAuthHeaderInProxyMode(this.cdapConfig, resource),
+        statusCode: 400,
+        response: 'INVALID_TEMPLATE_OR_PLUGIN_ID',
+      })
+    );
+    return;
+  }
 
   // Check if the configuration is present within the plugin for a template
   for (i = 0; i < paths; i++) {
