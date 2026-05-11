@@ -9,9 +9,9 @@ let serviceAccountEmail = null;
 let keySize = 0;
 
 if (keyExists) {
-  const raw = fs.readFileSync(keyPath, 'utf8');
-  keySize = raw.length;
   try {
+    const raw = fs.readFileSync(keyPath, 'utf8');
+    keySize = raw.length;
     const key = JSON.parse(raw);
     keyLooksValid = Boolean(
       key.type === 'service_account' &&
@@ -21,7 +21,7 @@ if (keyExists) {
     );
     serviceAccountEmail = key.client_email;
   } catch (e) {
-    // parse error - key may be malformed
+    // I/O or parse error
   }
 }
 
