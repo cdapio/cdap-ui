@@ -56,7 +56,30 @@ function extractMarketUrls(cdapConfig) {
 export const getMarketUrls = memoize(extractMarketUrls);
 
 export function isVerifiedMarketHost(cdapConfig, url) {
-  return !!getMarketUrls(cdapConfig).find((element) => url.startsWith(element));
+  // A naive `url.startsWith(element)` lets an attacker bypass the allowlist with
+  // origins such as `https://market.cdap.io.evil.com/...` or
+  // `https://market.cdap.io@evil.com/...`, turning the market proxy into an
+  // SSRF. Parse both URLs and require an exact origin match plus a path that is
+  // contained within the configured market base path.
+  let requested;
+  try {
+    requested = new URL(url);
+  } catch (e) {
+    return false;
+  }
+  return !!getMarketUrls(cdapConfig).find((element) => {
+    let base;
+    try {
+      base = new URL(element);
+    } catch (e) {
+      return false;
+    }
+    if (requested.origin !== base.origin) {
+      return false;
+    }
+    const basePath = base.pathname.endsWith('/') ? base.pathname : `${base.pathname}/`;
+    return requested.pathname === base.pathname || requested.pathname.startsWith(basePath);
+  });
 }
 
 export function constructUrl(cdapConfig, path, origin = REQUEST_ORIGIN_ROUTER) {
