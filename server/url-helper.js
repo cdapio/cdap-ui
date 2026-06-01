@@ -55,6 +55,29 @@ function extractMarketUrls(cdapConfig) {
 
 export const getMarketUrls = memoize(extractMarketUrls);
 
+// Cache of parsed market base URLs, keyed by the (memoized) array returned by
+// getMarketUrls so the configured URLs are only parsed once per config rather
+// than on every request.
+const parsedMarketUrlsCache = new WeakMap();
+
+function getParsedMarketUrls(cdapConfig) {
+  const marketUrls = getMarketUrls(cdapConfig);
+  let parsed = parsedMarketUrlsCache.get(marketUrls);
+  if (!parsed) {
+    parsed = marketUrls
+      .map((element) => {
+        try {
+          return new URL(element);
+        } catch (e) {
+          return null;
+        }
+      })
+      .filter((parsedUrl) => parsedUrl !== null);
+    parsedMarketUrlsCache.set(marketUrls, parsed);
+  }
+  return parsed;
+}
+
 export function isVerifiedMarketHost(cdapConfig, url) {
   // A naive `url.startsWith(element)` lets an attacker bypass the allowlist with
   // origins such as `https://market.cdap.io.evil.com/...` or
@@ -67,13 +90,7 @@ export function isVerifiedMarketHost(cdapConfig, url) {
   } catch (e) {
     return false;
   }
-  return !!getMarketUrls(cdapConfig).find((element) => {
-    let base;
-    try {
-      base = new URL(element);
-    } catch (e) {
-      return false;
-    }
+  return getParsedMarketUrls(cdapConfig).some((base) => {
     if (requested.origin !== base.origin) {
       return false;
     }
