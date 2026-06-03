@@ -19,7 +19,25 @@ const path = require('path');
 const yauzl = require("yauzl");
 const mkdirp = require("mkdirp");
 
+/**
+ * Resolves an archive entry path within the extraction root.
+ * Throws an error if the resolved path would escape the root directory.
+ *
+ * @param {string} root - The absolute extraction root directory.
+ * @param {string} entryFileName - The archive member fileName.
+ * @returns {string} The safe, resolved absolute target path.
+ */
+function safeEntryPath(root, entryFileName) {
+  var normalizedRoot = path.resolve(root) + path.sep;
+  var target = path.resolve(normalizedRoot, entryFileName);
+  if (!target.startsWith(normalizedRoot)) {
+    throw new Error('Zip entry escapes extraction root: ' + entryFileName);
+  }
+  return target;
+}
+
 async function unzipSDK(sdkzippath) {
+  const workspaceRoot = '/workspace/';
   return new Promise((resolve, reject) => {
     try {
       yauzl.open(sdkzippath, {lazyEntries: true, autoClose: true}, function(err, zipfile) {
@@ -32,7 +50,8 @@ async function unzipSDK(sdkzippath) {
           if (/\/$/.test(entry.fileName)) {
             // directory file names end with '/'
             try {
-              await mkdirp(path.join('/workspace/', entry.fileName))
+              var dirTarget = safeEntryPath(workspaceRoot, entry.fileName);
+              await mkdirp(dirTarget);
               zipfile.readEntry();
             } catch(err) {
               reject(err);
@@ -44,8 +63,9 @@ async function unzipSDK(sdkzippath) {
               if (err) {reject(err); return; }
               // ensure parent directory exists
               try {
-                await mkdirp(path.dirname(path.join('/workspace/', entry.fileName)));
-                readStream.pipe(fs.createWriteStream(path.join('/workspace/', entry.fileName), {flags: 'w+', mode: 0o755}));
+                var fileTarget = safeEntryPath(workspaceRoot, entry.fileName);
+                await mkdirp(path.dirname(fileTarget));
+                readStream.pipe(fs.createWriteStream(fileTarget, {flags: 'w+', mode: 0o755}));
                 readStream.on("end", function() {
                   zipfile.readEntry();
                 });
