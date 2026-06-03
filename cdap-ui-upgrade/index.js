@@ -47,6 +47,24 @@ var filestozip = [
 
 var skipUpgrade = false;
 
+/**
+ * Resolves an archive entry path within the extraction root.
+ * Throws an error if the resolved path would escape the root directory.
+ *
+ * @param {string} root - The absolute extraction root directory (must end with sep).
+ * @param {string} entryFileName - The archive member fileName.
+ * @returns {string} The safe, resolved absolute target path.
+ */
+function safeEntryPath(root, entryFileName) {
+  // Normalize the root to ensure it ends with the separator
+  var normalizedRoot = path.resolve(root) + path.sep;
+  var target = path.resolve(normalizedRoot, entryFileName);
+  if (!target.startsWith(normalizedRoot)) {
+    throw new Error('Zip entry escapes extraction root: ' + entryFileName);
+  }
+  return target;
+}
+
 function checkPreRequisite() {
   if (!newuizippath) {
     throw 'Missing UI Pack archive path. Please provide fully qualified path to the UI Pack archive.';
@@ -83,7 +101,14 @@ function unzipNewUI() {
       zipfile.on("entry", function(entry) {
         if (/\/$/.test(entry.fileName)) {
           // directory file names end with '/'
-          mkdirp(cdaphome + '/' + entry.fileName, function(err) {
+          var dirTarget;
+          try {
+            dirTarget = safeEntryPath(cdaphome, entry.fileName);
+          } catch (e) {
+            _reject(e);
+            return;
+          }
+          mkdirp(dirTarget, function(err) {
             if (err) { _reject(err); return; }
             zipfile.readEntry();
           });
@@ -91,10 +116,17 @@ function unzipNewUI() {
           // file entry
           zipfile.openReadStream(entry, function(err, readStream) {
             if (err) {_reject(err); return; }
+            var fileTarget;
+            try {
+              fileTarget = safeEntryPath(cdaphome, entry.fileName);
+            } catch (e) {
+              _reject(e);
+              return;
+            }
             // ensure parent directory exists
-            mkdirp(path.dirname(cdaphome + '/' + entry.fileName), function(err) {
+            mkdirp(path.dirname(fileTarget), function(err) {
               if (err) {_reject(err); return; }
-              readStream.pipe(fs.createWriteStream(cdaphome + entry.fileName, {flags: 'w+'}));
+              readStream.pipe(fs.createWriteStream(fileTarget, {flags: 'w+'}));
               readStream.on("end", function() {
                 zipfile.readEntry();
               });
