@@ -27,9 +27,10 @@ const yauzl = require("yauzl");
  * @returns {string} The safe, resolved absolute target path.
  */
 function safeEntryPath(root, entryFileName) {
-  var normalizedRoot = path.resolve(root) + path.sep;
-  var target = path.resolve(normalizedRoot, entryFileName);
-  if (!target.startsWith(normalizedRoot)) {
+  var resolvedRoot = path.resolve(root);
+  var target = path.resolve(resolvedRoot, entryFileName);
+  var relative = path.relative(resolvedRoot, target);
+  if (relative.startsWith('..') || path.isAbsolute(relative)) {
     throw new Error('Zip entry escapes extraction root: ' + entryFileName);
   }
   return target;
