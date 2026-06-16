@@ -63,6 +63,7 @@ export async function queryTypePipelinesResolver(parent, args, context) {
   };
 
   const apps = await requestPromiseWrapper(options, context, null, errorModifiersFn);
-  log.info(`[Query:${queryId}] Parent pipelinesResolver successfully fetched ${apps?.applications?.length || 0} apps for namespace: ${namespace}`);
+  const appCount = apps && apps.applications ? apps.applications.length : 0;
+  log.info(`[Query:${queryId}] Parent pipelinesResolver successfully fetched ${appCount} apps for namespace: ${namespace}`);
   return apps;
 }
