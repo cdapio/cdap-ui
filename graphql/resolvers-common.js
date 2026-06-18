@@ -28,6 +28,7 @@ export function getPOSTRequestOptions() {
   return {
     method: 'POST',
     json: true,
+    agent: false,
   };
 }
 
