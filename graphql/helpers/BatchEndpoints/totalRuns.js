@@ -19,6 +19,9 @@ import { getCDAPConfig } from 'server/cdap-config';
 import { getPOSTRequestOptions, requestPromiseWrapper } from 'gql/resolvers-common';
 import { ApolloError } from 'apollo-server';
 import chunk from 'lodash/chunk';
+import log4js from 'log4js';
+
+const log = log4js.getLogger('graphql');
 
 let cdapConfig;
 getCDAPConfig().then(function(value) {
@@ -35,6 +38,9 @@ export async function batchTotalRuns(req, auth, userIdProperty, userIdValue) {
   }
 
   const body = req.slice(0, 25).map((reqObj) => reqObj.program);
+  const names = body.map(p => p.appId).join(', ');
+  log.info(`[DataLoader:totalRuns] Dispatching batch request for ${body.length} pipelines: [${names}]`);
+
   const chunkedBody = chunk(body, 100);
 
   let runInfo = await Promise.all(
