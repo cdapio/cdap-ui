@@ -31,10 +31,7 @@ export function getPOSTRequestOptions() {
   return {
     method: 'POST',
     json: true,
-    agent: false, // Enforce fresh TCP connection (no socket reuse) for Phase 2 dataloaders
-    headers: {
-      'Connection': 'close',
-    },
+    agent: false,
   };
 }
 
