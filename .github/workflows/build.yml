@@ -66,6 +66,7 @@ jobs:
       with:
         repository: cdapio/cdap
         path: cdap
+        ref: ${{ github.event.inputs.branch || github.base_ref || github.ref_name }}
 
     - name: Get Secrets from GCP Secret Manager
       id: secrets
