@@ -77,3 +77,77 @@ export function deconstructUrl(cdapConfig, url, origin = REQUEST_ORIGIN_ROUTER) 
   const baseUrl = getRouterHost(cdapConfig);
   return `/${url.replace(baseUrl, '')}`;
 }
+
+// The following are valid backendPath patterns for logs
+
+// Pipeline run Logs: /v3/namespaces/:namespace/apps/:appid/:programType/:programName/runs/:runid/logs/[prev | next]
+// Preview logs: /v3/namespaces/:namespace/previews/:previewId/logs/[prev | next]
+// System service logs: /v3/system/services/:serviceName/logs/[prev | next]
+// Program logs: /v3/namespaces/:namespace/apps/:appid/:programType/:programId/logs/[prev | next]
+
+// Allowed query params on these endpoints:
+// start: number
+// stop: number
+// escape: boolean
+// filter: string
+// format: string
+// suppress: string[]
+// max: number
+// fromOffset: string
+
+// any other backend paths will be blocked from being served when called with the /downloadLogs endpoint
+
+const SAFE_PATH_PARAM = '[\\p{L}\\p{N}_.-]+';
+
+const LOGS_PATH_REGEXES = [
+  new RegExp(`^/v3/namespaces/${SAFE_PATH_PARAM}/apps/${SAFE_PATH_PARAM}/${SAFE_PATH_PARAM}/${SAFE_PATH_PARAM}/(?:runs/${SAFE_PATH_PARAM}/)?logs(?:/(?:prev|next))?$`, 'u'),
+  new RegExp(`^/v3/namespaces/${SAFE_PATH_PARAM}/previews/${SAFE_PATH_PARAM}/logs(?:/(?:prev|next))?$`, 'u'),
+  new RegExp(`^/v3/system/services/${SAFE_PATH_PARAM}/logs(?:/(?:prev|next))?$`, 'u')
+];
+
+
+const ALLOWED_QUERY_PARAMS = [
+  'start',
+  'stop',
+  'escape',
+  'filter',
+  'format',
+  'suppress',
+  'max',
+  'fromOffset'
+];
+
+export function validateLogsPath(backendPath) {
+  if (!backendPath || typeof backendPath !== 'string' || !backendPath.startsWith('/v3/')) {
+    return false;
+  }
+
+  const queryIndex = backendPath.indexOf('?');
+  let pathPart = backendPath;
+  let queryPart = '';
+  if (queryIndex !== -1) {
+    pathPart = backendPath.substring(0, queryIndex);
+    queryPart = backendPath.substring(queryIndex + 1);
+  }
+
+  const segments = pathPart.split('/').map((seg) => seg.trim()).filter(Boolean);
+  if (segments.indexOf('.') !== -1 || segments.indexOf('..') !== -1) {
+    return false;
+  }
+
+  const isValidPath = LOGS_PATH_REGEXES.some((regex) => regex.test(pathPart));
+  if (!isValidPath) {
+    return false;
+  }
+
+  if (queryPart) {
+    const searchParams = new URLSearchParams(queryPart);
+    for (const key of searchParams.keys()) {
+      if (ALLOWED_QUERY_PARAMS.indexOf(key) === -1) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
