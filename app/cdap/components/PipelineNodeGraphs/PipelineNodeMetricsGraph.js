@@ -138,15 +138,23 @@ export default class PipelineNodeMetricsGraph extends Component {
   filterData = ({ qid: data }) => {
     let resolution = getResolution(data.resolution);
     let recordsInRegex = new RegExp(/user.*.records.in/);
-    let recordsOutRegex = new RegExp(/user.*.records.out/);
+    let recordsOutRegex = new RegExp(/user.*.records.out$/);
     let recordsErrorRegex = new RegExp(/user.*.records.error/);
     let recordsOutPortsRegex = new RegExp(/user.*.records.out./);
 
-    let recordsInData = data.series.find((d) => recordsInRegex.test(d.metricName)) || [];
-    let recordsOutData = data.series.find((d) => recordsOutRegex.test(d.metricName)) || [];
-    let recordsErrorData = data.series.find((d) => recordsErrorRegex.test(d.metricName)) || [];
+    let recordsInData = data.series.find((d) => d.metricName.endsWith('.records.in.raw'))
+      || data.series.find((d) => recordsInRegex.test(d.metricName))
+      || [];
+    let recordsOutData = data.series.find((d) => d.metricName.endsWith('.records.out.raw'))
+      || data.series.find((d) => recordsOutRegex.test(d.metricName))
+      || [];
+    let recordsErrorData = data.series.find((d) => d.metricName.endsWith('.records.error.raw'))
+      || data.series.find((d) => recordsErrorRegex.test(d.metricName))
+      || [];
     let recordsOutPortsData =
-      data.series.filter((d) => recordsOutPortsRegex.test(d.metricName)) || [];
+      data.series.filter((d) => recordsOutPortsRegex.test(d.metricName) && d.metricName.endsWith('.raw')).length
+      ? data.series.filter((d) => recordsOutPortsRegex.test(d.metricName) && d.metricName.endsWith('.raw'))
+      : data.series.filter((d) => recordsOutPortsRegex.test(d.metricName) && !d.metricName.endsWith('.raw')) || [];
 
     let newState = {
       recordsInData,

@@ -104,7 +104,9 @@ const parseMetrics = (metrics) => {
     }
 
     if (metricName.indexOf(key + '.records.in') !== -1) {
-      metricObj[key].recordsIn = metricValue;
+      if (metricName.endsWith('.raw') || metricObj[key].recordsIn === undefined) {
+        metricObj[key].recordsIn = metricValue;
+      }
     } else if (metricName.indexOf(key + '.records.out') !== -1) {
       // contains multiple records.out metrics
       if (metricName.indexOf(key + '.records.out.') !== -1) {
@@ -112,12 +114,18 @@ const parseMetrics = (metrics) => {
         if (!metricObj[key].recordsOut) {
           metricObj[key].recordsOut = {};
         }
-        metricObj[key].recordsOut[port] = metricValue;
+        if (metricName.endsWith('.raw') || metricObj[key].recordsOut[port] === undefined) {
+          metricObj[key].recordsOut[port] = metricValue;
+        }
       } else {
-        metricObj[key].recordsOut = metricValue;
+        if (metricName.endsWith('.raw') || metricObj[key].recordsOut === undefined) {
+          metricObj[key].recordsOut = metricValue;
+        }
       }
     } else if (metricName.indexOf(key + '.records.error') !== -1) {
-      metricObj[key].recordsError = metricValue;
+      if (metricName.endsWith('.raw') || metricObj[key].recordsError === undefined) {
+        metricObj[key].recordsError = metricValue;
+      }
     }
   });
 
