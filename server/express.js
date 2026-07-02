@@ -23,6 +23,7 @@ import {
   constructUrl,
   isVerifiedMarketHost,
   getMarketUrls,
+  validateLogsPath,
   REQUEST_ORIGIN_MARKET,
 } from 'server/url-helper';
 import url from 'url';
@@ -72,7 +73,7 @@ const removeBCookie = (req, res, cookieSettings) => {
   // This cookie is no longer needed and should be deleted.
   if (req.cookies.bcookie) {
     const date = new Date(0); // Expire in the past to delete
-    res.cookie('bcookie', '', { ...cookieSettings, expires: date } );
+    res.cookie('bcookie', '', { ...cookieSettings, expires: date });
   }
 }
 
@@ -147,9 +148,9 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   if (!isModeDevelopment()) {
     const proxyBaseUrl = cdapConfig['dashboard.proxy.base.url'];
     const hstsSettings = {
-       maxAge: parseInt(cdapConfig["hsts.max.age"]),
-       includeSubDomains: cdapConfig["hsts.include.sub.domains"] === 'true',
-       preload: cdapConfig["hsts.preload"] === 'true',
+      maxAge: parseInt(cdapConfig["hsts.max.age"]),
+      includeSubDomains: cdapConfig["hsts.include.sub.domains"] === 'true',
+      preload: cdapConfig["hsts.preload"] === 'true',
     }
     let cspWhiteListUrls = [];
     if (proxyBaseUrl) {
@@ -190,7 +191,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
             ],
             baseUri: [`'self'`],
             styleSrc: [`'self'`, `'unsafe-inline'`,
-            'https://tagmanager.google.com', 'https://fonts.googleapis.com'],
+              'https://tagmanager.google.com', 'https://fonts.googleapis.com'],
             objectSrc: [`'none'`],
             workerSrc: [`'self' blob:`],
             reportUri: `https://csp.withgoogle.com/csp/cdap`,
@@ -208,7 +209,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   /**
    * Adding default 500 error handler
    */
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     log.error(err);
     res.status(500).send(err);
     next(err);
@@ -237,7 +238,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   });
 
   // serve the config file
-  app.get('/config.js', function(req, res) {
+  app.get('/config.js', function (req, res) {
     uiSettings.ui.externalLinks = cdapConfig.externalLinks;
     var data = JSON.stringify({
       // the following will be available in angular via the "MY_CONFIG" injectable
@@ -251,7 +252,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         maxRecordsPreview: cdapConfig['preview.max.num.records'],
         ui: uiSettings['ui'],
         k8sWorkloadIdentityEnabled: cdapConfig['master.environment.k8s.workload.identity.enabled'],
-        k8sWorkloadIdentityPool:cdapConfig['credential.provider.system.properties.gcp-wi-credential-provider.k8s.workload.identity.pool'],
+        k8sWorkloadIdentityPool: cdapConfig['credential.provider.system.properties.gcp-wi-credential-provider.k8s.workload.identity.pool'],
         namespaceCreationHookEnabled: cdapConfig['namespaces.creation.hook.enabled'],
         hstsEnabled: cdapConfig['hsts.enabled'],
         hstsMaxAge: cdapConfig['hsts.max.age'],
@@ -291,7 +292,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     res.send('window.CDAP_CONFIG = ' + data + ';');
   });
 
-  app.get('/ui-config.js', function(req, res) {
+  app.get('/ui-config.js', function (req, res) {
     // var path = __dirname + '/config/cdap-ui-config.json';
     var path = CONFIG_PATH + '/cdap-ui-config.json';
 
@@ -305,7 +306,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     res.send('window.CDAP_UI_CONFIG = ' + fileConfig + ';');
   });
 
-  app.get('/ui-theme.js', function(req, res) {
+  app.get('/ui-theme.js', function (req, res) {
     res.header({
       'Content-Type': 'text/javascript',
       'Cache-Control': 'no-store, must-revalidate',
@@ -323,7 +324,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
    *    target: CDAP API
    *    targetMethod: HTTP method for the CDAP API (default to POST)
    **/
-  app.get('/forwardMarketToCdap', function(req, res) {
+  app.get('/forwardMarketToCdap', function (req, res) {
     var sourceLink = req.query.source,
       targetLink = req.query.target,
       sourceMethod = req.query.sourceMethod || 'GET',
@@ -351,16 +352,16 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       url: sourceLink,
       method: sourceMethod,
     })
-      .on('error', function(e) {
+      .on('error', function (e) {
         log.error('Error', e);
       })
       .pipe(request(forwardRequestObject))
-      .on('response', function(resFromBackend) {
+      .on('response', function (resFromBackend) {
         var strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, resFromBackend);
         var newHeaders = strippedResponse.headers;
         res.set(newHeaders);
       })
-      .on('error', function(e) {
+      .on('error', function (e) {
         log.error('Error', e);
       })
       .pipe(res);
@@ -373,7 +374,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
    * Query parameters:
    *   source: Link to the market resource to retrieve
    */
-  app.get('/market', function(req, res) {
+  app.get('/market', function (req, res) {
     const sourceLink = req.query['source'];
 
     log.debug('[REQUEST]: (method: ' + req.method + ', url: ' + sourceLink + ')');
@@ -391,7 +392,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         url: sourceLink,
         agent: false,
       },
-      function(err, marketResponse) {
+      function (err, marketResponse) {
         if (err) {
           log.error(
             '[ERROR] Market request to url: ' + sourceLink + ' responded with error: ' + err
@@ -401,19 +402,31 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
           res.status(marketResponse.statusCode).send(marketResponse.body);
         }
       }
-    ).on('error', function(err) {
+    ).on('error', function (err) {
       log.error('[ERROR] Market request had error: (url: ' + sourceLink + ') ' + err.message);
-      res.status(502).send(err.message);
+      res.status(502).send('Error requesting market.');
     });
   });
 
-  app.get('/downloadLogs', function(req, res) {
-    var url = constructUrl(cdapConfig, decodeURIComponent(req.query.backendPath));
-    var method = req.query.method || 'GET';
+  app.get('/downloadLogs', function (req, res) {
+    if (typeof req.query.backendPath !== 'string') {
+      return res.status(400).send('Invalid logs path');
+    }
+    let backendPath;
+    try {
+      backendPath = decodeURIComponent(req.query.backendPath);
+    } catch (e) {
+      return res.status(400).send('Invalid logs path');
+    }
+    if (!validateLogsPath(backendPath)) {
+      return res.status(400).send('Invalid logs path');
+    }
+
+    var url = constructUrl(cdapConfig, backendPath);
     log.info('Download Logs Start: ', url);
     var customHeaders;
     var requestObject = {
-      method: method,
+      method: 'GET',
       url: url,
       rejectUnauthorized: false,
       requestCert: true,
@@ -447,10 +460,10 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
 
     try {
       request(requestObject)
-        .on('error', function(e) {
+        .on('error', function (e) {
           log.error('Error request logs: ', e);
         })
-        .on('response', function(response) {
+        .on('response', function (response) {
           // This happens when use tries to access the link directly when
           // no autorization token present
           if (response.statusCode === 200) {
@@ -468,8 +481,11 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
           }
         })
         .pipe(res)
-        .on('error', function(e) {
+        .on('error', function (e) {
           log.error('Error downloading logs: ', e);
+          if (!res.headersSent) {
+            res.status(502).send('Error requesting logs');
+          }
         });
     } catch (e) {
       log.error('Downloading logs failed, ', e);
@@ -491,7 +507,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     Handle POST requests made outside of the websockets from front-end.
     For now it handles file upload POST /namespaces/:namespace/apps API
   */
-  app.post('/namespaces/:namespace/:path(*)', function(req, res) {
+  app.post('/namespaces/:namespace/:path(*)', function (req, res) {
     var headers = {};
     if (req.headers) {
       headers = req.headers;
@@ -514,45 +530,45 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     };
 
     req
-      .on('error', function(e) {
+      .on('error', function (e) {
         log.error(e);
       })
       .pipe(request.post(opts))
-      .on('response', function(newRes) {
+      .on('response', function (newRes) {
         var strippedResponse = stripAuthHeadersInProxyMode(cdapConfig, newRes);
         var newHeaders = strippedResponse.headers;
         res.set(newHeaders);
       })
-      .on('error', function(e) {
+      .on('error', function (e) {
         log.error(e);
       })
       .pipe(res)
-      .on('error', function(e) {
+      .on('error', function (e) {
         log.error(e);
       });
   });
   // serve static assets
   app.use('/assets', [
     express.static(DIST_PATH + '/assets'),
-    function(req, res) {
+    function (req, res) {
       finalhandler(req, res)(false); // 404
     },
   ]);
   app.use('/cdap_assets', [
     express.static(CDAP_DIST_PATH + '/cdap_assets', getExpressStaticConfig()),
-    function(req, res) {
+    function (req, res) {
       finalhandler(req, res)(false); // 404
     },
   ]);
   app.use('/dll_assets', [
     express.static(DLL_PATH, getExpressStaticConfig()),
-    function(req, res) {
+    function (req, res) {
       finalhandler(req, res)(false);
     },
   ]);
   app.use('/login_assets', [
     express.static(LOGIN_DIST_PATH + '/login_assets', getExpressStaticConfig()),
-    function(req, res) {
+    function (req, res) {
       finalhandler(req, res)(false); // 404
     },
   ]);
@@ -560,12 +576,12 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     express.static(MARKET_DIST_PATH, {
       index: false,
     }),
-    function(req, res) {
+    function (req, res) {
       finalhandler(req, res)(false); // 404
     },
   ]);
   app.get('/robots.txt', [
-    function(req, res) {
+    function (req, res) {
       res.type('text/plain');
       res.send('User-agent: *\nDisallow: /');
     },
@@ -579,7 +595,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       },
       url: authAddress.get(),
     };
-    request(opts, function(nerr, nres, nbody) {
+    request(opts, function (nerr, nres, nbody) {
       if (nerr || nres.statusCode !== 200) {
         var statusCode = (nres ? nres.statusCode : 500) || 500;
         res.status(statusCode).send(nbody);
@@ -595,12 +611,12 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   }
 
   // CDAP-678, CDAP-8260 This is added for health check on node proxy.
-  app.get('/status', function(req, res) {
+  app.get('/status', function (req, res) {
     res.send(200, 'OK');
   });
 
   app.get('/login', [
-    function(req, res) {
+    function (req, res) {
       if (!authAddress.get() || req.headers.authorization) {
         res.redirect('/');
         return;
@@ -609,7 +625,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     },
   ]);
 
-  app.get('/sessionToken', function(req, res) {
+  app.get('/sessionToken', function (req, res) {
     let authToken = req.headers.authorization || '';
     const sToken = sessionToken.generateToken(cdapConfig, log, authToken);
     res.send(sToken);
@@ -623,13 +639,13 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
 
   */
   app.post('/login', authentication);
-  app.post('/logout', function(req, res) {
+  app.post('/logout', function (req, res) {
     res.clearCookie('CDAP_Auth_Token');
     res.end();
   });
 
   app.get('/backendstatus', [
-    function(req, res) {
+    function (req, res) {
       var protocol, port;
       if (isSecure) {
         protocol = 'https://';
@@ -662,7 +678,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
           agent: false,
           headers: headers,
         },
-        function(err, response) {
+        function (err, response) {
           if (err) {
             log.info('Server responded with error: ' + err + ' for API : "/v3/namespaces"');
             res.status((response && response.statusCode) || 502).send(err);
@@ -670,7 +686,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
             res.status(response.statusCode).send('OK');
           }
         }
-      ).on('error', function(err) {
+      ).on('error', function (err) {
         // If an error hasn't already been sent, send it here
         if (!res.headersSent) {
           try {
@@ -692,7 +708,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
    * In the future if we alow the user to change the theme from UI this API could
    * be used and we need to persist this information somewhere.
    */
-  app.post('/updateTheme', function(req, res) {
+  app.post('/updateTheme', function (req, res) {
     let authToken = req.headers.authorization;
     if (
       !req.headers['session-token'] ||
@@ -721,7 +737,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   app.all(
     ['/pipelines', '/pipelines/*'],
     [
-      function(req, res) {
+      function (req, res) {
         removeBCookie(req, res, cookieSettings);
         res.render('hydrator', { nonceVal: res.locals.nonce });
       },
@@ -731,7 +747,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
   app.all(
     ['/', '/cdap', '/cdap/*'],
     [
-      function(req, res) {
+      function (req, res) {
         removeBCookie(req, res, cookieSettings);
         res.render('cdap', { nonceVal: `${res.locals.nonce}` });
       },
