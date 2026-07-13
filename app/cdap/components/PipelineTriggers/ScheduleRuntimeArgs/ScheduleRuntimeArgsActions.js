@@ -141,6 +141,9 @@ function bulkSetArgMapping(argsArray) {
  * @returns all the args that belong to the triggering pipeline.
  */
 function filterPropertyMapping(args, triggeringPipelineInfo) {
+  if (!args) {
+    return [];
+  }
   return args.filter(
     (arg) =>
       !arg.pipeline ||
