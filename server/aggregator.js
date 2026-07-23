@@ -104,6 +104,22 @@ Aggregator.prototype.pushConfiguration = function(resource) {
   var statusCode = 404;
   var filePaths = [];
   var isConfigSemanticsValid;
+
+  // Validate templateid and pluginid to prevent path traversal attacks.
+  // Only allow alphanumeric characters, hyphens, and underscores.
+  var safeNamePattern = /^[a-zA-Z0-9_-]+$/;
+  if (!safeNamePattern.test(templateid) || !safeNamePattern.test(pluginid)) {
+    log.warn('Invalid templateid or pluginid: templateid=' + templateid + ', pluginid=' + pluginid);
+    this.connection.write(
+      JSON.stringify({
+        resource: this.stripAuthHeaderInProxyMode(this.cdapConfig, resource),
+        statusCode: 400,
+        response: 'INVALID_TEMPLATE_OR_PLUGIN_ID',
+      })
+    );
+    return;
+  }
+
   // Some times there might a plugin that is common across multiple templates
   // in which case, this is stored within the common directory. So, if the
   // template specific plugin check fails, then attempt to get it from common.
