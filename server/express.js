@@ -718,15 +718,23 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
       return res.status(500).send('Unable to validate session');
     }
     const requestedTheme = req.body.uiThemePath;
-    if (!requestedTheme) {
+    if (typeof requestedTheme !== 'string' || !requestedTheme) {
       return res.status(500).send('UnKnown theme file. Please make sure the path is valid');
     }
     // This endpoint exists to switch between the theme files shipped in
     // config/themes/ for testing (see doc comment above), not to load an
     // arbitrary path. Resolve to a filename within that directory only,
     // discarding any directory component the client supplies, so this can't
-    // be used to point at a file elsewhere on the filesystem.
-    const uiThemePath = path.join(__dirname, 'config', 'themes', path.basename(requestedTheme));
+    // be used to point at a file elsewhere on the filesystem. path.basename
+    // returns '..' or '.' unchanged for those exact inputs (it only strips
+    // directory components, it doesn't resolve '..' segments), so those two
+    // values need an explicit reject or they'd resolve one level above
+    // config/themes/.
+    const baseTheme = path.basename(requestedTheme);
+    if (baseTheme === '..' || baseTheme === '.' || !baseTheme) {
+      return res.status(500).send('UnKnown theme file. Please make sure the path is valid');
+    }
+    const uiThemePath = path.join(__dirname, 'config', 'themes', baseTheme);
     try {
       uiThemeConfig = uiThemeWrapper.extractUITheme(cdapConfig, uiThemePath);
     } catch (e) {
