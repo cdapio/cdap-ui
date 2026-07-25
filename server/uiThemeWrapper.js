@@ -50,6 +50,15 @@ function extractUIFeaturesFromConfig(cdapConfig) {
   return featuresMap;
 }
 
+// Theme files are plain JSON data, not code. Read and parse them directly
+// instead of require()'ing them: __non_webpack_require__ executes .js files
+// as Node modules, which turned an attacker-controlled uiThemePath (see
+// express.js's /updateTheme route) into arbitrary code execution rather than
+// just a theme-config read.
+function readThemeJSON(themePath) {
+  return JSON.parse(fs.readFileSync(themePath, 'utf8'));
+}
+
 function mergeUIThemeWithConfig(cdapConfig, themeConfig) {
   const configFeatures = {
     features: extractUIFeaturesFromConfig(cdapConfig),
@@ -71,11 +80,9 @@ export function extractUITheme(cdapConfig, uiThemePath) {
   // Absolute path
   if (uiThemePath[0] === '/') {
     try {
-      if (__non_webpack_require__.resolve(uiThemePath)) {
-        uiThemeConfig = __non_webpack_require__(uiThemePath);
-        log.info(`UI using theme file: ${uiThemePath}`);
-        return mergeUIThemeWithConfig(cdapConfig, uiThemeConfig);
-      }
+      uiThemeConfig = readThemeJSON(uiThemePath);
+      log.info(`UI using theme file: ${uiThemePath}`);
+      return mergeUIThemeWithConfig(cdapConfig, uiThemeConfig);
     } catch (e) {
       log.info('UI Theme file not found at: ', uiThemePath);
       throw e;
@@ -105,11 +112,9 @@ export function extractUITheme(cdapConfig, uiThemePath) {
       }
       themePath = path.join(__dirname, themePath);
 
-      if (__non_webpack_require__.resolve(themePath)) {
-        uiThemeConfig = __non_webpack_require__(themePath);
-        log.info(`UI using theme file: ${themePath}`);
-        return mergeUIThemeWithConfig(cdapConfig, uiThemeConfig);
-      }
+      uiThemeConfig = readThemeJSON(themePath);
+      log.info(`UI using theme file: ${themePath}`);
+      return mergeUIThemeWithConfig(cdapConfig, uiThemeConfig);
     } catch (e) {
       // This will show the user what the full path is.
       // This should help them give proper relative path

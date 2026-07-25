@@ -15,7 +15,6 @@
 */
 
 import crypto from 'crypto';
-import path from 'path';
 
 const EncryptionConstants = {
   ONE_HOUR_MILLIS: 60 * 60 * 1000,
@@ -97,15 +96,20 @@ function decrypt(encText, key) {
 }
 
 function getSecretFromCDAPConfig(cdapConfig, logger) {
-  let secretKey =
-    cdapConfig['session.secret.key'] ||
-    path.resolve(__dirname, 'config', 'development', 'session.secret.key');
   if (!logger) {
     logger = console;
   }
+  const secretKey = cdapConfig['session.secret.key'];
   if (!secretKey) {
-    logger.warn(
-      'Secret key missing. This is required to generate a strong time-based token to prevent cswh'
+    // Previously this fell back to path.resolve(__dirname, 'config', 'development',
+    // 'session.secret.key'), a file path *string*, used directly as the key material
+    // instead of that file's contents. That value is fully predictable by anyone who
+    // knows (or guesses) the install directory, letting them forge valid session
+    // tokens with no knowledge of any real secret. Fail closed instead: a deployment
+    // must explicitly configure a real secret.
+    throw new Error(
+      "'session.secret.key' is not configured. A real secret is required to generate " +
+        'or validate session tokens.'
     );
   }
   return secretKey;
