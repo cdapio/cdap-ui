@@ -41,5 +41,30 @@ function testMismatch() {
   assert(!isTokenValid);
 }
 
+// A missing 'session.secret.key' must not fall back to any predictable value.
+// generateToken should refuse to issue a token, and validateToken should
+// reject everything (including a token forged with the old, predictable
+// fallback), rather than accepting a guessable secret.
+function testMissingSecretKeyRefusesToken() {
+  const cdapConfigNoSecret = { 'instance.metadata.id': 'test-instance' };
+
+  let threw = false;
+  try {
+    generateToken(cdapConfigNoSecret, console);
+  } catch (e) {
+    threw = true;
+  }
+  assert(threw, 'generateToken should throw when session.secret.key is not configured');
+
+  const isValid = validateToken('anything-at-all', cdapConfigNoSecret, console);
+  assert(!isValid, 'validateToken should reject when session.secret.key is not configured');
+
+  console.log('testMissingSecretKeyRefusesToken passed');
+}
+
 testMatch();
+testMissingSecretKeyRefusesToken();
+// Note: testMismatch() fails on master independent of this change, since
+// authToken isn't actually part of the token or the comparison in either
+// generateToken or validateToken. Left as-is, out of scope here.
 testMismatch();

@@ -15,7 +15,10 @@
 */
 
 import crypto from 'crypto';
+import fs from 'fs';
 import path from 'path';
+
+/* global process, __dirname */
 
 const EncryptionConstants = {
   ONE_HOUR_MILLIS: 60 * 60 * 1000,
@@ -97,15 +100,23 @@ function decrypt(encText, key) {
 }
 
 function getSecretFromCDAPConfig(cdapConfig, logger) {
-  let secretKey =
-    cdapConfig['session.secret.key'] ||
-    path.resolve(__dirname, 'config', 'development', 'session.secret.key');
   if (!logger) {
     logger = console;
   }
+  const secretKey = cdapConfig['session.secret.key'];
   if (!secretKey) {
-    logger.warn(
-      'Secret key missing. This is required to generate a strong time-based token to prevent cswh'
+    // In development, fall back to reading the actual secret file on disk.
+    // This avoids the old bug where the file *path string* was used as key
+    // material instead of the file's contents.
+    if (process.env.NODE_ENV === 'development') {
+      const keyFilePath = path.resolve(__dirname, 'config', 'development', 'session_secret.key');
+      return fs.readFileSync(keyFilePath, 'utf8');
+    }
+    // In production (or any other environment), fail closed: a deployment
+    // must explicitly configure a real secret via 'session.secret.key'.
+    throw new Error(
+      "'session.secret.key' is not configured. A real secret is required to generate " +
+        'or validate session tokens.'
     );
   }
   return secretKey;
