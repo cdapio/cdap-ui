@@ -15,6 +15,11 @@
 */
 
 import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+/* global process, __dirname */
 
 const EncryptionConstants = {
   ONE_HOUR_MILLIS: 60 * 60 * 1000,
@@ -101,12 +106,15 @@ function getSecretFromCDAPConfig(cdapConfig, logger) {
   }
   const secretKey = cdapConfig['session.secret.key'];
   if (!secretKey) {
-    // Previously this fell back to path.resolve(__dirname, 'config', 'development',
-    // 'session.secret.key'), a file path *string*, used directly as the key material
-    // instead of that file's contents. That value is fully predictable by anyone who
-    // knows (or guesses) the install directory, letting them forge valid session
-    // tokens with no knowledge of any real secret. Fail closed instead: a deployment
-    // must explicitly configure a real secret.
+    // In development, fall back to reading the actual secret file on disk.
+    // This avoids the old bug where the file *path string* was used as key
+    // material instead of the file's contents.
+    if (process.env.NODE_ENV === 'development') {
+      const keyFilePath = path.resolve(__dirname, 'config', 'development', 'session_secret.key');
+      return fs.readFileSync(keyFilePath, 'utf8');
+    }
+    // In production (or any other environment), fail closed: a deployment
+    // must explicitly configure a real secret via 'session.secret.key'.
     throw new Error(
       "'session.secret.key' is not configured. A real secret is required to generate " +
         'or validate session tokens.'

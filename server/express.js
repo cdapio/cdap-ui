@@ -709,6 +709,13 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
    * be used and we need to persist this information somewhere.
    */
   app.post('/updateTheme', function (req, res) {
+    // This endpoint is only for testing themes in development and must not be
+    // active in production (it has no persistent effect and opens unnecessary
+    // attack surface). Return 401 so callers get a clear signal rather than a
+    // silent no-op.
+    if (isModeProduction()) {
+      return res.status(401).send('This endpoint is not available in production');
+    }
     let authToken = req.headers.authorization;
     if (
       !req.headers['session-token'] ||

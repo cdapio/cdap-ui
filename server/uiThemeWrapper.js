@@ -51,10 +51,7 @@ function extractUIFeaturesFromConfig(cdapConfig) {
 }
 
 // Theme files are plain JSON data, not code. Read and parse them directly
-// instead of require()'ing them: __non_webpack_require__ executes .js files
-// as Node modules, which turned an attacker-controlled uiThemePath (see
-// express.js's /updateTheme route) into arbitrary code execution rather than
-// just a theme-config read.
+// instead of require()'ing them to avoid executing attacker-controlled input.
 function readThemeJSON(themePath) {
   return JSON.parse(fs.readFileSync(themePath, 'utf8'));
 }
