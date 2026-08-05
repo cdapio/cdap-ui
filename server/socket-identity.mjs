@@ -53,22 +53,32 @@ export function getSockjsSessionId(prefix, url) {
 export function createSocketIdentityStore({ prefix, cdapConfig, getAuthHeaderFromRawCookies, ttlMs = 60000 }) {
   const pending = new Map();
 
-  /** Call for every request that might be starting/continuing a sockjs session. */
+  /**
+   * Call for every request that might be starting/continuing a sockjs session.
+   * Long-lived polling transports call this repeatedly (once per poll) for the same
+   * session id, so each call clears the previous entry's timer before scheduling a new
+   * one -- otherwise an earlier, still-pending timer can delete a later, unconsumed entry.
+   */
   function capture(req) {
     const sessionId = getSockjsSessionId(prefix, req.url);
     if (!sessionId) {
       return;
     }
+    const existing = pending.get(sessionId);
+    if (existing) {
+      clearTimeout(existing.timer);
+    }
     req.headers.authorization = getAuthHeaderFromRawCookies(req);
     const userIdProperty = cdapConfig['security.authentication.proxy.user.identity.header'];
-    pending.set(sessionId, {
-      authToken: req.headers.authorization,
-      userid: req.headers[userIdProperty],
-    });
     const timer = setTimeout(() => pending.delete(sessionId), ttlMs);
     if (typeof timer.unref === 'function') {
       timer.unref();
     }
+    pending.set(sessionId, {
+      authToken: req.headers.authorization,
+      userid: req.headers[userIdProperty],
+      timer,
+    });
   }
 
   /** Call once a sockjs 'connection' fires, with that connection's own url. */
@@ -77,9 +87,13 @@ export function createSocketIdentityStore({ prefix, cdapConfig, getAuthHeaderFro
     if (!sessionId) {
       return {};
     }
-    const identity = pending.get(sessionId) || {};
+    const identity = pending.get(sessionId);
+    if (!identity) {
+      return {};
+    }
+    clearTimeout(identity.timer);
     pending.delete(sessionId);
-    return identity;
+    return { authToken: identity.authToken, userid: identity.userid };
   }
 
   return { capture, consume };

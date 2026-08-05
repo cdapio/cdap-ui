@@ -96,4 +96,29 @@ describe('createSocketIdentityStore', () => {
     store.consume('/_sock/000/onceonly/websocket');
     expect(store.consume('/_sock/000/onceonly/websocket')).toEqual({});
   });
+
+  // Regression test: a long-lived polling transport calls capture() repeatedly for the
+  // same session id. Each call used to schedule its own expiry timer without clearing the
+  // previous one, so an earlier timer could delete a later, still-unconsumed entry.
+  test('an earlier capture for a session does not expire a later capture of the same session', () => {
+    jest.useFakeTimers();
+    const store = createSocketIdentityStore({
+      prefix: '/_sock', cdapConfig, getAuthHeaderFromRawCookies, ttlMs: 1000,
+    });
+
+    store.capture({
+      url: '/_sock/000/polling/xhr_streaming',
+      headers: { authorization: 'Bearer first', 'x-identity-id': 'u' },
+    });
+    jest.advanceTimersByTime(900);
+    store.capture({
+      url: '/_sock/000/polling/xhr_streaming',
+      headers: { authorization: 'Bearer second', 'x-identity-id': 'u' },
+    });
+    // the first capture's timer would have fired here if it hadn't been cleared
+    jest.advanceTimersByTime(200);
+
+    expect(store.consume('/_sock/000/polling/xhr_streaming').authToken).toBe('Bearer second');
+    jest.useRealTimers();
+  });
 });

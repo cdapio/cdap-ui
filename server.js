@@ -240,8 +240,12 @@ getCDAPConfig()
       getAuthHeaderFromRawCookies,
     });
 
-    function isAllowedOrigin(req) {
-      return allowedOrigin.indexOf(req.headers.origin) !== -1;
+    function isAllowedOrigin(req, allowMissing = false) {
+      const origin = req.headers.origin;
+      if (!origin) {
+        return allowMissing;
+      }
+      return allowedOrigin.indexOf(origin) !== -1;
     }
 
     sockServer.on('connection', function(c) {
@@ -278,11 +282,13 @@ getCDAPConfig()
     });
     // Non-websocket sockjs transports (xhr-streaming, xhr-polling, eventsource, ...) never
     // fire 'upgrade' -- they're plain HTTP requests, so this is the only place their
-    // PROXY-mode identity can be captured. Skip capture (rather than tearing down the
-    // socket, which sockjs's own request handling already owns) for origins we wouldn't
-    // have allowed to upgrade either, so those sessions fall through unauthenticated.
+    // PROXY-mode identity can be captured. Browsers don't reliably send Origin on
+    // same-origin requests, so a missing Origin here is treated as same-origin (matches
+    // how these fallback transports actually behave) rather than rejected outright; skip
+    // capture (rather than tearing down the socket, which sockjs's own request handling
+    // already owns) only for a mismatched, known-cross-origin request.
     server.addListener('request', function(req) {
-      if (!isAllowedOrigin(req)) {
+      if (!isAllowedOrigin(req, true)) {
         return;
       }
       socketIdentities.capture(req);
