@@ -28,6 +28,7 @@ import { getCDAPConfig } from 'server/cdap-config';
 import { applyGraphQLMiddleware } from 'gql/graphql';
 import { getHostName } from 'server/config/hostname';
 import middleware404 from 'server/middleware-404';
+import { createSocketIdentityStore } from 'server/socket-identity';
 
 var cdapConfig,
   securityConfig,
@@ -215,14 +216,38 @@ getCDAPConfig()
      *    requests.
      * 3. The client will not know about the auth token either.
      * 4. Once the client reaches CDAP UI, the proxy would have already authenticated the user.
-     * 5. The request to upgrade websocket connection should already have the auth token and the user id
+     * 5. The request to establish the sockjs session should already have the auth token and the user id
      * 6. We take those values and add to the connection object (sockjs connection object)
      * 7. This then gets picked up at the aggregator module that actually makes the call to the
      *    backend along with these in the request header.
      * 8. Upon receiving the response, we remove these from the request object and send it back
      *    to the client as if no authentication exists.
+     *
+     * Step 5/6 need one correction versus how this used to work: sockjs sessions aren't only
+     * established over a websocket upgrade. Whenever a websocket upgrade isn't available
+     * (some corporate proxies, older browsers), sockjs transparently falls back to plain HTTP
+     * transports (xhr-streaming, xhr-polling, eventsource, ...), which never fire Node's
+     * 'upgrade' event at all. The auth token / user id must therefore be captured per sockjs
+     * session id (parsed out of the request URL) rather than in one shared variable -- a shared
+     * variable is clobbered by whichever request happens to arrive last, silently binding one
+     * user's session to a different, unrelated user's identity (in the fallback-transport case,
+     * every single session gets bound this way, since 'upgrade' never fires for them at all).
      */
-    let authToken, userid;
+    const SOCKJS_PREFIX = '/_sock';
+    const socketIdentities = createSocketIdentityStore({
+      prefix: SOCKJS_PREFIX,
+      cdapConfig,
+      getAuthHeaderFromRawCookies,
+    });
+
+    function isAllowedOrigin(req, allowMissing = false) {
+      const origin = req.headers.origin;
+      if (!origin) {
+        return allowMissing;
+      }
+      return allowedOrigin.indexOf(origin) !== -1;
+    }
+
     sockServer.on('connection', function(c) {
       if (!c) {
         log.error('Connection requested, but no connection available');
@@ -231,8 +256,9 @@ getCDAPConfig()
       log.debug('[SOCKET OPEN] Connection to client "' + c.id + '" opened');
       // @ts-ignore
       var a = new Aggregator(c, { ...cdapConfig, ...securityConfig });
-      c.authToken = authToken;
-      c.userid = userid;
+      const identity = socketIdentities.consume(c.url);
+      c.authToken = identity.authToken;
+      c.userid = identity.userid;
       wsConnections[c.id] = c;
       c.on('close', function() {
         log.debug('Cleaning out aggregator: ' + JSON.stringify(a.connection.id));
@@ -243,20 +269,29 @@ getCDAPConfig()
       });
     });
 
-    sockServer.installHandlers(server, { prefix: '/_sock' });
+    sockServer.installHandlers(server, { prefix: SOCKJS_PREFIX });
     server.addListener('upgrade', function(req, socket) {
-      req.headers.authorization = getAuthHeaderFromRawCookies(req);
-      authToken = req.headers.authorization;
-      const userIdProperty = cdapConfig['security.authentication.proxy.user.identity.header'];
-      userid = req.headers[userIdProperty];
-
-      if (allowedOrigin.indexOf(req.headers.origin) === -1) {
+      if (!isAllowedOrigin(req)) {
         log.info('Unknown Origin: ' + req.headers.origin);
         log.info('Denying socket connection and closing the channel');
         socket.end();
         socket.destroy();
         return;
       }
+      socketIdentities.capture(req);
+    });
+    // Non-websocket sockjs transports (xhr-streaming, xhr-polling, eventsource, ...) never
+    // fire 'upgrade' -- they're plain HTTP requests, so this is the only place their
+    // PROXY-mode identity can be captured. Browsers don't reliably send Origin on
+    // same-origin requests, so a missing Origin here is treated as same-origin (matches
+    // how these fallback transports actually behave) rather than rejected outright; skip
+    // capture (rather than tearing down the socket, which sockjs's own request handling
+    // already owns) only for a mismatched, known-cross-origin request.
+    server.addListener('request', function(req) {
+      if (!isAllowedOrigin(req, true)) {
+        return;
+      }
+      socketIdentities.capture(req);
     });
     function gracefulShutdown() {
       log.info('Caught SIGTERM. Closing http & ws server');
