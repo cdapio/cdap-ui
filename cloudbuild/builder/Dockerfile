@@ -22,15 +22,11 @@ FROM node:16
 RUN apt-get update && \
    apt install -y software-properties-common
 
-# Add OpenJDK registry
-RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | apt-key add -
-RUN add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
-
-# Install OpenJDK-8
-RUN apt-get update && \
-   apt-get install -y adoptopenjdk-8-hotspot && \
-   apt-get install -y ant && \
-   apt-get clean;
+# Add OpenJDK registry and install jdk 8
+RUN mkdir -p /etc/apt/keyrings && \
+    wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc && \
+    echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list && \
+    apt-get update && apt-get install -y temurin-8-jdk && apt-get install -y ant && apt-get clean;
 
 # Fix certificate issues
 RUN apt-get update && \
@@ -39,7 +35,7 @@ RUN apt-get update && \
    update-ca-certificates -f;
 
 # Setup JAVA_HOME -- useful for docker commandline
-ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
+ENV JAVA_HOME /usr/lib/jvm/temurin-8-jdk-amd64/
 RUN export JAVA_HOME
 
 # Install Cypress dependencies
