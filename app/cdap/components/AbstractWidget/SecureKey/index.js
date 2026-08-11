@@ -15,6 +15,7 @@
  */
 
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
 import { MySecureKeyApi } from 'api/securekey';
@@ -27,14 +28,24 @@ import { SECURE_KEY_PREFIX, SECURE_KEY_SUFFIX, SYSTEM_NAMESPACE } from 'services
 import Mousetrap from 'mousetrap';
 import { Observable } from 'rxjs/Observable';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
+import { IconButton } from '@material-ui/core';
+import ClearIcon from '@material-ui/icons/Clear';
 require('./SecureKeyTextarea.scss');
 
 const PREFIX = 'features.AbstractWidget.SecureKeyTextarea';
 
+const NonEditableTextWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`;
+
 export default class SecureKeyTextarea extends Component {
   static propTypes = {
     ...WIDGET_PROPTYPES,
-    inputTextType: PropTypes.oneOf(['textarea', 'text', 'password']),
+    inputTextType: PropTypes.oneOf(['textarea', 'text', 'password', 'none']),
     dataCy: PropTypes.string,
     dataTestId: PropTypes.string,
   };
@@ -146,6 +157,13 @@ export default class SecureKeyTextarea extends Component {
     }
   };
 
+  handleClearInput = (e) => {
+    e.stopPropagation();
+    if (this.props.onChange) {
+      this.props.onChange('');
+    }
+  };
+
   renderCustomEntry = () => {
     const helperText = (
       <div className="helper-text text-center" onClick={this.toggleCustomEntry}>
@@ -215,6 +233,25 @@ export default class SecureKeyTextarea extends Component {
   };
 
   renderInput = () => {
+    if (this.props.inputTextType === 'none') {
+      return (
+        <NonEditableTextWrapper
+          className="form-control raw-text-input"
+          onClick={this.toggleExpand}
+          data-cy={this.props.dataCy}
+          data-testid={this.props.dataTestId}
+          {...this.props.widgetProps}
+        >
+          <span>{this.props.value}</span>
+          {this.props.value && (
+            <IconButton aria-label="clear" onClick={this.handleClearInput}>
+              <ClearIcon fontSize="small" />
+            </IconButton>
+          )}
+        </NonEditableTextWrapper>
+      );
+    }
+
     if (this.props.inputTextType === 'textarea') {
       return (
         <textarea

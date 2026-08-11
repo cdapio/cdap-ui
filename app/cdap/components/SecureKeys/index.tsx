@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019-2020 Cask Data, Inc.
+ * Copyright © 2019-2024 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,13 +14,13 @@
  * the License.
  */
 
-import * as React from 'react';
+import React, { useEffect, useReducer } from 'react';
+import styled from 'styled-components';
 
 import { List, fromJS } from 'immutable';
 import withStyles, { StyleRules, WithStyles } from '@material-ui/core/styles/withStyles';
 
 import Alert from 'components/shared/Alert';
-import If from 'components/shared/If';
 import LoadingSVGCentered from 'components/shared/LoadingSVGCentered';
 import { MySecureKeyApi } from 'api/securekey';
 import SecureKeyDelete from 'components/SecureKeys/SecureKeyDelete';
@@ -70,22 +70,22 @@ export function reducer(state, action) {
   }
 }
 
-const styles = (): StyleRules => {
-  return {
-    content: {
-      padding: '50px',
-    },
-  };
-};
+const ContentDiv = styled.div`
+  padding: ${({ renderInTab }) => (renderInTab ? '0px' : '50px')};
+`;
 
-const SecureKeysView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+interface ISecureKeyViewProps {
+  renderInTab?: boolean;
+}
+
+const SecureKeysView: React.FC<ISecureKeyViewProps> = ({ renderInTab }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const { secureKeyStatus, editMode, deleteMode, loading } = state;
 
   const namespace = getCurrentNamespace();
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchSecureKeys();
   }, []);
 
@@ -141,7 +141,7 @@ const SecureKeysView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
   };
 
   return (
-    <div className="container">
+    <div className={!renderInTab && 'container'}>
       <Alert
         message={'saved successfully'}
         showAlert={secureKeyStatus === SecureKeyStatus.Success}
@@ -155,41 +155,39 @@ const SecureKeysView: React.FC<WithStyles<typeof styles>> = ({ classes }) => {
         onClose={onAlertClose}
       />
 
-      <If condition={loading}>
-        <LoadingSVGCentered showFullPage />
-      </If>
-
-      <If condition={!loading}>
-        <div className={classes.content}>
+      {loading && <LoadingSVGCentered showFullPage />}
+      {!loading && (
+        <ContentDiv renderInTab={renderInTab}>
           <SecureKeyList
+            renderInTab={renderInTab}
             state={state}
             alertSuccess={alertSuccess}
             alertFailure={alertFailure}
             openDeleteDialog={openDeleteDialog}
             openEditDialog={openEditDialog}
           />
-        </div>
-      </If>
+        </ContentDiv>
+      )}
 
-      <If condition={editMode}>
+      {editMode && (
         <SecureKeyEdit
           state={state}
           open={editMode}
           handleClose={onEditDialogClose}
           alertSuccess={alertSuccess}
         />
-      </If>
-      <If condition={deleteMode}>
+      )}
+
+      {deleteMode && (
         <SecureKeyDelete
           state={state}
           open={deleteMode}
           handleClose={onDeleteDialogClose}
           alertSuccess={alertSuccess}
         />
-      </If>
+      )}
     </div>
   );
 };
 
-const SecureKeys = withStyles(styles)(SecureKeysView);
-export default SecureKeys;
+export default SecureKeysView;

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2019 Cask Data, Inc.
+ * Copyright © 2024 Cask Data, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,17 +14,9 @@
  * the License.
  */
 
-import { DEFAULT_WIDGET_PROPS } from 'components/AbstractWidget';
-import React from 'react';
-import SecureKey from 'components/AbstractWidget/SecureKey';
-import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
+import React, { useState } from 'react';
+import SecureKeysView from 'components/SecureKeys';
 
-export default function SecureKeyTextarea(props) {
-  return <SecureKey inputTextType="none" {...props} />;
+export default function SecureKeysTab() {
+  return <SecureKeysView renderInTab={true} />;
 }
-
-SecureKeyTextarea.propTypes = WIDGET_PROPTYPES;
-SecureKeyTextarea.defaultProps = DEFAULT_WIDGET_PROPS;
-SecureKeyTextarea.getWidgetAttributes = () => {
-  return {};
-};
