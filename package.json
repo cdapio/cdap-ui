@@ -46,7 +46,7 @@
     "url": "https://github.com/caskdata/cdap/cdap-ui"
   },
   "devDependencies": {
-    "@babel/core": "7.7.4",
+    "@babel/core": "7.29.6",
     "@babel/plugin-proposal-class-properties": "7.7.4",
     "@babel/plugin-proposal-decorators": "7.7.4",
     "@babel/plugin-proposal-export-namespace-from": "7.7.4",
