@@ -2548,6 +2548,9 @@ features:
       edit: Edit
       export: Export
       exportModalTitle: Export pipeline configuration
+      genaiSummarize: Summarize
+      genaiSummaryOfPipeline: Summary of {pipelineName}
+      genaiSummaryOfUnnamedPipeline: Pipeline summary
       history: History
       run: Run
       schedule: Schedule

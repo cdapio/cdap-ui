@@ -29,4 +29,6 @@ export const MyAppApi = {
   batchStatus: apiCreator(dataSrc, 'POST', 'POLL', '/namespaces/:namespace/status'),
   batchAppDetail: apiCreator(dataSrc, 'POST', 'REQUEST', '/namespaces/:namespace/appdetail'),
   delete: apiCreator(dataSrc, 'DELETE', 'REQUEST', appPath),
+  summarize: apiCreator(dataSrc, 'POST', 'REQUEST', `${appPath}/summarize`),
+  summarizeDraft: apiCreator(dataSrc, 'POST', 'REQUEST', `${basepath}/summarize`),
 };

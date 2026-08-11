@@ -129,7 +129,7 @@ export const DescriptionTextField = styled(TextField)`
 `;
 
 export const EditStatus = styled.div`
-  width: calc(20vw - 110px);
+  width: calc(20vw - 180px);
   flex-wrap: wrap;
   display: flex;
   background-color: transparent;

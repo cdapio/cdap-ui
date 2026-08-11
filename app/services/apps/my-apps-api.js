@@ -30,6 +30,15 @@ angular.module(PKG.name + '.services')
     {
       delete: myHelpers.getConfig('DELETE', 'REQUEST', detailPath),
       list: myHelpers.getConfig('GET', 'REQUEST', listPath, true),
-      get: myHelpers.getConfig('GET', 'REQUEST', detailPath)
+      get: myHelpers.getConfig('GET', 'REQUEST', detailPath),
+      summarize: myHelpers.getConfig('POST', 'REQUEST', basePath + '/summarize', 
+        false, { 
+          responseType: 'text',
+          transformResponse: function (data) {
+            return {
+              summary: data,
+            };
+          },
+        }),
     });
   });
