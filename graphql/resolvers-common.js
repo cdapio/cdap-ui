@@ -43,6 +43,10 @@ export function requestPromiseWrapper(options, { auth: token, userIdProperty, us
     options.headers[userIdProperty] = userIdValue;
   }
 
+  if (!options.timeout) {
+    options.timeout = 5 * 60 * 1000; // 5mins
+  }
+
   return new Promise((resolve, reject) => {
     request(options, (err, response, body) => {
       const statusCode = response.statusCode;
