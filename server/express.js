@@ -259,6 +259,7 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
         hstsPreload: cdapConfig['hsts.preload'],
         runRecordsTtl: cdapConfig['app.run.records.ttl.days'],
         defaultPollIntervalMs: parseInt(cdapConfig['ui.default.poll.interval.millis'], 10) || 10000,
+        defaultWranglerBrowseEntitiesLimit: parseInt(cdapConfig['ui.wrangler.connections.browse.entities.limit'], 10) || 2000,
       },
       hydrator: {
         previewEnabled: cdapConfig['enable.preview'] === 'true',

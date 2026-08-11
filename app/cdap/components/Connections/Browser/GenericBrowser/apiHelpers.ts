@@ -17,8 +17,10 @@
 import { ConnectionsApi } from 'api/connections';
 import DataprepApi from 'api/dataprep';
 import { getCurrentNamespace } from 'services/NamespaceStore';
+import { getCdapConfig } from 'services/helpers';
 
-export const ENTITY_TRUNCATION_LIMIT = 1000;
+export const ENTITY_TRUNCATION_LIMIT_SETTING = 'defaultWranglerBrowseEntitiesLimit';
+export const ENTITY_TRUNCATION_LIMIT = getCdapConfig(ENTITY_TRUNCATION_LIMIT_SETTING, 2000);
 
 export function exploreConnection({ connectionid, path = '/' }) {
   const body = {

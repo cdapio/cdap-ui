@@ -23,5 +23,6 @@
   "hsts.max.age": 31536000,
   "hsts.include.sub.domains": "true",
   "hsts.preload": "true",
-  "ui.default.poll.interval.millis": "10000"
+  "ui.default.poll.interval.millis": "10000",
+  "ui.wrangler.connections.browse.entities.limit": "2000"
 }
