@@ -15,7 +15,11 @@
  */
 
 import { execSync } from 'child_process';
-import { getGcloudCommand, shellQuote } from 'components/NamespaceAdmin/ServiceAccounts/gcloudCommand';
+import {
+  getGcloudCommand,
+  isValidServiceAccountEmail,
+  shellQuote,
+} from 'components/NamespaceAdmin/ServiceAccounts/gcloudCommand';
 
 describe('shellQuote', () => {
   // Round-trips a set of values through a real shell (printf) to confirm the
@@ -81,6 +85,37 @@ describe('getGcloudCommand', () => {
       k8snamespace: 'my-ns',
       k8sWorkloadIdentityPool: 'my-pool',
     });
-    expect(command).toContain("--member serviceAccount:'my-pool'['my-ns'/'my-identity']");
+    expect(command).toContain("--member serviceAccount:'my-pool'\\['my-ns'/'my-identity'\\]");
+  });
+
+  test('the k8s namespace/identity brackets are escaped so zsh does not glob them', () => {
+    const command = getGcloudCommand({ identity: 'my-identity', k8snamespace: 'my-ns' });
+    expect(command).toContain('\\[');
+    expect(command).toContain('\\]');
+    expect(command).not.toMatch(/[^\\]\[/);
+  });
+
+  test('an invalid gsaEmail is discarded to the literal placeholder', () => {
+    const command = getGcloudCommand({
+      gsaEmail: 'x@x.iam.gserviceaccount.com; touch /tmp/should-not-exist',
+    });
+    expect(command).toContain('${GSA_EMAIL}');
+    expect(command).not.toContain('touch');
+  });
+});
+
+describe('isValidServiceAccountEmail', () => {
+  test('accepts well-formed service account emails', () => {
+    expect(isValidServiceAccountEmail('svc@my-project.iam.gserviceaccount.com')).toBe(true);
+    expect(isValidServiceAccountEmail('123-compute@developer.gserviceaccount.com')).toBe(true);
+  });
+
+  test('rejects values carrying shell metacharacters or malformed emails', () => {
+    expect(isValidServiceAccountEmail('x@x.com; touch /tmp/pwned')).toBe(false);
+    expect(isValidServiceAccountEmail('x@x.com;touch')).toBe(false);
+    expect(isValidServiceAccountEmail('$(touch /tmp/pwned)')).toBe(false);
+    expect(isValidServiceAccountEmail('`touch /tmp/pwned`')).toBe(false);
+    expect(isValidServiceAccountEmail('not-an-email')).toBe(false);
+    expect(isValidServiceAccountEmail('')).toBe(false);
   });
 });

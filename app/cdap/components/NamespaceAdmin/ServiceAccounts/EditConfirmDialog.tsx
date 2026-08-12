@@ -23,7 +23,10 @@ import {
   validateServiceAccount,
   addServiceAccount,
 } from 'components/NamespaceAdmin/store/ActionCreator';
-import { getGcloudCommand } from 'components/NamespaceAdmin/ServiceAccounts/gcloudCommand';
+import {
+  getGcloudCommand,
+  isValidServiceAccountEmail,
+} from 'components/NamespaceAdmin/ServiceAccounts/gcloudCommand';
 
 const PREFIX = 'features.ServiceAccounts';
 
@@ -69,9 +72,13 @@ export const EditConfirmDialog = ({
   );
   const [saveStatus, setSaveStatus] = useState<SeverityType>(SeverityType.INFO);
 
+  // The input is only ever expected to hold a GCP service account email. Anything else
+  // is treated as invalid and never fed into the generated gcloud command or saved.
+  const isInputValid = isValidServiceAccountEmail(serviceAccountInputValue);
+
   const gcloudCommandParams = {
     identity: namespaceIdentity || undefined,
-    gsaEmail: serviceAccountInputValue || undefined,
+    gsaEmail: (isInputValid && serviceAccountInputValue) || undefined,
     k8snamespace: (namespacedCreationHookEnabled && k8snamespace) || undefined,
     k8sWorkloadIdentityPool: k8sWorkloadIdentityPool || undefined,
   };
@@ -118,7 +125,12 @@ export const EditConfirmDialog = ({
       <StyledTextField
         label={T.translate(`${PREFIX}.editInputLabel`)}
         defaultValue={serviceAccountInputValue}
-        helperText={T.translate(`${PREFIX}.inputHelperText`)}
+        error={!!serviceAccountInputValue && !isInputValid}
+        helperText={
+          !!serviceAccountInputValue && !isInputValid
+            ? T.translate(`${PREFIX}.invalidServiceAccount`)
+            : T.translate(`${PREFIX}.inputHelperText`)
+        }
         variant="outlined"
         margin="dense"
         fullWidth
@@ -142,7 +154,7 @@ export const EditConfirmDialog = ({
       confirmButtonText={T.translate('commons.save')}
       confirmFn={handleSave}
       cancelFn={closeFn}
-      disableAction={!serviceAccountInputValue}
+      disableAction={!serviceAccountInputValue || !isInputValid}
       isOpen={isShow}
       severity={saveStatus}
       statusMessage={saveStatusMsg}

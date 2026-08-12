@@ -23,6 +23,16 @@
  */
 export const shellQuote = (value: string): string => `'${String(value).replace(/'/g, `'\\''`)}'`;
 
+/**
+ * A GCP service account email is the only value the operator is expected to type into
+ * the input box. Anything that isn't a well-formed service account email (e.g. a value
+ * carrying shell metacharacters) is rejected so it never reaches the generated command.
+ * The character classes are deliberately narrow (no spaces, quotes, `;`, `$`, backticks,
+ * parentheses, etc.), which also makes shell injection structurally impossible.
+ */
+export const isValidServiceAccountEmail = (value: string): boolean =>
+  /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?@[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?\.[a-z]{2,}$/i.test(value);
+
 interface IGcloudCommandParams {
   k8sWorkloadIdentityPool?: string;
   identity?: string;
@@ -61,8 +71,13 @@ export const getGcloudCommand = ({
     : '${TENANT_PROJECT_ID}.svc.id.goog';
   const ns = shellQuote(k8snamespace || 'default');
   const id = identity ? shellQuote(identity) : '${IDENTITY}';
-  const email = gsaEmail ? shellQuote(gsaEmail) : '${GSA_EMAIL}';
+  // Only a well-formed service account email is interpolated; anything else is
+  // discarded back to the literal "${GSA_EMAIL}" placeholder.
+  const email = gsaEmail && isValidServiceAccountEmail(gsaEmail) ? shellQuote(gsaEmail) : '${GSA_EMAIL}';
   const projectId = gsaProjectId ? shellQuote(gsaProjectId) : '${GSA_PROJECT_ID}';
 
-  return `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member serviceAccount:${pool}[${ns}/${id}] ${email} --project ${projectId}`;
+  // The square brackets around the k8s namespace/identity are escaped so zsh (the
+  // default macOS shell) doesn't treat them as a filename-globbing pattern and fail
+  // with "no matches found" when the operator copy-pastes the command.
+  return `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member serviceAccount:${pool}\\[${ns}/${id}\\] ${email} --project ${projectId}`;
 };
