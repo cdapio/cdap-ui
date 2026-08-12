@@ -23,6 +23,10 @@ import {
   validateServiceAccount,
   addServiceAccount,
 } from 'components/NamespaceAdmin/store/ActionCreator';
+import {
+  getGcloudCommand,
+  isValidServiceAccountEmail,
+} from 'components/NamespaceAdmin/ServiceAccounts/gcloudCommand';
 
 const PREFIX = 'features.ServiceAccounts';
 
@@ -48,29 +52,6 @@ const StyledTextField = styled(TextField)`
   }
 `;
 
-/**
- * Generates the gcloud cli command to add an IAM policy binding. If any of the
- * parameters for the command is not provided when the command is generated, then
- * the user should be able to provide them as environment variables in their shell.
- *
- * @param  tenantProjectId string, defaults to "${TENANT_PROJECT_ID}" so it can be
- *         provided as the environment variable TENANT_PROJECT_ID when
- *         the command is run
- * @param  identity string, defaults to "${IDENTITY}" so that it can be provided as the
- *         environment variable IDENTITY when the command is run
- * @param  gsaEmail string, defaults to "${GSA_EMAIL}" so that it can be provided as the
- *         environment variable GSA_EMAIL when the command is run
- * @return string, the gcloud cli command to run
- */
-const getGcloudCommand = ({
-  k8sWorkloadIdentityPool = '${TENANT_PROJECT_ID}.svc.id.goog',
-  identity = '${IDENTITY}',
-  gsaEmail = '${GSA_EMAIL}',
-  gsaProjectId = '${GSA_PROJECT_ID}',
-  k8snamespace = 'default',
-}): string =>
-  `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:${k8sWorkloadIdentityPool}[${k8snamespace}/${identity}]" ${gsaEmail} --project ${gsaProjectId}`;
-
 export const EditConfirmDialog = ({
   selectedServiceAcccount,
   isShow,
@@ -91,9 +72,13 @@ export const EditConfirmDialog = ({
   );
   const [saveStatus, setSaveStatus] = useState<SeverityType>(SeverityType.INFO);
 
+  // The input is only ever expected to hold a GCP service account email. Anything else
+  // is treated as invalid and never fed into the generated gcloud command or saved.
+  const isInputValid = isValidServiceAccountEmail(serviceAccountInputValue);
+
   const gcloudCommandParams = {
     identity: namespaceIdentity || undefined,
-    gsaEmail: serviceAccountInputValue || undefined,
+    gsaEmail: (isInputValid && serviceAccountInputValue) || undefined,
     k8snamespace: (namespacedCreationHookEnabled && k8snamespace) || undefined,
     k8sWorkloadIdentityPool: k8sWorkloadIdentityPool || undefined,
   };
@@ -140,7 +125,12 @@ export const EditConfirmDialog = ({
       <StyledTextField
         label={T.translate(`${PREFIX}.editInputLabel`)}
         defaultValue={serviceAccountInputValue}
-        helperText={T.translate(`${PREFIX}.inputHelperText`)}
+        error={!!serviceAccountInputValue && !isInputValid}
+        helperText={
+          !!serviceAccountInputValue && !isInputValid
+            ? T.translate(`${PREFIX}.invalidServiceAccount`)
+            : T.translate(`${PREFIX}.inputHelperText`)
+        }
         variant="outlined"
         margin="dense"
         fullWidth
@@ -164,7 +154,7 @@ export const EditConfirmDialog = ({
       confirmButtonText={T.translate('commons.save')}
       confirmFn={handleSave}
       cancelFn={closeFn}
-      disableAction={!serviceAccountInputValue}
+      disableAction={!serviceAccountInputValue || !isInputValid}
       isOpen={isShow}
       severity={saveStatus}
       statusMessage={saveStatusMsg}
