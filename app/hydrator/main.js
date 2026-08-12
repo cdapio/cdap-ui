@@ -201,37 +201,12 @@ angular
     window.CaskCommon.StatusFactory.startPollingForBackendStatus();
   })
 
-  .run(function (MYSOCKET_EVENT, myAlert, EventPipe) {
-
-    EventPipe.on(MYSOCKET_EVENT.message, function (data) {
-      if (data.statusCode > 399 && !data.resource.suppressErrors) {
-        myAlert({
-          title: data.statusCode.toString(),
-          content: data.response || 'Server had an issue, please try refreshing the page',
-          type: 'danger'
-        });
-      }
-
-      // The user doesn't need to know that the backend node
-      // is unable to connect to CDAP. Error messages add no
-      // more value than the pop showing that the FE is waiting
-      // for system to come back up. Most of the issues are with
-      // connect, other than that pass everything else to user.
-      if (data.warning && data.error.syscall !== 'connect') {
-        myAlert({
-          content: data.warning,
-          type: 'warning'
-        });
-      }
-    });
-  })
-
   /**
    * BodyCtrl
    * attached to the <body> tag, mostly responsible for
    *  setting the className based events from $state and caskTheme
    */
-  .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MYSOCKET_EVENT, MyCDAPDataSource, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers, $http) {
+  .controller('BodyCtrl', function ($scope, $cookies, $cookieStore, caskTheme, CASK_THEME_EVENT, $rootScope, $state, $log, MY_CONFIG, MYAUTH_EVENT, EventPipe, myAuth, $window, myAlertOnValium, myLoadingService, myHelpers, $http) {
     window.CaskCommon.CDAPHelpers.setupExperiments();
     var activeThemeClass = caskTheme.getClassName();
     getVersion();
