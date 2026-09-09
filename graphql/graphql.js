@@ -38,11 +38,17 @@ const getApolloServer = (cdapConfig, logger = console) =>
     typeDefs,
     resolvers,
     context: ({ req }) => {
+      const queryId = Math.random().toString(36).substring(2, 9);
+      log.info(`[Query:${queryId}] Incoming GraphQL request context initialization.`);
+
       if (!req || !req.headers || !req.headers.authorization) {
+        log.info(`[Query:${queryId}] No Authorization header. Bypassing session token verification.`);
         return {
+          queryId,
           loaders: createLoaders(),
         };
       }
+
       const sToken = req.headers['session-token'];
       const auth = req.headers.authorization;
       let userIdValue, userIdProperty;
@@ -51,11 +57,14 @@ const getApolloServer = (cdapConfig, logger = console) =>
         userIdValue = req.headers[userIdProperty];
       }
 
+      log.info(`[Query:${queryId}] Verifying session token for authenticated user context...`);
       if (!sToken || (sToken && !sessionToken.validateToken(sToken, cdapConfig, logger, auth))) {
         throw new Error('Invalid Sesion Token');
       }
+      log.info(`[Query:${queryId}] Session token validated successfully.`);
 
       return {
+        queryId,
         auth,
         userIdProperty,
         userIdValue,

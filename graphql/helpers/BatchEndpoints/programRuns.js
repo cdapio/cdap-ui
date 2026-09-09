@@ -17,8 +17,10 @@
 import { constructUrl } from 'server/url-helper';
 import { getCDAPConfig } from 'server/cdap-config';
 import { ApolloError } from 'apollo-server';
-
 import { getPOSTRequestOptions, requestPromiseWrapper } from 'gql/resolvers-common';
+import log4js from 'log4js';
+
+const log = log4js.getLogger('graphql');
 
 let cdapConfig;
 getCDAPConfig().then(function(value) {
@@ -29,7 +31,12 @@ export async function batchProgramRuns(req, auth, userIdProperty, userIdValue) {
   const namespace = req[0].namespace;
   const options = getPOSTRequestOptions();
   options.url = constructUrl(cdapConfig, `/v3/namespaces/${namespace}/runs`);
-  options.body = req.slice(0, 25).map((reqObj) => reqObj.program);
+  const body = req.slice(0, 25).map((reqObj) => reqObj.program);
+  options.body = body;
+
+  const names = body.map(p => p.appId).join(', ');
+  log.info(`[DataLoader:programRuns] Dispatching batch request for ${body.length} pipelines: [${names}]`);
+
   const errorModifiersFn = (error, statusCode) => {
     return new ApolloError(error, statusCode, { errorOrigin: 'programRuns' });
   }

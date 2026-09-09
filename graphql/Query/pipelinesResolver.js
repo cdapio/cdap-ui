@@ -19,6 +19,9 @@ import { getCDAPConfig } from 'server/cdap-config';
 import { getGETRequestOptions, requestPromiseWrapper } from 'gql/resolvers-common';
 import { orderBy } from 'natural-orderby';
 import { ApolloError } from 'apollo-server';
+import log4js from 'log4js';
+
+const log = log4js.getLogger('graphql');
 
 let cdapConfig;
 getCDAPConfig().then(function(value) {
@@ -27,6 +30,9 @@ getCDAPConfig().then(function(value) {
 
 export async function queryTypePipelinesResolver(parent, args, context) {
   const namespace = args.namespace;
+  const queryId = context.queryId || 'Internal';
+  log.info(`[Query:${queryId}] Parent pipelinesResolver fetching apps list for namespace: ${namespace}`);
+
   const options = getGETRequestOptions();
 
   const pipelineArtifacts = ['cdap-data-pipeline', 'cdap-data-streams', 'cdap-sql-pipeline'];
@@ -57,5 +63,7 @@ export async function queryTypePipelinesResolver(parent, args, context) {
   };
 
   const apps = await requestPromiseWrapper(options, context, null, errorModifiersFn);
+  const appCount = apps && apps.applications ? apps.applications.length : 0;
+  log.info(`[Query:${queryId}] Parent pipelinesResolver successfully fetched ${appCount} apps for namespace: ${namespace}`);
   return apps;
 }
