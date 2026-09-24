@@ -15,7 +15,7 @@
  */
 
 angular.module(PKG.name + '.services')
-  .service('myNamespace', function myNamespace($q, MyCDAPDataSource, EventPipe, $http, $rootScope, myAuth, myHelpers, $state) {
+  .service('myNamespace', function myNamespace($q, EventPipe, $http, $rootScope, myAuth, myHelpers, $state) {
 
     this.namespaceList = [];
     var prom,
