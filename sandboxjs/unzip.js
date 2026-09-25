@@ -18,6 +18,24 @@ const fs = require('fs-extra');
 const path = require('path');
 const yauzl = require("yauzl");
 
+/**
+ * Resolves an archive entry path within the extraction root.
+ * Throws an error if the resolved path would escape the root directory.
+ *
+ * @param {string} root - The absolute extraction root directory.
+ * @param {string} entryFileName - The archive member fileName.
+ * @returns {string} The safe, resolved absolute target path.
+ */
+function safeEntryPath(root, entryFileName) {
+  var resolvedRoot = path.resolve(root);
+  var target = path.resolve(resolvedRoot, entryFileName);
+  var relative = path.relative(resolvedRoot, target);
+  if (relative.startsWith('..') || path.isAbsolute(relative)) {
+    throw new Error('Zip entry escapes extraction root: ' + entryFileName);
+  }
+  return target;
+}
+
 async function unzipSDK(sdkzippath, targetDir) {
   return new Promise((resolve, reject) => {
     try {
@@ -31,7 +49,8 @@ async function unzipSDK(sdkzippath, targetDir) {
           if (/\/$/.test(entry.fileName)) {
             // directory file names end with '/'
             try {
-              await fs.mkdirp(path.join(targetDir, entry.fileName))
+              var dirTarget = safeEntryPath(targetDir, entry.fileName);
+              await fs.mkdirp(dirTarget);
               zipfile.readEntry();
             } catch(err) {
               reject(err);
@@ -43,8 +62,9 @@ async function unzipSDK(sdkzippath, targetDir) {
               if (err) {reject(err); return; }
               // ensure parent directory exists
               try {
-                await fs.mkdirp(path.dirname(path.join(targetDir, entry.fileName)));
-                readStream.pipe(fs.createWriteStream(path.join(targetDir, entry.fileName), {flags: 'w+', mode: 0o755}));
+                var fileTarget = safeEntryPath(targetDir, entry.fileName);
+                await fs.mkdirp(path.dirname(fileTarget));
+                readStream.pipe(fs.createWriteStream(fileTarget, {flags: 'w+', mode: 0o755}));
                 readStream.on("end", function() {
                   zipfile.readEntry();
                 });
