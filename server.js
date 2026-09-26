@@ -222,7 +222,23 @@ getCDAPConfig()
      * 8. Upon receiving the response, we remove these from the request object and send it back
      *    to the client as if no authentication exists.
      */
-    let authToken, userid;
+    // Map of pending auth entries keyed by the TCP socket's
+    // "remoteAddress:remotePort" pair. The HTTP 'upgrade' event and the
+    // SockJS 'connection' event fire separately, but both correspond to
+    // the same underlying TCP socket and therefore share a unique
+    // remote address + remote port. Keeping the credentials keyed by
+    // that pair instead of stashing them in shared closure variables
+    // ensures that concurrent upgrades cannot let one connection pick
+    // up another connection's credentials.
+    const pendingAuth = new Map();
+
+    function pendingAuthKeyFromSocket(socket) {
+      if (!socket || !socket.remoteAddress || socket.remotePort == null) {
+        return null;
+      }
+      return socket.remoteAddress + ':' + socket.remotePort;
+    }
+
     sockServer.on('connection', function(c) {
       if (!c) {
         log.error('Connection requested, but no connection available');
@@ -231,8 +247,16 @@ getCDAPConfig()
       log.debug('[SOCKET OPEN] Connection to client "' + c.id + '" opened');
       // @ts-ignore
       var a = new Aggregator(c, { ...cdapConfig, ...securityConfig });
-      c.authToken = authToken;
-      c.userid = userid;
+      const authKey = pendingAuthKeyFromSocket(c);
+      const auth = authKey ? pendingAuth.get(authKey) : null;
+      if (auth) {
+        c.authToken = auth.authToken;
+        c.userid = auth.userid;
+        pendingAuth.delete(authKey);
+      } else {
+        c.authToken = undefined;
+        c.userid = undefined;
+      }
       wsConnections[c.id] = c;
       c.on('close', function() {
         log.debug('Cleaning out aggregator: ' + JSON.stringify(a.connection.id));
@@ -246,9 +270,7 @@ getCDAPConfig()
     sockServer.installHandlers(server, { prefix: '/_sock' });
     server.addListener('upgrade', function(req, socket) {
       req.headers.authorization = getAuthHeaderFromRawCookies(req);
-      authToken = req.headers.authorization;
       const userIdProperty = cdapConfig['security.authentication.proxy.user.identity.header'];
-      userid = req.headers[userIdProperty];
 
       if (allowedOrigin.indexOf(req.headers.origin) === -1) {
         log.info('Unknown Origin: ' + req.headers.origin);
@@ -256,6 +278,19 @@ getCDAPConfig()
         socket.end();
         socket.destroy();
         return;
+      }
+
+      const authKey = pendingAuthKeyFromSocket(socket);
+      if (authKey) {
+        pendingAuth.set(authKey, {
+          authToken: req.headers.authorization,
+          userid: req.headers[userIdProperty],
+        });
+        const cleanup = function() {
+          pendingAuth.delete(authKey);
+        };
+        socket.once('close', cleanup);
+        socket.once('error', cleanup);
       }
     });
     function gracefulShutdown() {
