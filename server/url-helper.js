@@ -55,8 +55,48 @@ function extractMarketUrls(cdapConfig) {
 
 export const getMarketUrls = memoize(extractMarketUrls);
 
+// Cache of parsed market base URLs, keyed by the (memoized) array returned by
+// getMarketUrls so the configured URLs are only parsed once per config rather
+// than on every request.
+const parsedMarketUrlsCache = new WeakMap();
+
+function getParsedMarketUrls(cdapConfig) {
+  const marketUrls = getMarketUrls(cdapConfig);
+  let parsed = parsedMarketUrlsCache.get(marketUrls);
+  if (!parsed) {
+    parsed = marketUrls
+      .map((element) => {
+        try {
+          return new URL(element);
+        } catch (e) {
+          return null;
+        }
+      })
+      .filter((parsedUrl) => parsedUrl !== null);
+    parsedMarketUrlsCache.set(marketUrls, parsed);
+  }
+  return parsed;
+}
+
 export function isVerifiedMarketHost(cdapConfig, url) {
-  return !!getMarketUrls(cdapConfig).find((element) => url.startsWith(element));
+  // A naive `url.startsWith(element)` lets an attacker bypass the allowlist with
+  // origins such as `https://market.cdap.io.evil.com/...` or
+  // `https://market.cdap.io@evil.com/...`, turning the market proxy into an
+  // SSRF. Parse both URLs and require an exact origin match plus a path that is
+  // contained within the configured market base path.
+  let requested;
+  try {
+    requested = new URL(url);
+  } catch (e) {
+    return false;
+  }
+  return getParsedMarketUrls(cdapConfig).some((base) => {
+    if (requested.origin !== base.origin) {
+      return false;
+    }
+    const basePath = base.pathname.endsWith('/') ? base.pathname : `${base.pathname}/`;
+    return requested.pathname === base.pathname || requested.pathname.startsWith(basePath);
+  });
 }
 
 export function constructUrl(cdapConfig, path, origin = REQUEST_ORIGIN_ROUTER) {

@@ -721,6 +721,13 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
     if (!uiThemePath) {
       return res.status(500).send('UnKnown theme file. Please make sure the path is valid');
     }
+    // Only allow (re)loading the theme file configured by the operator. Without
+    // this check, extractUITheme() would __non_webpack_require__() an arbitrary
+    // absolute path taken from the request body, letting a caller load any file
+    // on the server as a Node module.
+    if (uiThemePath !== cdapConfig['ui.theme.file']) {
+      return res.status(400).send('Invalid theme file path');
+    }
     try {
       uiThemeConfig = uiThemeWrapper.extractUITheme(cdapConfig, uiThemePath);
     } catch (e) {
