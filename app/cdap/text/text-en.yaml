@@ -3219,6 +3219,7 @@ features:
     helpTitle: To use the service account with the namespace, Workload Identity Permission is required. Please grant the permission by running the  below commands in CLI. 
     helpContent: "1. Run below command and export the GSA Project ID <br/> export GSA_PROJECT_ID=<i>&lt;PROJECT_ID&gt;</i> # Google Cloud Project ID where the IAM service account is located.<br/> <br/>2. Copy and Run below command"
     inputHelperText: Provide details of the service account for authorization
+    invalidServiceAccount: Enter a valid service account email (for example, name@project.iam.gserviceaccount.com)
     serviceAccount : Service account
   SourceControlManagement:
     configModal:
