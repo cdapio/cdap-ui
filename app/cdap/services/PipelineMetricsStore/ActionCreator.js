@@ -56,7 +56,10 @@ function getMetrics(params) {
       stagesArray.forEach((stage) => {
         // Prefixing it with user. as we to filter out only user metrics and not system metrics
         // This was a problem if a node name is a substring of a system metric. Ref: CDAP-12121
-        let stageMetrics = res.filter((metric) => metric.indexOf(`user.${stage}`) !== -1);
+        // Exclude per-task-attempt .raw metrics (CDAP-21235) intended for REST API consumers.
+        let stageMetrics = res.filter(
+          (metric) => metric.indexOf(`user.${stage}`) !== -1 && !metric.endsWith('.raw')
+        );
         metricQuery = metricQuery.concat(stageMetrics);
       });
 
@@ -109,7 +112,7 @@ const parseMetrics = (metrics) => {
       // contains multiple records.out metrics
       if (metricName.indexOf(key + '.records.out.') !== -1) {
         const port = split[split.length - 1];
-        if (!metricObj[key].recordsOut) {
+        if (typeof metricObj[key].recordsOut !== 'object' || !metricObj[key].recordsOut) {
           metricObj[key].recordsOut = {};
         }
         metricObj[key].recordsOut[port] = metricValue;
