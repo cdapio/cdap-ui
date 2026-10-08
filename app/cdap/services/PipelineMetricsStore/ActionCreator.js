@@ -116,7 +116,7 @@ const parseMetrics = (metrics) => {
           metricObj[key].recordsOut = {};
         }
         metricObj[key].recordsOut[port] = metricValue;
-      } else {
+      } else if (typeof metricObj[key].recordsOut !== 'object' || !metricObj[key].recordsOut) {
         metricObj[key].recordsOut = metricValue;
       }
     } else if (metricName.indexOf(key + '.records.error') !== -1) {
