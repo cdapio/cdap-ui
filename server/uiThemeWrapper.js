@@ -24,6 +24,63 @@ const CDAP_DIST_PATH = path.normalize(__dirname + '/../public/cdap_dist');
 const log = log4js.getLogger('default');
 const uiThemePropertyName = 'ui.theme.file';
 
+// Directories from which UI theme files are allowed to be loaded.
+// extractUITheme accepts a path from HTTP input (POST /updateTheme), so
+// the resolved theme file must stay inside one of these roots and must
+// be a .json file. This prevents the loader from pulling in files from
+// arbitrary locations and blocks non-JSON modules (which would otherwise
+// be executed by require()).
+const UI_THEME_ALLOWED_ROOTS = [
+  path.resolve(__dirname, 'config', 'themes'),
+  path.resolve(__dirname, '..', 'server', 'config', 'themes'),
+];
+
+function isPathInsideRoot(candidate, root) {
+  const relative = path.relative(root, candidate);
+  return (
+    relative === '' ||
+    (!relative.startsWith('..') && !path.isAbsolute(relative))
+  );
+}
+
+function resolveAllowedThemePath(uiThemePath) {
+  if (typeof uiThemePath !== 'string' || uiThemePath.length === 0) {
+    throw new Error('UI theme path is missing');
+  }
+  if (path.extname(uiThemePath).toLowerCase() !== '.json') {
+    throw new Error(`UI theme path must be a .json file: ${uiThemePath}`);
+  }
+
+  const candidates = [];
+  if (path.isAbsolute(uiThemePath)) {
+    candidates.push(path.resolve(uiThemePath));
+  } else {
+    candidates.push(path.resolve(__dirname, uiThemePath));
+    if (uiThemePath.startsWith('server') && __dirname.endsWith('server')) {
+      candidates.push(path.resolve(__dirname, '..', uiThemePath));
+    }
+    if (uiThemePath.startsWith('config') && !__dirname.endsWith('server')) {
+      candidates.push(path.resolve(__dirname, 'server', uiThemePath));
+    }
+  }
+
+  for (const resolved of candidates) {
+    for (const root of UI_THEME_ALLOWED_ROOTS) {
+      if (isPathInsideRoot(resolved, root)) {
+        return resolved;
+      }
+    }
+  }
+  throw new Error(
+    `UI theme path is not inside an allowed theme directory: ${uiThemePath}`
+  );
+}
+
+function loadThemeJsonFile(resolvedPath) {
+  const raw = fs.readFileSync(resolvedPath, 'utf8');
+  return JSON.parse(raw);
+}
+
 export function extractUIThemeWrapper(cdapConfig) {
   const uiThemePath = cdapConfig[uiThemePropertyName];
   return extractUITheme(cdapConfig, uiThemePath);
@@ -67,59 +124,22 @@ export function extractUITheme(cdapConfig, uiThemePath) {
     return mergeUIThemeWithConfig(cdapConfig, DEFAULT_CONFIG);
   }
 
-  let uiThemeConfig = DEFAULT_CONFIG;
-  // Absolute path
-  if (uiThemePath[0] === '/') {
-    try {
-      if (__non_webpack_require__.resolve(uiThemePath)) {
-        uiThemeConfig = __non_webpack_require__(uiThemePath);
-        log.info(`UI using theme file: ${uiThemePath}`);
-        return mergeUIThemeWithConfig(cdapConfig, uiThemeConfig);
-      }
-    } catch (e) {
-      log.info('UI Theme file not found at: ', uiThemePath);
-      throw e;
-    }
+  let resolvedThemePath;
+  try {
+    resolvedThemePath = resolveAllowedThemePath(uiThemePath);
+  } catch (e) {
+    log.info(`UI theme path rejected: ${e.message}`);
+    throw e;
   }
-  // Relative path
 
-  {
-    let themePath;
-
-    try {
-      /**
-       * Two paths
-       * theme file path : config/themes/light.json | server/config/themes/light.json
-       * __dirname: <cdap-home>/ui | <cdap-home/ui/server
-       *
-       * The configs exists in <cdap-home>/ui/sever/config/themes/*.json
-       *
-       */
-      themePath = uiThemePath;
-      if (uiThemePath.startsWith('server') && __dirname.endsWith('server')) {
-        themePath = path.join('..', uiThemePath);
-      }
-
-      if (uiThemePath.startsWith('config') && !__dirname.endsWith('server')) {
-        themePath = path.join('server', uiThemePath);
-      }
-      themePath = path.join(__dirname, themePath);
-
-      if (__non_webpack_require__.resolve(themePath)) {
-        uiThemeConfig = __non_webpack_require__(themePath);
-        log.info(`UI using theme file: ${themePath}`);
-        return mergeUIThemeWithConfig(cdapConfig, uiThemeConfig);
-      }
-    } catch (e) {
-      // This will show the user what the full path is.
-      // This should help them give proper relative path
-      log.info('UI Theme file not found at: ', themePath);
-
-      console.log('e', e);
-      throw e;
-    }
+  try {
+    const uiThemeConfig = loadThemeJsonFile(resolvedThemePath);
+    log.info(`UI using theme file: ${resolvedThemePath}`);
+    return mergeUIThemeWithConfig(cdapConfig, uiThemeConfig);
+  } catch (e) {
+    log.info('UI Theme file not found or not valid JSON at: ', resolvedThemePath);
+    throw e;
   }
-  return mergeUIThemeWithConfig(cdapConfig, uiThemeConfig);
 }
 
 export function getFaviconPath(uiThemeConfig) {
