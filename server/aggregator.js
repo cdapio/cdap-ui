@@ -91,6 +91,47 @@ Aggregator.prototype.validateSession = function(message) {
   return true;
 };
 
+// Fields that the WebSocket client is allowed to forward into the
+// request library's options object. The resource received from the
+// client is otherwise attacker-controllable, and the request library
+// recognises a number of fields (proxy, tunnel, auth, cert, key, ca,
+// pfx, agent, agentOptions, baseUrl, strictSSL, rejectUnauthorized,
+// pool, localAddress, har, aws, oauth, hawk, httpSignature, ...) that
+// we do not want the client to be able to set — especially not after
+// the server has already injected its own Authorization header into
+// resource.headers.
+var REQUEST_OPTION_ALLOWLIST = [
+  'method',
+  'url',
+  'uri',
+  'headers',
+  'body',
+  'json',
+  'form',
+  'formData',
+  'multipart',
+  'qs',
+  'qsStringifyOptions',
+  'useQuerystring',
+  'encoding',
+  'gzip',
+  'timeout',
+  'followRedirect',
+  'followAllRedirects',
+  'maxRedirects',
+];
+
+function buildSafeRequestOptions(resource) {
+  var safe = {};
+  for (var i = 0; i < REQUEST_OPTION_ALLOWLIST.length; i++) {
+    var key = REQUEST_OPTION_ALLOWLIST[i];
+    if (Object.prototype.hasOwnProperty.call(resource, key)) {
+      safe[key] = resource[key];
+    }
+  }
+  return safe;
+}
+
 /**
  * Pushes the ETL Application configuration for templates and plugins to the
  * FE. These configurations are UI specific and hences need to be supported
@@ -333,7 +374,7 @@ function onSocketData(message) {
           r.headers[this.cdapConfig['security.authentication.proxy.user.identity.header']] = this.connection.userid;
         }
         log.debug('[REQUEST]: (method: ' + r.method + ', id: ' + r.id + ', url: ' + r.url + ')');
-        request(r, emitResponse.bind(this, r)).on('error', function(err) {
+        request(buildSafeRequestOptions(r), emitResponse.bind(this, r)).on('error', function(err) {
           log.error('[ERROR]: (url: ' + r.url + ') ' + err.message);
         });
         break;
