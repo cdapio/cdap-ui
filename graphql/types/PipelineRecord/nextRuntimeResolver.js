@@ -15,10 +15,14 @@
  */
 
 import { PIPELINE_PROGRAMS_MAP } from 'gql/types/PipelineRecord/common';
+import log4js from 'log4js';
+
+const log = log4js.getLogger('graphql');
 
 export async function nextRuntimeResolvers(parent, args, context) {
   const namespace = context.namespace;
   const name = parent.name;
+  const queryId = context.queryId || 'Internal';
 
   const pipelineType = parent.artifact.name || 'cdap-data-pipeline';
 
@@ -30,10 +34,14 @@ export async function nextRuntimeResolvers(parent, args, context) {
     programId: programId,
   };
 
+  log.info(`[Query:${queryId}] Queueing nextRuntime load for pipeline: ${name}`);
+
   const nextRuntimeInfo = await context.loaders.nextRuntime.load({
     namespace,
     program,
   });
+
+  log.info(`[Query:${queryId}] Resolved nextRuntime for pipeline: ${name}`);
 
   if (!nextRuntimeInfo) {
     return;

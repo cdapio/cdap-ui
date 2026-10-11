@@ -16,6 +16,9 @@
 
 import request from 'request';
 import { ApolloError } from 'apollo-server';
+import log4js from 'log4js';
+
+const log = log4js.getLogger('graphql-client');
 
 export function getGETRequestOptions() {
   return {
@@ -43,21 +46,33 @@ export function requestPromiseWrapper(options, { auth: token, userIdProperty, us
     options.headers[userIdProperty] = userIdValue;
   }
 
+  if (!options.timeout) {
+    options.timeout = 5 * 60 * 1000; // 5mins
+  }
+
+  const requestId = Math.random().toString(36).substring(2, 9);
+  const startTime = Date.now();
+  log.info(`[Req:${requestId}] Sending backend request: ${options.method} ${options.url}`);
+
   return new Promise((resolve, reject) => {
     request(options, (err, response, body) => {
-      const statusCode = response.statusCode;
+      const duration = Date.now() - startTime;
+      
       if (err) {
+        log.error(`[Req:${requestId}] Backend request failed after ${duration}ms: ${options.method} ${options.url}. Error: ${err.message || err}`);
         let exception;
         if (typeof errorModifiersFn === 'function') {
-          exception = errorModifiersFn(err, statusCode ? statusCode.toString() : '500');
+          exception = errorModifiersFn(err, '500');
         } else {
-          exception = new ApolloError(err, statusCode ? statusCode.toString() : '500');
+          exception = new ApolloError(err, '500');
         }
         return reject(exception);
       }
 
+      const statusCode = response ? response.statusCode : 500;
       
       if (typeof statusCode === 'undefined' || statusCode != 200) {
+        log.error(`[Req:${requestId}] Backend request failed with status ${statusCode} after ${duration}ms: ${options.method} ${options.url}`);
         let error;
         if (typeof errorModifiersFn === 'function') {
           error = errorModifiersFn(body, statusCode.toString());
@@ -66,6 +81,8 @@ export function requestPromiseWrapper(options, { auth: token, userIdProperty, us
         }
         return reject(error);
       }
+
+      log.info(`[Req:${requestId}] Backend request completed successfully in ${duration}ms with status ${statusCode}: ${options.method} ${options.url}`);
 
       let resultBody = body;
       if (typeof bodyModifiersFn === 'function') {
