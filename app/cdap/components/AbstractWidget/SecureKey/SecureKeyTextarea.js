@@ -20,7 +20,7 @@ import SecureKey from 'components/AbstractWidget/SecureKey';
 import { WIDGET_PROPTYPES } from 'components/AbstractWidget/constants';
 
 export default function SecureKeyTextarea(props) {
-  return <SecureKey inputTextType="textarea" {...props} />;
+  return <SecureKey inputTextType="none" {...props} />;
 }
 
 SecureKeyTextarea.propTypes = WIDGET_PROPTYPES;

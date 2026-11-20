@@ -30,6 +30,7 @@ import TabContext from '@material-ui/lab/TabContext';
 import styled from 'styled-components';
 import { useLocation } from 'react-router';
 import ServiceAccounts from './ServiceAccounts';
+import SecureKeysTab from './SecureKeysTab';
 
 const StyledTabs = styled(Tabs)`
   border-bottom: 1px solid #e8e8e8;
@@ -95,6 +96,11 @@ export const AdminTabs = () => {
               value={`${baseNSPath}/connections`}
             />
             <LinkTab label="Drivers" to={`${baseNSPath}/drivers`} value={`${baseNSPath}/drivers`} />
+            <LinkTab
+              label="Secure keys"
+              to={`${baseNSPath}/securekeys`}
+              value={`${baseNSPath}/securekeys`}
+            />
             {namespacedServiceAccountsEnabled && (
               <LinkTab
                 label="Service Accounts"
@@ -119,6 +125,7 @@ export const AdminTabs = () => {
           <Route exact path={`${basepath}/connections`} component={Connections} />
           <Route exact path={`${basepath}/drivers`} component={Drivers} />
           <Route exact path={`${basepath}/scm`} component={SourceControlManagement} />
+          <Route exact path={`${basepath}/securekeys`} component={SecureKeysTab} />
           {namespacedServiceAccountsEnabled && (
             <Route exact path={`${basepath}/serviceaccounts`} component={ServiceAccounts} />
           )}

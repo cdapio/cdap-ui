@@ -23,30 +23,11 @@ import Paper from '@material-ui/core/Paper';
 import SecureKeyActionButtons from 'components/SecureKeys/SecureKeyList/SecureKeyActionButtons';
 import SecureKeyCreate from 'components/SecureKeys/SecureKeyCreate';
 import SecureKeySearch from 'components/SecureKeys/SecureKeySearch';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-
-export const CustomTableCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: theme.palette.grey['300'],
-    color: theme.palette.common.white,
-    padding: '5px 10px',
-    fontSize: 13,
-    '&:first-of-type': {
-      borderRight: `1px solid ${theme.palette.grey['500']}`,
-    },
-  },
-  body: {
-    padding: '5px 10px',
-    fontSize: 13,
-    '&:first-of-type': {
-      borderRight: `1px solid ${theme.palette.grey['500']}`,
-    },
-  },
-}))(TableCell);
+import Table from 'components/shared/Table';
+import TableHead from 'components/shared/Table/TableHeader';
+import TableRow from 'components/shared/Table/TableRow';
+import TableCell from 'components/shared/Table/TableCell';
+import TableBody from 'components/shared/Table/TableBody';
 
 const styles = (theme): StyleRules => {
   return {
@@ -58,13 +39,12 @@ const styles = (theme): StyleRules => {
       display: 'grid',
       alignItems: 'center',
       gridTemplateColumns: 'repeat(7, 1fr)',
+      gridTemplateRows: '40px',
     },
     addSecureKeyButton: {
       gridRow: '1',
       gridColumnStart: '1',
       textTransform: 'none',
-      padding: '7px',
-      fontSize: '13px',
     },
     secureKeySearch: {
       gridRow: '1',
@@ -78,27 +58,16 @@ const styles = (theme): StyleRules => {
     },
     row: {
       height: 40,
-      '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.grey['600'],
-      },
       cursor: 'pointer',
       hover: {
         cursor: 'pointer',
       },
     },
-    nameCell: {
-      width: '30%',
-    },
-    descriptionCell: {
-      width: '60%',
-    },
-    actionButtonsCell: {
-      width: '10%',
-    },
   };
 };
 
 interface ISecureKeyListProps extends WithStyles<typeof styles> {
+  renderInTab?: boolean;
   state: any;
   alertSuccess: () => void;
   alertFailure: () => void;
@@ -107,6 +76,7 @@ interface ISecureKeyListProps extends WithStyles<typeof styles> {
 }
 
 const SecureKeyListView: React.FC<ISecureKeyListProps> = ({
+  renderInTab,
   classes,
   state,
   alertSuccess,
@@ -137,7 +107,7 @@ const SecureKeyListView: React.FC<ISecureKeyListProps> = ({
 
   return (
     <div>
-      <div className={classes.secureKeysTitle}>Secure keys</div>
+      {!renderInTab && <div className={classes.secureKeysTitle}>Secure keys</div>}
       <div className={classes.secureKeyManager}>
         <Button
           className={classes.addSecureKeyButton}
@@ -155,12 +125,12 @@ const SecureKeyListView: React.FC<ISecureKeyListProps> = ({
       </div>
 
       <Paper className={classes.root}>
-        <Table>
+        <Table columnTemplate="minmax(20rem, 1fr) 2fr 50px">
           <TableHead>
             <TableRow className={classes.row}>
-              <CustomTableCell>Key</CustomTableCell>
-              <CustomTableCell>Description</CustomTableCell>
-              <CustomTableCell></CustomTableCell>
+              <TableCell>Key</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody data-cy="secure-key-list" data-testid="secure-key-list">
@@ -170,22 +140,19 @@ const SecureKeyListView: React.FC<ISecureKeyListProps> = ({
                 <TableRow
                   key={keyMetadata.get('name')}
                   hover
-                  selected
                   className={classes.row}
                   onClick={() => openEditDialog(keyIndex)}
                   data-cy={`secure-key-row-${keyMetadata.get('name')}`}
                   data-testid={`secure-key-row-${keyMetadata.get('name')}`}
                 >
-                  <CustomTableCell className={classes.nameCell}>{keyID}</CustomTableCell>
-                  <CustomTableCell className={classes.descriptionCell}>
-                    {keyMetadata.get('description')}
-                  </CustomTableCell>
-                  <CustomTableCell className={classes.actionButtonsCell}>
+                  <TableCell>{keyID}</TableCell>
+                  <TableCell>{keyMetadata.get('description')}</TableCell>
+                  <TableCell>
                     <SecureKeyActionButtons
                       openDeleteDialog={openDeleteDialog}
                       keyIndex={keyIndex}
                     />
-                  </CustomTableCell>
+                  </TableCell>
                 </TableRow>
               );
             })}
