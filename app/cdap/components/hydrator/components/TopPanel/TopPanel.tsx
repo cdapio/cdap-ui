@@ -31,6 +31,7 @@ import { editPipeline } from 'services/PipelineUtils';
 import downloadFile from 'services/download-file';
 import { cleanseAndCompareTwoObjects } from 'services/helpers';
 import ThemeWrapper from 'components/ThemeWrapper';
+import { FeatureProvider } from 'services/react/providers/featureFlagProvider';
 
 export interface IGlobalObj {
   etlRealtime?: string;
@@ -129,6 +130,7 @@ interface ITopPanelProps {
   toggleScheduler: () => void;
   hasNodes: boolean;
   onSaveDraft: () => void;
+  onPipelineSummarize: (summarySetter: (string) => void) => void;
   onPublish: (isEdit) => void;
   onImport: () => void;
   onFileSelect: (files: FileList) => void;
@@ -181,6 +183,7 @@ export const TopPanel = ({
   closeScheduler,
   hasNodes,
   onSaveDraft,
+  onPipelineSummarize,
   onPublish,
   onImport,
   onFileSelect,
@@ -380,108 +383,111 @@ export const TopPanel = ({
     />
   );
   return (
-    <ThemeWrapper>
-      {errorState.errorMessage && (
-        <ErrorBanner
-          error={errorState.errorMessage}
-          actionElements={errorState.actionElements}
-          onClose={() => {
-            errorDispatch({ type: 'reset' });
-          }}
+    <FeatureProvider>
+      <ThemeWrapper>
+        {errorState.errorMessage && (
+          <ErrorBanner
+            error={errorState.errorMessage}
+            actionElements={errorState.actionElements}
+            onClose={() => {
+              errorDispatch({ type: 'reset' });
+            }}
+          />
+        )}
+        <TopPanelContainer>
+          <NameAndDescription
+            globals={globals}
+            metadataExpanded={metadataExpanded}
+            state={state}
+            invalidName={invalidName}
+            parsedDescription={parsedDescription}
+            saveMetadata={saveMetadata}
+            resetMetadata={resetMetadata}
+            openMetadata={openMetadata}
+            isEdit={isEdit}
+            editStatus={editStatus}
+          ></NameAndDescription>
+          <ActionButtons
+            previewMode={previewMode}
+            previewEnabled={previewEnabled}
+            togglePreviewMode={togglePreviewMode}
+            toggleConfig={toggleConfig}
+            viewConfig={viewConfig}
+            showSchedule={showSchedule && !isEdit}
+            viewScheduler={viewScheduler}
+            toggleScheduler={toggleScheduler}
+            hasNodes={hasNodes}
+            onSaveDraft={onSaveDraft}
+            onPipelineSummarize={onPipelineSummarize}
+            onPublish={publishPipeline}
+            onImport={onImport}
+            onFileSelect={onFileSelect}
+            onExport={onExport}
+            onClickLogs={onClickLogs}
+            previewLoading={previewLoading}
+            previewRunning={previewRunning}
+            startOrStopPreview={startOrStopPreview}
+            queueStatus={queueStatus}
+            displayDuration={displayDuration}
+            loadingLabel={loadingLabel}
+            currentPreviewId={currentPreviewId}
+            viewLogs={viewLogs}
+            timerLabel={timerLabel}
+            applyRuntimeArguments={applyRuntimeArguments}
+            state={state}
+            runPipeline={startOrStopPreview}
+            applyBatchConfig={applyBatchConfig}
+            applyRealtimeConfig={applyRealtimeConfig}
+            actionCreator={actionCreator}
+            getPostActions={getPostActions}
+            validatePluginProperties={validatePluginProperties}
+            getRuntimeArgs={getRuntimeArgs}
+            getStoreConfig={getStoreConfig}
+          ></ActionButtons>
+          <ResourceCenterButton></ResourceCenterButton>
+        </TopPanelContainer>
+        {viewScheduler && (
+          <PipelineScheduler
+            schedule={sheculdeInfo.schedule}
+            maxConcurrentRuns={sheculdeInfo.maxConcurrentRuns}
+            actionCreator={actionCreator}
+            pipelineName={state.metadata.name}
+            onClose={closeScheduler}
+            open={true}
+            suppressAnimation={true}
+            anchorEl="pipeline-schedule-modeless-btn"
+          ></PipelineScheduler>
+        )}
+        {viewLogs && (
+          <PipelinePreviewLogs>
+            <PreviewLogs
+              namespace={namespace}
+              previewId={currentPreviewId}
+              stopPoll={!previewRunning}
+              onClose={onCloseLog}
+            ></PreviewLogs>
+          </PipelinePreviewLogs>
+        )}
+        {(viewLogs || viewConfig) && (
+          <ReturnButton
+            onClick={() => {
+              onCloseLog();
+              if (viewConfig) {
+                toggleConfig();
+              }
+            }}
+          ></ReturnButton>
+        )}
+        <ConfirmationModal
+          headerTitle="Enter Change Summary"
+          isOpen={isChangeSummaryOpen}
+          cancelFn={closeChangeSummary}
+          confirmButtonText="Deploy"
+          toggleModal={closeChangeSummary}
+          confirmationElem={confirmationElem}
+          confirmFn={updatePipeline}
         />
-      )}
-      <TopPanelContainer>
-        <NameAndDescription
-          globals={globals}
-          metadataExpanded={metadataExpanded}
-          state={state}
-          invalidName={invalidName}
-          parsedDescription={parsedDescription}
-          saveMetadata={saveMetadata}
-          resetMetadata={resetMetadata}
-          openMetadata={openMetadata}
-          isEdit={isEdit}
-          editStatus={editStatus}
-        ></NameAndDescription>
-        <ActionButtons
-          previewMode={previewMode}
-          previewEnabled={previewEnabled}
-          togglePreviewMode={togglePreviewMode}
-          toggleConfig={toggleConfig}
-          viewConfig={viewConfig}
-          showSchedule={showSchedule && !isEdit}
-          viewScheduler={viewScheduler}
-          toggleScheduler={toggleScheduler}
-          hasNodes={hasNodes}
-          onSaveDraft={onSaveDraft}
-          onPublish={publishPipeline}
-          onImport={onImport}
-          onFileSelect={onFileSelect}
-          onExport={onExport}
-          onClickLogs={onClickLogs}
-          previewLoading={previewLoading}
-          previewRunning={previewRunning}
-          startOrStopPreview={startOrStopPreview}
-          queueStatus={queueStatus}
-          displayDuration={displayDuration}
-          loadingLabel={loadingLabel}
-          currentPreviewId={currentPreviewId}
-          viewLogs={viewLogs}
-          timerLabel={timerLabel}
-          applyRuntimeArguments={applyRuntimeArguments}
-          state={state}
-          runPipeline={startOrStopPreview}
-          applyBatchConfig={applyBatchConfig}
-          applyRealtimeConfig={applyRealtimeConfig}
-          actionCreator={actionCreator}
-          getPostActions={getPostActions}
-          validatePluginProperties={validatePluginProperties}
-          getRuntimeArgs={getRuntimeArgs}
-          getStoreConfig={getStoreConfig}
-        ></ActionButtons>
-        <ResourceCenterButton></ResourceCenterButton>
-      </TopPanelContainer>
-      {viewScheduler && (
-        <PipelineScheduler
-          schedule={sheculdeInfo.schedule}
-          maxConcurrentRuns={sheculdeInfo.maxConcurrentRuns}
-          actionCreator={actionCreator}
-          pipelineName={state.metadata.name}
-          onClose={closeScheduler}
-          open={true}
-          suppressAnimation={true}
-          anchorEl="pipeline-schedule-modeless-btn"
-        ></PipelineScheduler>
-      )}
-      {viewLogs && (
-        <PipelinePreviewLogs>
-          <PreviewLogs
-            namespace={namespace}
-            previewId={currentPreviewId}
-            stopPoll={!previewRunning}
-            onClose={onCloseLog}
-          ></PreviewLogs>
-        </PipelinePreviewLogs>
-      )}
-      {(viewLogs || viewConfig) && (
-        <ReturnButton
-          onClick={() => {
-            onCloseLog();
-            if (viewConfig) {
-              toggleConfig();
-            }
-          }}
-        ></ReturnButton>
-      )}
-      <ConfirmationModal
-        headerTitle="Enter Change Summary"
-        isOpen={isChangeSummaryOpen}
-        cancelFn={closeChangeSummary}
-        confirmButtonText="Deploy"
-        toggleModal={closeChangeSummary}
-        confirmationElem={confirmationElem}
-        confirmFn={updatePipeline}
-      />
-    </ThemeWrapper>
+      </ThemeWrapper>
+    </FeatureProvider>
   );
 };

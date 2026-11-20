@@ -51,6 +51,11 @@ export const BorderRightButton = styled(BaseButton)`
   border-right: 1px solid ${greyBorder};
 `;
 
+export const BorderRightOnlyButton = styled(BorderRightButton)`
+  border-left: none;
+  position: relative;
+`;
+
 export const PreviewModeButton = styled(BaseButton)`
   background-color: ${previewActive};
 `;

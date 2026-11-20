@@ -31,6 +31,7 @@ class HydratorPlusPlusTopPanelCtrl {
     HydratorPlusPlusPreviewActions,
     $interval,
     myPipelineApi,
+    myAppsApi,
     $state,
     myAlertOnValium,
     MY_CONFIG,
@@ -64,6 +65,7 @@ class HydratorPlusPlusTopPanelCtrl {
     this.previewActions = HydratorPlusPlusPreviewActions;
     this.$interval = $interval;
     this.myPipelineApi = myPipelineApi;
+    this.myAppsApi = myAppsApi;
     this.myPreviewLogsApi = myPreviewLogsApi;
     this.myPreferenceApi = myPreferenceApi;
     this.DAGPlusPlusNodesStore = DAGPlusPlusNodesStore;
@@ -99,6 +101,7 @@ class HydratorPlusPlusTopPanelCtrl {
     this.toggleSchedulerV2 = this.toggleSchedulerV2.bind(this);
     this.closeScheduler = this.closeScheduler.bind(this);
     this.onSaveDraftV2 = this.onSaveDraftV2.bind(this);
+    this.onPipelineSummarize = this.onPipelineSummarize.bind(this);
     this.onPublishV2 = this.onPublishV2.bind(this);
     this.onImportV2 = this.onImportV2.bind(this);
     this.onExportV2 = this.onExportV2.bind(this);
@@ -572,7 +575,7 @@ class HydratorPlusPlusTopPanelCtrl {
       this.HydratorPlusPlusConfigStore.getDraftId()
     );
     this.$window.localStorage.setItem("LastPreviewId", this.currentPreviewId);
-  }
+  } 
   onClickLogs() {
     this.viewLogs = !this.viewLogs;
   }
@@ -1155,6 +1158,15 @@ class HydratorPlusPlusTopPanelCtrl {
     this._checkAndShowConfirmationModalOnActionPlugin(
       this.runPreview.bind(this)
     );
+  }
+
+  onPipelineSummarize(summarySetter) {
+    let pipelineConfig = this.HydratorPlusPlusConfigStore.getConfigForExport();
+    this.myAppsApi.summarize({
+      namespace: this.$state.params.namespace, 
+    }, pipelineConfig).$promise.then((res) => {
+      summarySetter(res.summary);
+    });
   }
 
   runPreview() {

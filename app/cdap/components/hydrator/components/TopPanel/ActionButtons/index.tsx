@@ -15,7 +15,8 @@
  */
 
 import IconSVG from 'components/shared/IconSVG';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import GraphicEqIcon from '@material-ui/icons/GraphicEq';
 import { objectQuery } from 'services/helpers';
 import PipelineConfigurationsStore, {
   ACTIONS as PipelineConfigurationsActions,
@@ -24,6 +25,7 @@ import { PipelineConfigure } from '../PipelineConfigure';
 import {
   ActionButtonsContainer,
   BorderRightButton,
+  BorderRightOnlyButton,
   ButtonLabel,
   CommonButton,
   CustomTooltip,
@@ -36,6 +38,8 @@ import {
   PreviewModeButton,
   RunTimeSpan,
 } from './styles';
+import { useFeatureFlagDefaultTrue } from 'services/react/customHooks/useFeatureFlag';
+import { PipelineGenaiSummaryModal } from 'components/PipelineDetails/PipelineDetailsTopPanel/PipelineGenaiSummaryModal';
 
 interface IDuration {
   minutes: string;
@@ -53,6 +57,7 @@ interface IActionButtonsProps {
   toggleScheduler: () => void;
   hasNodes: boolean;
   onSaveDraft: () => void;
+  onPipelineSummarize: (summarySetter: (string) => void) => void;
   onPublish: () => void;
   onImport: () => void;
   onFileSelect: (files: FileList) => void;
@@ -90,6 +95,7 @@ export const ActionButtons = ({
   toggleScheduler,
   hasNodes,
   onSaveDraft,
+  onPipelineSummarize,
   onPublish,
   onImport,
   onFileSelect,
@@ -116,6 +122,20 @@ export const ActionButtons = ({
   getStoreConfig,
 }: IActionButtonsProps) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const [genaiSummary, setGenaiSummary] = useState('');
+  const [isSummaryModalOpen, setSummaryModalOpen] = useState(false);
+  const pipelineGenaiSummaryButtonRef = useRef(null);
+  // TODO: replace with useFeatureFlagDefaultFalse when productionising
+  const genaiPipelineSummaryEnabled = useFeatureFlagDefaultTrue('genai.pipeline.summary.enabled');
+
+  const onGenaiSummary = () => {
+    if (!genaiPipelineSummaryEnabled) {
+      return;
+    }
+    setGenaiSummary('');
+    onPipelineSummarize(setGenaiSummary);
+    setSummaryModalOpen(true);
+  };
 
   const handleFile = (event) => {
     if (!objectQuery(event, 'target', 'files', 0)) {
@@ -365,6 +385,27 @@ export const ActionButtons = ({
                 </BorderRightButton>
               </span>
             </CustomTooltip>
+            {genaiPipelineSummaryEnabled && (
+              <CustomTooltip
+                title={hasNodes ? '' : 'Start building a pipeline before summarizing'}
+                arrow
+                placement="bottom"
+              >
+                <span>
+                  <BorderRightOnlyButton
+                    disabled={!hasNodes}
+                    onClick={!hasNodes || onGenaiSummary}
+                    data-cy="pipeline-genai-summary-btn"
+                    data-testid="pipeline-genai-summary-btn"
+                  >
+                    <div ref={pipelineGenaiSummaryButtonRef}>
+                      <GraphicEqIcon viewBox="1 1 22 22" fontSize="small" className="icon-svg" />
+                      <ButtonLabel>Summarize</ButtonLabel>
+                    </div>
+                  </BorderRightOnlyButton>
+                </span>
+              </CustomTooltip>
+            )}
           </>
         )}
       </ActionButtonsContainer>
@@ -384,6 +425,14 @@ export const ActionButtons = ({
         validatePluginProperties={validatePluginProperties}
         getRuntimeArgs={getRuntimeArgs}
       ></PipelineConfigure>
+      {hasNodes && pipelineGenaiSummaryButtonRef.current && (
+        <PipelineGenaiSummaryModal
+          isOpen={isSummaryModalOpen}
+          anchorEl={pipelineGenaiSummaryButtonRef.current}
+          onClose={() => setSummaryModalOpen(false)}
+          summary={genaiSummary}
+        />
+      )}
     </>
   );
 };

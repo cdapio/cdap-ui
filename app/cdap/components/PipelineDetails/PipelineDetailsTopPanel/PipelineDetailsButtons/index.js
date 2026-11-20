@@ -29,7 +29,11 @@ import ApolloClient from 'apollo-boost';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import introspectionQueryResultData from '../../../../../../graphql/fragments/fragmentTypes.json';
 import SessionTokenStore from 'services/SessionTokenStore';
-import { useFeatureFlagDefaultFalse } from 'services/react/customHooks/useFeatureFlag';
+import {
+  useFeatureFlagDefaultFalse,
+  useFeatureFlagDefaultTrue,
+} from 'services/react/customHooks/useFeatureFlag';
+import { PipelineGenaiSummaryButton } from './PipelineGenaiSummaryButton';
 
 const fragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData,
@@ -106,6 +110,8 @@ export default function PipelineDetailsButtons({
   const lifecycleManagementEditEnabled = useFeatureFlagDefaultFalse(
     'lifecycle.management.edit.enabled'
   );
+  // TODO: replace with useFeatureFlagDefaultFalse when productionising
+  const genaiPipelineSummaryEnabled = useFeatureFlagDefaultTrue('genai.pipeline.summary.enabled');
   return (
     <ApolloProvider client={client}>
       <Provider store={PipelineConfigurationsStore}>
@@ -142,6 +148,9 @@ export default function PipelineDetailsButtons({
           />
           <PipelineSummaryButton pipelineType={pipelineType} pipelineName={pipelineName} />
           {lifecycleManagementEditEnabled && <PipelineHistoryButton pipelineName={pipelineName} />}
+          {genaiPipelineSummaryEnabled && (
+            <PipelineGenaiSummaryButton pipelineName={pipelineName} />
+          )}
         </div>
       </Provider>
     </ApolloProvider>
