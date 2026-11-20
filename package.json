@@ -238,6 +238,7 @@
     "history": "4.10.1",
     "i18n-react": "0.7.0",
     "ifvisible.js": "1.0.6",
+    "immer": "^10.1.1",
     "immutability-helper": "3.0.1",
     "immutable": "3.8.2",
     "intersection-observer": "0.7.0",
