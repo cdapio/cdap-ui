@@ -199,8 +199,10 @@ public class Commands implements CdfHelper {
           "//div[@data-testid='plugin-" + pluginGroup + "-group-summary' and @aria-expanded='false']"));
       WaitHelper.waitForElementToBeDisplayed(Helper.locateElementByTestId("plugin-" + pluginGroup + "-group-details"));
     } catch (StaleElementReferenceException | NoSuchElementException e) {
-      Assert.assertTrue(Helper.isElementExists(
-        By.xpath("//div[@data-testid='plugin-" + pluginGroup + "-group-summary' and @aria-expanded='true']")));
+      String testid = "plugin-" + pluginGroup + "-group-summary";
+      Assert.assertTrue(Helper.isElementExistsByTestid(testid));
+      WebElement pluginGroupSummaryElement = Helper.locateElementByTestId(testid);
+      Assert.assertTrue(pluginGroupSummaryElement.getAttribute("aria-expanded").equals("true"));
     }
   }
 
@@ -213,8 +215,10 @@ public class Commands implements CdfHelper {
         "//div[@data-testid='plugin-" + pluginGroup + "-group-summary' and @aria-expanded='false']")
       );
     } catch (StaleElementReferenceException | NoSuchElementException e) {
-      Assert.assertTrue(Helper.isElementExists(
-        By.xpath("//div[@data-testid='plugin-" + pluginGroup + "-group-summary' and @aria-expanded='false']")));
+      String testid = "plugin-" + pluginGroup + "-group-summary";
+      Assert.assertTrue(Helper.isElementExistsByTestid(testid));
+      WebElement pluginGroupSummaryElement = Helper.locateElementByTestId(testid);
+      Assert.assertTrue(pluginGroupSummaryElement.getAttribute("aria-expanded").equals("false"));
     }
   }
 

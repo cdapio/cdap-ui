@@ -136,6 +136,7 @@ public class Helper implements CdfHelper {
     return response.getResponseBodyAsString();
   }
 
+  @Deprecated
   public static WebElement locateElementByCssSelector(String cssSelector) {
     return SeleniumDriver.getDriver()
       .findElement(By.cssSelector(cssSelector));
@@ -150,20 +151,23 @@ public class Helper implements CdfHelper {
     return withinElement.findElement(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
   }
 
+  @Deprecated
   public static WebElement locateElementById(String elementId) {
     return SeleniumDriver.getDriver()
       .findElement(By.id(elementId));
   }
 
-  public static WebElement locateElementByLocator(By locator) {
+  private static WebElement locateElementByLocator(By locator) {
     return SeleniumDriver.getDriver().findElement(locator);
   }
 
+  @Deprecated
   public static WebElement locateElementByXPath(String xpath) {
     return SeleniumDriver.getDriver()
       .findElement(By.xpath(xpath));
   }
 
+  @Deprecated
   public static List<WebElement> locateElementsByXPath(String xpath) {
     return SeleniumDriver.getDriver().findElements(By.xpath(xpath));
   }
@@ -173,11 +177,20 @@ public class Helper implements CdfHelper {
       .findElements(By.cssSelector(Helper.getCssSelectorByDataTestId(testId)));
   }
 
+  public static boolean isElementExistsByTestid(String testid) {
+    return isElementExists(By.cssSelector(Helper.getCssSelectorByDataTestId(testid)));
+  }
+
+  public static boolean isElementExistsByTestid(String testid, WebElement withinElement) {
+    return isElementExists(By.cssSelector(Helper.getCssSelectorByDataTestId(testid)), withinElement);
+  }
+
+  @Deprecated
   public static boolean isElementExists(String cssSelector) {
     return isElementExists(By.cssSelector(cssSelector));
   }
 
-  public static boolean isElementExists(By by) {
+  private static boolean isElementExists(By by) {
     try {
       return ElementHelper.isElementDisplayed(SeleniumDriver.getDriver().findElement(by));
     } catch (StaleElementReferenceException | NoSuchElementException e) {
@@ -185,7 +198,7 @@ public class Helper implements CdfHelper {
     }
   }
 
-  public static boolean isElementExists(By by, WebElement withinElement) {
+  private static boolean isElementExists(By by, WebElement withinElement) {
     try {
       return ElementHelper.isElementDisplayed(withinElement.findElement(by));
     } catch (StaleElementReferenceException | NoSuchElementException e) {
@@ -193,6 +206,7 @@ public class Helper implements CdfHelper {
     }
   }
 
+  @Deprecated
   public static boolean isElementExists(String cssSelector, WebElement withinElement) {
     return isElementExists(By.cssSelector(cssSelector), withinElement);
   }
@@ -215,6 +229,7 @@ public class Helper implements CdfHelper {
       node.getNodeId() + "\"]";
   }
 
+  // TODO: this method should be refactored to use data-testid for locating elements
   public static void uploadPipelineFromFile(String filename) {
     String pipelineNameXPathSelector = "//div[contains(@class, 'PipelineName')]";
     WebElement element = locateElementByLocator(By.xpath(pipelineNameXPathSelector));
@@ -299,6 +314,7 @@ public class Helper implements CdfHelper {
     return By.xpath(xpath);
   }
 
+  // TODO: Refactor to locate element using only testid
   public static By locatorOfPluginGroupExpanded(String pluginGroupName) {
     String xpath = "//div[@data-cy='plugin-" + pluginGroupName
       + "-group' and contains(@class, 'Mui-expanded')]//div[contains(@class, 'expandIcon')]";
