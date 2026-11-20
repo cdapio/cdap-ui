@@ -28,9 +28,11 @@
   </h5>
   <span class="text-success"
         data-cy="plugin-validation-success-msg"
+        data-testid="plugin-validation-success-msg"
         ng-if="HydratorPlusPlusNodeConfigCtrl.errorCount === 0">No errors found.</span>
   <span class="text-danger"
         data-cy="plugin-validation-error-msg"
+        data-testid="plugin-validation-error-msg"
         ng-if="HydratorPlusPlusNodeConfigCtrl.errorCount > 0">
     <ng-pluralize count="HydratorPlusPlusNodeConfigCtrl.errorCount"
                   data-cy="plugin-properties-errors-found"
