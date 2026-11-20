@@ -94,7 +94,7 @@ const checkError = (error) => {
       } else {
         // Pick one of the leftover errors to show in the banner;
         const errs = Object.values(errorMap);
-        return errs ? errs[0][0] : 'Unknown error';
+        return errs?.[0]?.[0] ? errs[0][0] : 'Unknown error';
       }
     }
   }
@@ -156,7 +156,8 @@ const DeployedPipeline: React.FC = () => {
   );
   const { loading, error, data, refetch, networkStatus } = useQuery(QUERY, {
     errorPolicy: 'all',
-    fetchPolicy: 'no-cache',
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
     notifyOnNetworkStatusChange: true,
     variables: {
       nameFilter: search || undefined,
