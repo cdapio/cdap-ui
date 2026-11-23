@@ -707,31 +707,39 @@ function makeApp(authAddress, cdapConfig, uiSettings) {
    * This won't be for production as we don't persist this state anywhere.
    * In the future if we alow the user to change the theme from UI this API could
    * be used and we need to persist this information somewhere.
+   *
+   * The theme is shared by all users of the UI server, so this API is only available in
+   * development mode, and it only accepts the theme files that are bundled with the UI.
    */
-  app.post('/updateTheme', function (req, res) {
-    let authToken = req.headers.authorization;
-    if (
-      !req.headers['session-token'] ||
-      (req.headers['session-token'] &&
-        !sessionToken.validateToken(req.headers['session-token'], cdapConfig, log, authToken))
-    ) {
-      return res.status(500).send('Unable to validate session');
-    }
-    const uiThemePath = req.body.uiThemePath;
-    if (!uiThemePath) {
-      return res.status(500).send('UnKnown theme file. Please make sure the path is valid');
-    }
-    try {
-      uiThemeConfig = uiThemeWrapper.extractUITheme(cdapConfig, uiThemePath);
-    } catch (e) {
-      return res
-        .status(500)
-        .send(
-          'Error parsing theme file. Please make sure the path and the file contents are valid'
-        );
-    }
-    res.send('Theme updated');
-  });
+  if (isModeDevelopment()) {
+    app.post('/updateTheme', function (req, res) {
+      let authToken = req.headers.authorization;
+      if (
+        !req.headers['session-token'] ||
+        (req.headers['session-token'] &&
+          !sessionToken.validateToken(req.headers['session-token'], cdapConfig, log, authToken))
+      ) {
+        return res.status(500).send('Unable to validate session');
+      }
+      const uiThemePath = req.body && req.body.uiThemePath;
+      let themeFilePath;
+      try {
+        themeFilePath = uiThemeWrapper.resolveBundledThemePath(uiThemePath);
+      } catch (e) {
+        return res
+          .status(400)
+          .send('Invalid theme file. Only the theme files bundled with the UI can be used');
+      }
+      try {
+        uiThemeConfig = uiThemeWrapper.loadUITheme(cdapConfig, themeFilePath);
+      } catch (e) {
+        return res
+          .status(500)
+          .send('Error parsing theme file. Please make sure the file contents are valid');
+      }
+      res.send('Theme updated');
+    });
+  }
 
   // any other path, serve index.html
   app.all(
