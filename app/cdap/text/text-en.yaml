@@ -337,6 +337,13 @@ features:
       message1: "Create a new namespace "
       message2: "(Note: You will require ADMIN privileges for creating a namespace)"
     mainMessage: " You are not authorized to access any existing namespace"
+    rbacCallToAction1: Contact your administrator to grant you a namespace role (Viewer, Developer, Operator, or Editor) or the Cloud Data Fusion Admin role (roles/datafusion.admin).
+    rbacDocsMessage:
+      conjunction: " and "
+      prefix: "For details, see "
+      rolesAndPermissionsLabel: RBAC roles and permissions
+      suffix: "."
+      useRbacLabel: Use role-based access control
   Cloud:
     Profiles:
       common:
