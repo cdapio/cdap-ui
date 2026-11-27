@@ -17,16 +17,41 @@
 import log4js from 'log4js';
 import path from 'path';
 import get from 'lodash/get';
+import isPlainObject from 'lodash/isPlainObject';
 import merge from 'lodash/merge';
 import fs from 'fs';
 
 const CDAP_DIST_PATH = path.normalize(__dirname + '/../public/cdap_dist');
 const log = log4js.getLogger('default');
 const uiThemePropertyName = 'ui.theme.file';
+const THEME_FILE_EXTENSION = '.json';
+
+/**
+ * Directory with the theme files that are shipped with the UI (server/config/themes).
+ * __dirname is either <cdap-ui>/server, when running from the sources,
+ * or the directory of the server bundle, next to which webpack copies server/config.
+ */
+const IS_SERVER_DIR = path.basename(__dirname) === 'server';
+
+const BUNDLED_THEMES_DIR = IS_SERVER_DIR
+  ? path.join(__dirname, 'config', 'themes')
+  : path.join(__dirname, 'server', 'config', 'themes');
+
+/**
+ * A theme that can be selected at runtime: the name of a .json file in the bundled themes
+ * directory, optionally with the same prefix as used in the ui.theme.file property
+ * (e.g. "light.json", "config/themes/light.json" or "server/config/themes/light.json").
+ */
+const BUNDLED_THEME_PATTERN = /^(?:(?:server\/)?config\/themes\/)?([A-Za-z0-9_-]+\.json)$/;
 
 export function extractUIThemeWrapper(cdapConfig) {
   const uiThemePath = cdapConfig[uiThemePropertyName];
-  return extractUITheme(cdapConfig, uiThemePath);
+  if (typeof uiThemePath !== 'string' || !uiThemePath) {
+    log.warn(`Unable to find ${uiThemePropertyName} property`);
+    log.warn(`UI using default theme`);
+    return mergeUIThemeWithConfig(cdapConfig, {});
+  }
+  return loadUITheme(cdapConfig, resolveConfiguredThemePath(uiThemePath));
 }
 
 function extractUIFeaturesFromConfig(cdapConfig) {
@@ -58,67 +83,78 @@ function mergeUIThemeWithConfig(cdapConfig, themeConfig) {
   return merge(themeConfig, configFeatures);
 }
 
-export function extractUITheme(cdapConfig, uiThemePath) {
-  const DEFAULT_CONFIG = {};
-
-  if (!(uiThemePropertyName in cdapConfig)) {
-    log.warn(`Unable to find ${uiThemePropertyName} property`);
-    log.warn(`UI using default theme`);
-    return mergeUIThemeWithConfig(cdapConfig, DEFAULT_CONFIG);
+/**
+ * Resolves the theme file set in the ui.theme.file property. The property is set by the
+ * administrator in cdap-site.xml, so it can be an absolute path or a path relative to the UI.
+ */
+function resolveConfiguredThemePath(uiThemePath) {
+  if (path.isAbsolute(uiThemePath)) {
+    return uiThemePath;
   }
+  /**
+   * Two paths
+   * theme file path : config/themes/light.json | server/config/themes/light.json
+   * __dirname: <cdap-home>/ui | <cdap-home/ui/server
+   *
+   * The configs exists in <cdap-home>/ui/sever/config/themes/*.json
+   *
+   */
+  let themePath = uiThemePath;
+  if (uiThemePath.startsWith('server') && IS_SERVER_DIR) {
+    themePath = path.join('..', uiThemePath);
+  }
+  if (uiThemePath.startsWith('config') && !IS_SERVER_DIR) {
+    themePath = path.join('server', uiThemePath);
+  }
+  return path.join(__dirname, themePath);
+}
 
-  let uiThemeConfig = DEFAULT_CONFIG;
-  // Absolute path
-  if (uiThemePath[0] === '/') {
-    try {
-      if (__non_webpack_require__.resolve(uiThemePath)) {
-        uiThemeConfig = __non_webpack_require__(uiThemePath);
-        log.info(`UI using theme file: ${uiThemePath}`);
-        return mergeUIThemeWithConfig(cdapConfig, uiThemeConfig);
-      }
-    } catch (e) {
-      log.info('UI Theme file not found at: ', uiThemePath);
-      throw e;
+/**
+ * Resolves a theme selected at runtime (see the /updateTheme API) to one of the theme files
+ * bundled with the UI. Anything else, like absolute paths, paths into other directories or
+ * files other than .json files, is rejected.
+ *
+ * @param {string} theme the requested theme
+ * @param {string} [themesDir] the bundled themes directory, defaults to server/config/themes
+ * @returns {string} the real path of the bundled theme file
+ * @throws {Error} if the requested theme is not a bundled theme file
+ */
+export function resolveBundledThemePath(theme, themesDir = BUNDLED_THEMES_DIR) {
+  const match = typeof theme === 'string' ? BUNDLED_THEME_PATTERN.exec(theme) : null;
+  if (!match) {
+    throw new Error('Not a bundled UI theme');
+  }
+  const realThemesDir = fs.realpathSync(themesDir);
+  // realpath also resolves symbolic links, so the file has to really be in the themes directory.
+  const themePath = fs.realpathSync(path.join(realThemesDir, match[1]));
+  if (path.dirname(themePath) !== realThemesDir) {
+    throw new Error('Not a bundled UI theme');
+  }
+  return themePath;
+}
+
+/**
+ * Loads a theme file and adds the UI features configured in cdap-site.xml.
+ *
+ * Theme files are JSON documents. They are read and parsed as data, and never passed to
+ * require(), so the content of a theme file is never executed.
+ */
+export function loadUITheme(cdapConfig, themeFilePath) {
+  let uiThemeConfig;
+  try {
+    if (path.extname(themeFilePath).toLowerCase() !== THEME_FILE_EXTENSION) {
+      throw new Error(`Theme files must be ${THEME_FILE_EXTENSION} files`);
     }
-  }
-  // Relative path
-
-  {
-    let themePath;
-
-    try {
-      /**
-       * Two paths
-       * theme file path : config/themes/light.json | server/config/themes/light.json
-       * __dirname: <cdap-home>/ui | <cdap-home/ui/server
-       *
-       * The configs exists in <cdap-home>/ui/sever/config/themes/*.json
-       *
-       */
-      themePath = uiThemePath;
-      if (uiThemePath.startsWith('server') && __dirname.endsWith('server')) {
-        themePath = path.join('..', uiThemePath);
-      }
-
-      if (uiThemePath.startsWith('config') && !__dirname.endsWith('server')) {
-        themePath = path.join('server', uiThemePath);
-      }
-      themePath = path.join(__dirname, themePath);
-
-      if (__non_webpack_require__.resolve(themePath)) {
-        uiThemeConfig = __non_webpack_require__(themePath);
-        log.info(`UI using theme file: ${themePath}`);
-        return mergeUIThemeWithConfig(cdapConfig, uiThemeConfig);
-      }
-    } catch (e) {
-      // This will show the user what the full path is.
-      // This should help them give proper relative path
-      log.info('UI Theme file not found at: ', themePath);
-
-      console.log('e', e);
-      throw e;
+    // Strip the byte order mark, if any, like require() does for JSON files.
+    uiThemeConfig = JSON.parse(fs.readFileSync(themeFilePath, 'utf8').replace(/^\uFEFF/, ''));
+    if (!isPlainObject(uiThemeConfig)) {
+      throw new Error('Theme files must contain a JSON object');
     }
+  } catch (e) {
+    log.error(`Unable to load UI theme file ${themeFilePath}: ${e.message}`);
+    throw e;
   }
+  log.info(`UI using theme file: ${themeFilePath}`);
   return mergeUIThemeWithConfig(cdapConfig, uiThemeConfig);
 }
 
