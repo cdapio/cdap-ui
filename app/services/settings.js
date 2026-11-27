@@ -20,9 +20,7 @@ angular.module(PKG.name + '.services')
     return new MyPersistentStorage('user');
   })
 
-  .factory('MyPersistentStorage', function MyPersistentStorageFactory($q, MyCDAPDataSource, myHelpers, $rootScope, MYAUTH_EVENT) {
-
-    var data = new MyCDAPDataSource();
+  .factory('MyPersistentStorage', function MyPersistentStorageFactory($q, $http, myCdapUrl, myHelpers, $rootScope, MYAUTH_EVENT) {
     function MyPersistentStorage (type) {
       this.endpoint = '/configuration/' + type;
       this.headers = {
@@ -54,14 +52,16 @@ angular.module(PKG.name + '.services')
       if (window.CaskCommon.CDAPHelpers.isAuthSetToManagedMode()) {
         this.headers['Authorization'] = ($rootScope.currentUser.token ? 'Bearer ' + $rootScope.currentUser.token: null);
       }
-      return data.request(
+      return $http(
         {
           method: 'PUT',
-          _cdapPath: this.endpoint,
+          url: myCdapUrl.constructUrl({ _cdapPath: this.endpoint }),
           headers: this.headers,
-          body: this.data
+          data: this.data
         }
-      );
+      ).then(function(res) {
+        return res.data;
+      });
 
     };
 
@@ -97,14 +97,15 @@ angular.module(PKG.name + '.services')
 
       this.pending = $q.defer();
 
-      data.request(
+      $http(
         {
           method: 'GET',
           headers: this.headers,
-          _cdapPath: this.endpoint
-        },
+          url: myCdapUrl.constructUrl({ _cdapPath: this.endpoint })
+        }
+      ).then(
         function (res) {
-          self.data = res.property;
+          self.data = res.data.property;
           self.pending.resolve(
             myHelpers.deepGet(self.data, key, true)
           );
